@@ -12,28 +12,37 @@ import warnings
 from datetime import datetime
 import time
 
-# [INIT VARIABLES]
+###[INIT VARIABLES]###
 exchange = ccxt.kucoin({
   "apiKey": config.KUCOIN_API_KEY,
   "secret": config.KUCOIN_SECRET_KEY,
   "password": config.KUCOIN_PASSWORD
 })
 
-trading_pair = 'ETH-USDT'
+#print(dir(ccxt.kucoin()))
+
+trading_pair = 'ETH/USDT'
 trade_qty = 0.01
+bars_limit = 100
+timeframe = "1m"
 in_position = False
-# [/INIT VARIABLES]
+###[/INIT VARIABLES]###
+#
+#
+###[UTILITY FUNCTIONS]###
 
-# [UTILITY FUNCTIONS]
-
-def run_bot(trading_pair, timeframe, limit, paper_trading: bool = true):
+def run_bot(trading_pair, timeframe, trade_qty, limit, paper_trading: bool = True):
   bars = get_bars(trading_pair, timeframe, limit)
+  print(f"[bars]\n{bars}\n")
   bars_df = create_df_from_bars(bars)
+  print(f"[bars_df]\n{bars_df}\n")
   st_data = supertrend(bars_df)
-  check_supertrend_signals(st_data)
+  print(f"[st_data]\n{st_data}\n")
+  check_supertrend_signals(st_data, trading_pair, trade_qty)
   
 def get_bars(pair: str, timeframe: str, limit: int):
-  bars = exchange.fetch_ohlcv(pair, timeframe, limit)
+  bars = exchange.fetchOHLCV(pair, timeframe)
+  print(bars)
   return bars
 
 def create_df_from_bars(bars):
@@ -68,20 +77,19 @@ def check_supertrend_signals(st_data, trading_pair, trade_qty):
     else:
       print("Not currently in a position. Nothing to sell.")
 
-    
 def open_synth_position(base_pair: str, quote_pair: str, direction: str, quantity: float):
   
-  #TODO: implement this. For now, just test with normal pairs.
+  #TODO: implement this. For now, will just test with normal pairs.
   raise NotImplementedError("TODO: implement open_synth_position() function.\nFor now, just test with normal pairs.")
   
-
-
 def create_synthetic_pair(base_df, quote_df):
   # TODO: implement
   pass
-# [/UTILITY FUNCTIONS]
 
-# [INDICATOR FUNCTIONS]
+###[/UTILITY FUNCTIONS]###
+#
+#
+###[INDICATOR FUNCTIONS]###
 def true_range(data):
   """
       Calculates true range. 
@@ -126,8 +134,16 @@ def supertrend(df, period=7, atr_multiplier=3):
       if df['in_uptrend'][current] and df['lowerband'][current] < df['lowerband'][previous]:
         df['lowerband'][current] = df['lowerband'][previous]
         
-      if not df['in_uptrend'][current] and df['upperband'] > df['upperband'][previous]:
+      if not df['in_uptrend'][current] and df['upperband'][current] > df['upperband'][previous]:
         df['lowerband'][current] = df['lowerband'][previous]
         
   return df
-# [/INDICATOR FUNCTIONS]
+###[/INDICATOR FUNCTIONS]###
+#
+#
+###[SCHEDULE]###
+schedule.every(10).seconds.do(lambda: run_bot(trading_pair, timeframe, trade_qty, bars_limit, False))
+while True:
+  schedule.run_pending()
+  time.sleep(1)
+###[/SCHEDULE]###
