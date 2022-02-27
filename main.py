@@ -1,3 +1,4 @@
+import config
 import pandas as pd
 pd.set_option('display.max_rows', None)
 
@@ -12,13 +13,15 @@ from datetime import datetime
 import time
 
 exchange = ccxt.kucoin({
-  "apiKey": '',
-  "secret": '',
+  "apiKey": config.KUCOIN_API_KEY,
+  "secret": config.KUCOIN_SECRET_KEY,
+  "password": config.KUCOIN_PASSWORD
 })
 
 trading_pair = 'ETH-USDT'
 
 def true_range(data):
+  """calculates true range"""
   data['previous_close'] = data['close'].shift(1)
   data['high-low'] = abs(data['high'] - data['low'])
   data['high-pc'] = abs(data['high'] - data['previous_close'])
@@ -28,12 +31,14 @@ def true_range(data):
   return tr
 
 def average_true_range(data, period):
+  """calculates average true range (ATR)"""
   data['tr'] = true_range(data)
   atr = data['tr'].rolling(period).mean()
   
   return atr
 
 def supertrend(df, period=7, atr_multiplier=3):
+  """calculates SuperTrend"""
   hl2 = (df['high'] + df['low']) / 2
   df['atr'] = average_true_range(df, period)
   df['upperband'] = hl2 + (atr_multiplier * df['atr'])
