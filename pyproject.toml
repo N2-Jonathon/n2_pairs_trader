@@ -1,0 +1,23 @@
+[project]
+name = ""
+version = ""
+description = ""
+authors = [
+    {name = "Jonathon Quick", email = "n2jonathon@tutanota.com"},
+]
+dependencies = [
+    "numpy>=1.22.2",
+    "pandas>=1.4.1",
+    "ccxt>=1.74.40",
+    "schedule>=1.1.0",
+]
+requires-python = ">=3.10"
+license = {text = "MIT"}
+
+[project.urls]
+Homepage = ""
+[tool.pdm]
+
+[build-system]
+requires = ["pdm-pep517"]
+build-backend = "pdm.pep517.api"
