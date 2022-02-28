@@ -102,7 +102,10 @@ def check_buy_sell_signals(df):
         else:
             print("Not currently in a position. Nothing to sell.")
 def run_bot():
-    create_synthetic_pair('ETH/USDT', 'BTC/USDT', "1m", 20)
+    base_bars = exchange.fetch_ohlcv('ETH/USDT', timeframe="1m", limit=20)
+    quote_bars = exchange.fetch_ohlcv('BTC/USDT', timeframe="1m", limit=20)
+
+    create_synthetic_pair(base_bars, quote_bars)
     
     #bars = exchange.fetch_ohlcv('ETH/USDT', timeframe='1m', limit=20)
     #print(bars)
@@ -115,41 +118,40 @@ def run_bot():
     check_buy_sell_signals(supertrend_data)
     """
     
-def create_synthetic_pair(base, quote, _timeframe, _limit):
+def create_synthetic_pair(base_bars, quote_bars): #def create_synthetic_pair(base, quote, _timeframe, _limit):
     """
-      This kind of works now, but it's not quite right yet 
-      since it's skipping over the 'close' column and it's
-      also inserting extra columns in the DataFrame
+      This takes raw kline data from calling
+      ccxt.exchange.fetch_ohlcv() as inputs,
+      turns them into DataFrames, then divides 
+      each base OHLCV data point value by its 
+      corresponding quote value, and returns
+      a new DataFrame with the new OHLCV values.
     """
     global exchange
-    base_bars = exchange.fetch_ohlcv(base, timeframe=_timeframe, limit=_limit)
+    #base_bars = exchange.fetch_ohlcv(base, timeframe=_timeframe, limit=_limit)
     #print(base_bars)
-    quote_bars = exchange.fetch_ohlcv(quote, timeframe=_timeframe, limit=_limit)
+    #quote_bars = exchange.fetch_ohlcv(quote, timeframe=_timeframe, limit=_limit)
 
     df_base = pd.DataFrame(base_bars[:-1], columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])
     df_base['timestamp'] = pd.to_datetime(df_base['timestamp'], unit='ms')
     
     df_quote = pd.DataFrame(quote_bars[:-1], columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])
     df_quote['timestamp'] = pd.to_datetime(df_quote['timestamp'], unit='ms')
-    
-    df_synth = (df_base.merge(df_quote, on='timestamp', how='left', suffixes=['_base', '_quote']) #how='left', sort=False)
-                  .eval("""
-                        open=open_base/open_quote
-                        high=high_base/high_quote
-                        low=low_base/low_quote
-                        close=close_base/close_quote
-                        """)
+
+    df_synth = (df_base.merge(df_quote, on='timestamp', how='left', suffixes=['_base', '_quote'], sort=False)
+                  .pipe(lambda x: x.assign(open=x.open_base/x.open_quote, 
+                                           high=x.high_base/x.high_quote,
+                                           low=x.low_base/x.low_quote,
+                                           close=x.close_base/x.close_quote,
+                                           volume=x.volume_base/x.volume_quote))
                 )
-    print(f"\n------------------------------------------------\n[df_base]\n{df_base}\n------------------------------------------------\n[df_quote]\n{df_quote}\n------------------------------------------------\n[df_synth]{df_synth}\n------------------------------------------------\n")
+    for name in df_synth.iteritems():
+      if name[0].endswith('_base') or name[0].endswith('_quote'):
+        df_synth = df_synth.drop(name[0] , 1)
+
+    print(f"\n------------------------------------------------\n[df_base]\n{df_base}\n------------------------------------------------\n[df_quote]\n{df_quote}\n------------------------------------------------\n[df_synth]\n{df_synth}\n------------------------------------------------\n")
     return df_synth 
-    # - [ ] TODO: figure out how to calculate df_synth from df_base & df_quote 
-    """
-    for name, value in df_quote.iteritems():
-      print(name)
-      df_synth[name] = name
-      df_synth[name][value] = value
-    """
-    #df_synth = df_base.apply(lambda x: x/(df_quote[x.name][x.index]))
+    # - [x] TODO: figure out how to calculate df_synth from df_base & df_quote 
     print(df_synth)
   
 def divide_base_by_quote(base, quote):
