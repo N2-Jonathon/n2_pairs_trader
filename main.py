@@ -87,7 +87,7 @@ def check_buy_sell_signals(df):
     if not df['in_uptrend'][previous_row_index] and df['in_uptrend'][last_row_index]:
         print("Signal: BUY (Uptrend started)")
         if not in_position:
-            order = exchange.create_market_buy_order('ETH/USD', 0.05)
+            order = exchange.create_market_buy_order('ETH/USDT', 0.05)
             print(order)
             in_position = True
         else:
@@ -96,19 +96,23 @@ def check_buy_sell_signals(df):
     if df['in_uptrend'][previous_row_index] and not df['in_uptrend'][last_row_index]:
         if in_position:
             print("Signal: SELL (Downtrend started)")
-            order = exchange.create_market_sell_order('ETH/USD', 0.05)
+            order = exchange.create_market_sell_order('ETH/USDT', 0.05)
             print(order)
             in_position = False
         else:
             print("Not currently in a position. Nothing to sell.")
 def run_bot():
+    create_synthetic_pair('ETH/USDT', 'BTC/USDT', "1m", 100)
+    
+    """
     bars = exchange.fetch_ohlcv('ETH/USDT', timeframe='1m', limit=100)
     df = pd.DataFrame(bars[:-1], columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])
     df['timestamp'] = pd.to_datetime(df['timestamp'], unit='ms')
-
+    
     supertrend_data = supertrend(df)
     
     check_buy_sell_signals(supertrend_data)
+    """
     
 def create_synthetic_pair(base, quote, timeframe, limit):
     """
@@ -123,8 +127,28 @@ def create_synthetic_pair(base, quote, timeframe, limit):
     df_quote = pd.DataFrame(quote_bars[:-1], columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])
     df_quote['timestamp'] = pd.to_datetime(df_quote['timestamp'], unit='ms')
     
-    df_synth = "???"
+    df_synth = (df_base.merge(df_quote, on='timestamp', how='left', suffixes=['_base', '_quote']) #how='left', sort=False)
+                  .eval("""
+                        open=open_base/open_quote
+                        high=high_base/high_quote
+                        low=low_base/low_quote
+                        close=close_base/close_quote
+                        """)
+                )
+    
+    
     # TODO: figure out how to calculate df_synth from df_base & df_quote 
+    """
+    for name, value in df_quote.iteritems():
+      print(name)
+      df_synth[name] = name
+      df_synth[name][value] = value
+    """
+    #df_synth = df_base.apply(lambda x: x/(df_quote[x.name][x.index]))
+    print(df_synth)
+  
+def divide_base_by_quote(base, quote):
+    return base/quote
   
 ###[/UTILITY FUNCTIONS]###
 
