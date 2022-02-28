@@ -72,9 +72,9 @@ def supertrend(df, period=10, atr_multiplier=2):
 
 
 ###[UTILITY FUNCTIONS]###
-def get_bars(pair: str, timeframe: str, limit: int):
+def get_bars(pair: str, _timeframe: str, _limit: int):
   print(f"Fetching new bars for {datetime.now().isoformat()}")
-  bars = exchange.fetch_ohlcv(pair, timeframe, limit)
+  bars = exchange.fetch_ohlcv(pair, timeframe=_timeframe, limit=_limit)
   return bars
 def check_buy_sell_signals(df):
     global in_position
@@ -102,10 +102,11 @@ def check_buy_sell_signals(df):
         else:
             print("Not currently in a position. Nothing to sell.")
 def run_bot():
-    create_synthetic_pair('ETH/USDT', 'BTC/USDT', "1m", 100)
+    create_synthetic_pair('ETH/USDT', 'BTC/USDT', "1m", 20)
     
+    #bars = exchange.fetch_ohlcv('ETH/USDT', timeframe='1m', limit=20)
+    #print(bars)
     """
-    bars = exchange.fetch_ohlcv('ETH/USDT', timeframe='1m', limit=100)
     df = pd.DataFrame(bars[:-1], columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])
     df['timestamp'] = pd.to_datetime(df['timestamp'], unit='ms')
     
@@ -114,12 +115,14 @@ def run_bot():
     check_buy_sell_signals(supertrend_data)
     """
     
-def create_synthetic_pair(base, quote, timeframe, limit):
+def create_synthetic_pair(base, quote, _timeframe, _limit):
     """
       This is not working yet. 
     """
-    base_bars = exchange.fetch_ohlcv(base, timeframe, limit)
-    quote_bars = exchange.fetch_ohlcv(quote, timeframe, limit)
+    global exchange
+    base_bars = exchange.fetch_ohlcv(base, timeframe=_timeframe, limit=_limit)
+    #print(base_bars)
+    quote_bars = exchange.fetch_ohlcv(quote, timeframe=_timeframe, limit=_limit)
 
     df_base = pd.DataFrame(base_bars[:-1], columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])
     df_base['timestamp'] = pd.to_datetime(df_base['timestamp'], unit='ms')
@@ -135,9 +138,9 @@ def create_synthetic_pair(base, quote, timeframe, limit):
                         close=close_base/close_quote
                         """)
                 )
-    
-    
-    # TODO: figure out how to calculate df_synth from df_base & df_quote 
+    print(f"\n------------------------------------------------\n[df_base]\n{df_base}\n------------------------------------------------\n[df_quote]\n{df_quote}\n------------------------------------------------\n[df_synth]{df_synth}\n------------------------------------------------\n")
+    return df_synth 
+    # - [ ] TODO: figure out how to calculate df_synth from df_base & df_quote 
     """
     for name, value in df_quote.iteritems():
       print(name)
