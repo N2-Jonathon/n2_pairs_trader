@@ -117,7 +117,9 @@ def run_bot():
     
 def create_synthetic_pair(base, quote, _timeframe, _limit):
     """
-      This is not working yet. 
+      This kind of works now, but it's not quite right yet 
+      since it's skipping over the 'close' column and it's
+      also inserting extra columns in the DataFrame
     """
     global exchange
     base_bars = exchange.fetch_ohlcv(base, timeframe=_timeframe, limit=_limit)
