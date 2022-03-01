@@ -48,7 +48,7 @@ def open_long(base_pair: str,
   # ----------------------------------------
   # Step 5: Buy the base coin of the base
   # [TODO]  pair using the quote coin of the
-  #         pair.
+  #         base pair.
   #         eg. Buy ETH with USDT
   # ----------------------------------------
   # Step 6: Generate & Send Email with all
@@ -82,9 +82,9 @@ def open_short(base_pair: str,
   # [TODO]  borrowed in step 3.
   #         eg. Sell ETH for USDT
   # ----------------------------------------
-  # Step 5: Buy the base coin of the base
+  # Step 5: Buy the base coin of the quote
   # [TODO]  pair using the quote coin of the
-  #         pair.
+  #         quote pair.
   #         eg. Buy BTC with USDT
   # ----------------------------------------
   # Step 6: Generate & Send Email with all
