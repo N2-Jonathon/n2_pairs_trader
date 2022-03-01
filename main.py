@@ -132,7 +132,7 @@ def run_bot():
     check_buy_sell_signals(supertrend_data)
     
     
-def create_synthetic_pair(base_bars, quote_bars): #def create_synthetic_pair(base, quote, _timeframe, _limit):
+def create_synthetic_pair(base_bars, quote_bars): 
     """
       This takes raw kline data from calling
       ccxt.exchange.fetch_ohlcv() as inputs,
