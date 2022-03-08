@@ -7,6 +7,7 @@ exchange = ccxt.kucoin({
   "password": config.KUCOIN_PASSWORD
 })
 
+
 def open_position(direction: str, 
                   base_pair: str,
                   quote_pair: str,
@@ -90,4 +91,17 @@ def open_short(base_pair: str,
   # Step 6: Generate & Send Email with all
   # [TODO]  of the details about the open 
   #         position included.
+  pass
+
+
+class position:
+  """
+  If other position types are added,
+  this should be renamed to pairs_position
+  """
+  def __init__(self, _synth_pair, base_pair, quote_pair, direction, orders):
+    self.synth_pair = synth_pair
+    self.base_pair = base_pair
+    self.quote_pair = quote_pair
+    self.orders = orders
   pass
