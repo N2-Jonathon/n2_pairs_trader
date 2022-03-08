@@ -1,43 +1,41 @@
 import pandas as pd
+import ccxt
+import configparser
 from datetime import datetime
+
+config = configparser.ConfigParser()
+config.read("config.ini")
+
+exchange = ccxt.kucoin({
+  "apiKey": config['KuCoin']['apiKey'],
+  "secret": config['KuCoin']['secret'],
+  "password": config['KuCoin']['password']
+})
 
 
 def get_bars(pair: str, _timeframe: str, _limit: int):
-    print(f"Fetching new bars for {datetime.now().isoformat()}")
+    # print(f"Fetching new bars for {datetime.now().isoformat()}")
     bars = exchange.fetch_ohlcv(pair, timeframe=_timeframe, limit=_limit)
     return bars
 
 
-def check_buy_sell_signals(df):
-    global in_position
-
-    print("Checking for signals")
-    print(df.tail(50))
+def check_buy_sell_signals(df, open_position=None):
+    # print("Checking for signals")
+    # print(df.tail(50))
     last_row_index = len(df.index) - 1
     previous_row_index = last_row_index - 1
 
     if not df['in_uptrend'][previous_row_index] and df['in_uptrend'][last_row_index]:
-        print("Signal: BUY (Uptrend started)")
-        if not in_position:
-            # order = exchange.create_market_buy_order('ETH/USDT', 0.05)
-            # print(order)
-            print("Entering long position")
-            # - [ ] TODO: Long position logic here
-            in_position = True
+        if open_position is None:
+            return "LONG"
         else:
-            print("Already in a position. Nothing to do.")
+            return "CLOSE"
 
     if df['in_uptrend'][previous_row_index] and not df['in_uptrend'][last_row_index]:
-        if in_position:
-            print("Signal: SELL (Downtrend started)")
-            # order = exchange.create_market_sell_order('ETH/USDT', 0.05)
-            # print(order)
-            print("Entering short position")
-            # - [ ] TODO: Short position logic here
-            in_position = False
+        if open_position is None:
+            return "SHORT"
         else:
-            print("Not currently in a position. Nothing to sell.")
-
+            return "CLOSE"
 
 def create_synthetic_pair(base_bars, quote_bars):
     """
@@ -48,8 +46,6 @@ def create_synthetic_pair(base_bars, quote_bars):
       corresponding quote value, and returns
       a new DataFrame with the new OHLCV values.
     """
-    global exchange
-
     df_base = pd.DataFrame(base_bars[:-1], columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])
     df_base['timestamp'] = pd.to_datetime(df_base['timestamp'], unit='ms')
 
@@ -67,11 +63,12 @@ def create_synthetic_pair(base_bars, quote_bars):
         if name[0].endswith('_base') or name[0].endswith('_quote'):
             df_synth = df_synth.drop(name[0], 1)
 
-    print("\n------------------------------------------------\n"
-          + f"[df_base]\n{df_base}"
-          + "\n------------------------------------------------\n"
-          + f"[df_quote]\n{df_quote}"
-          + "\n------------------------------------------------\n"
-          + f"[df_synth]\n{df_synth}"
-          + "\n------------------------------------------------\n")
+    print(  # "\n----------------------------------------------------------------\n"
+            # f"[df_base]\n{df_base}"
+            # "\n----------------------------------------------------------------\n"
+            # f "[df_quote]\n{df_quote}"
+            "\n----------------------------------------------------------------\n"
+            f"[Kline DataFrame]\n"
+            f"{df_synth}"
+            "\n----------------------------------------------------------------\n")
     return df_synth

@@ -1,5 +1,8 @@
 import ccxt
-import config
+import configparser
+
+config = configparser.ConfigParser()
+config.read("config.ini")
 
 exchange = ccxt.kucoin({
     "apiKey": config.KUCOIN_API_KEY,
