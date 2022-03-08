@@ -100,9 +100,15 @@ def open_short(base_pair: str,
 
 class Position:
     """
-  If other position types are added,
-  this should be renamed to pairs_position
-  """
+    If other position types are added,
+    this class should be renamed to pairs_position
+    """
+    borrowed_coin = {
+        "name": None,
+        "quantity": None,
+        "borrow_timestamp": None,
+        "repay_timestamp": None
+    }
 
     def __init__(self, synth_pair, base_pair, quote_pair, direction, orders):
         self.synth_pair = synth_pair
@@ -112,3 +118,15 @@ class Position:
         self.orders = orders
 
     pass
+
+    def open(self, synth_pair, borrow_qty, direction, order_type='market'):
+        print(f'Opening {self.direction} Position on {self.synth_pair}...\n'
+              f'Order Type: {order_type}')
+
+        return self, 0
+
+    def close(self, order_type='market'):
+        print(f'Closing {self.direction} Position on {self.synth_pair}...\n'
+              f'Order Type: {order_type}')
+
+        return self, 0
