@@ -24,7 +24,6 @@ class Position:
     }
 
     def __init__(self, base_pair, quote_pair, direction,
-                 borrow_coin,
                  order_type='market', prompt_borrow_qty=False, exchange=config['Bot Settings']['exchange']):
         self.status = 'init'
         self.exchange_name = exchange
@@ -34,7 +33,6 @@ class Position:
 
         self.direction = direction
 
-        self.borrow_coin = borrow_coin
         self.order_type = order_type
         self.prompt_borrow_qty = prompt_borrow_qty
 
@@ -47,12 +45,15 @@ class Position:
             raise NotImplementedError("Unsupported Exchange:\n"
                                       "Currently the only tested exchange is KuCoin.")
 
-    def open_order(self, pair, direction, quantity, order_type='market'):
+    def create_order(self, pair, direction, quantity, order_type='market'):
+        """
+        This is for individual orders, and gets used by the self.open() method
+        """
         order = self.exchange.create_order(pair, order_type, direction, quantity)
         return order
 
     # ----------------------------------------------------------------
-    # * Position.open_position() is for opening a position with two trades
+    # * Position.open() is for opening a position with two trades
     #   It has the same params as the constructor __init__
     #   TODO:
     #   - [ ] Returns a DataFrame containing information about the open
@@ -63,7 +64,7 @@ class Position:
     # * When you supply an already initialized yet unopened
     #   Position() instance to open, it will inherit its attributes.
     # ----------------------------------------------------------------
-    def open_position(self, direction, order_type='market', prompt_borrow_qty=False):
+    def open(self, direction, order_type='market', prompt_borrow_qty=False):
 
         self.status = 'opening'
 
@@ -183,8 +184,8 @@ my_position = Position(base_pair='ETHUSDT',
                        order_type='market',
                        prompt_borrow_qty=False)
 
-my_position = my_position.open_position(direction='LONG',
-                                        order_type='market',
-                                        prompt_borrow_qty=False)
+my_position = my_position.open(direction='LONG',
+                               order_type='market',
+                               prompt_borrow_qty=False)
 
 print(my_position)

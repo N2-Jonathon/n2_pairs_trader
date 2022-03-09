@@ -46,18 +46,16 @@ async def main(base_pair=config['Bot Settings']['base_pair_default'],
         """
 
         if signal == "LONG":
-            live_position = Position.open_position(exchange,
-                                          'ETHUSDT/BTCUSDT',  # synth_pair
-                                          'ETH/USDT',  # base_pair
-                                          'BTC/USDT',  # quote_pair
-                                          'BTC',  # borrow_coin
-                                          'LONG')             # position_type
+            live_position = Position(base_pair, quote_pair,
+                                     direction=signal,
+                                     order_type='limit')
+            live_position.open()
 
-            print(f"Opened LONG position on {Position.ex}.\n"
+            print(f"Opened LONG position on {exchange}.\n"
                   f"Double Pair/Synthetic Pair: {synth}")
             pass
         elif signal == "SHORT":
-            live_position = Position.open_position(exchange,
+            live_position = Position.open(exchange,
                                           'ETHUSDT/BTCUSDT',  # synth_pair
                                           'ETH/USDT',  # base_pair
                                           'BTC/USDT',  # quote_pair
