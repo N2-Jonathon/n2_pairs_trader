@@ -7,10 +7,27 @@ config = configparser.ConfigParser()
 config.read("config.ini")
 
 exchange = ccxt.kucoin({
-  "apiKey": config['KuCoin']['apiKey'],
-  "secret": config['KuCoin']['secret'],
-  "password": config['KuCoin']['password']
+    "apiKey": config['KuCoin']['apiKey'],
+    "secret": config['KuCoin']['secret'],
+    "password": config['KuCoin']['password']
 })
+
+
+def get_synth_pair_symbol(base_pair, quote_pair):
+    return f"{base_pair}/{quote_pair}"
+
+
+def split_pair(pair, pair_type):
+    if pair_type == 'coin_pair':
+        valid_coins = exchange.fetch_balance()
+        print(valid_coins)
+        pass
+    elif pair_type == 'pair_of_coin_pairs':
+        if '/' in pair:
+            return pair.split('/')
+        else:
+            raise ValueError('Invalid trading pair')
+        pass
 
 
 def get_bars(pair: str, _timeframe: str, _limit: int):
@@ -36,6 +53,7 @@ def check_buy_sell_signals(df, open_position=None):
             return "SHORT"
         else:
             return "CLOSE"
+
 
 def create_synthetic_pair(base_bars, quote_bars):
     """
@@ -64,11 +82,11 @@ def create_synthetic_pair(base_bars, quote_bars):
             df_synth = df_synth.drop(name[0], 1)
 
     print(  # "\n----------------------------------------------------------------\n"
-            # f"[df_base]\n{df_base}"
-            # "\n----------------------------------------------------------------\n"
-            # f "[df_quote]\n{df_quote}"
-            "\n----------------------------------------------------------------\n"
-            f"[Kline DataFrame]\n"
-            f"{df_synth}"
-            "\n----------------------------------------------------------------\n")
+        # f"[df_base]\n{df_base}"
+        # "\n----------------------------------------------------------------\n"
+        # f "[df_quote]\n{df_quote}"
+        "\n----------------------------------------------------------------\n"
+        f"[Kline DataFrame]\n"
+        f"{df_synth}"
+        "\n----------------------------------------------------------------\n")
     return df_synth

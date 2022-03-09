@@ -7,7 +7,7 @@ import time
 import warnings
 
 from indicators import supertrend
-from utilities import check_buy_sell_signals, create_synthetic_pair
+from utils import check_buy_sell_signals, create_synthetic_pair
 from position_manager import Position
 
 pd.set_option('display.max_rows', None)
@@ -40,10 +40,29 @@ async def main(base_pair=config['Bot Settings']['base_pair_default'],
         signal = check_buy_sell_signals(supertrend_data)
         print(f"Signal: {signal}")
 
-        if signal == "BUY":
-            live_position = Position().open()
+        """ Position Class Definition from ./position_manager.py
+        `def open(self, exchange, synth_pair, base_pair, quote_pair, borrow_coin, borrow_qty, direction,
+                     order_type='market', prompt_borrow_confirmation=False):`
+        """
+
+        if signal == "LONG":
+            live_position = Position.open(exchange,
+                                          'ETHUSDT/BTCUSDT',  # synth_pair
+                                          'ETH/USDT',         # base_pair
+                                          'BTC/USDT',         # quote_pair
+                                          'BTC',              # borrow_coin
+                                          'LONG')             # position_type
+
+            print(f"Opened LONG position on {Position.ex}.\n"
+                  f"Double Pair/Synthetic Pair: {synth}")
             pass
-        elif signal == "SELL":
+        elif signal == "SHORT":
+            live_position = Position.open(exchange,
+                                          'ETHUSDT/BTCUSDT',  # synth_pair
+                                          'ETH/USDT',         # base_pair
+                                          'BTC/USDT',         # quote_pair
+                                          'BTC',              # borrow_coin
+                                          'SHORT')            # position_type
             pass
 
         await asyncio.sleep(60)
