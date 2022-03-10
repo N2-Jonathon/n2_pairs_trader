@@ -109,9 +109,9 @@ def query_margin_risk_limit():
     return response.content
 
 
-def fetch_borrow_rates(code, params={}, exchange=ccxt_kucoin):
+def fetch_borrow_rates(params={}, exchange=ccxt_kucoin):
     # pprint(self)
-    pprint(query_margin_risk_limit())
+    # pprint(query_margin_risk_limit())
 
     response = json.loads(query_margin_risk_limit())
     now = int(time.time() * 1000)
@@ -119,7 +119,7 @@ def fetch_borrow_rates(code, params={}, exchange=ccxt_kucoin):
     # response_json = response.decode('utf-8').replace("'", '"').json
     data = safe_value(response, 'data')
     timestamp = str(now)
-    pprint(data)
+    # pprint(data)
 
     rates = {}
     for i in range(0, len(data)):
@@ -137,9 +137,14 @@ def fetch_borrow_rates(code, params={}, exchange=ccxt_kucoin):
         }
     return rates
 
+def fetch_borrow_rate(coin):
+    rates = fetch_borrow_rates()
+    _rate = rates[coin]
+    return _rate
+
 
 # [DEBUG]
 
-rate = fetch_borrow_rates('BTC')
+rate = fetch_borrow_rate('ETH')
 # rate = query_margin_risk_limit()
 print(rate)
