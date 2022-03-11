@@ -1,5 +1,7 @@
 import pandas as pd
 import ccxt
+import importlib
+
 from ccxt.base.errors import BadSymbol
 import configparser
 from datetime import datetime
@@ -114,4 +116,13 @@ def create_synthetic_pair(base_bars, quote_bars):
     return df_synth
 
 
+def get_exchange_module_from_name(name):
+    if name in ccxt.exchanges:
+        exchange = importlib.import_module(f"ccxt.{name}")
+        return exchange
+    else:
+        raise ValueError("Invalid exchange name")
+    pass
+
+# DEBUG
 
