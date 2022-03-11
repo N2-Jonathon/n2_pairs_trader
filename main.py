@@ -2,9 +2,14 @@ import asyncio
 import pandas as pd
 import warnings
 from configparser import ConfigParser
+from pprint import pprint
+import ccxt
 
+from core.indicators import supertrend
+from strategies.strategy_base import StrategyBase
 from strategies.n2_supertrend import N2SuperTrend
 from core.position_manager import Position, PositionManager
+from core.utils import create_synthetic_pair, check_signals
 
 from scripts.kucoin_extended import KuCoinExtended
 """
@@ -20,6 +25,11 @@ kucoin = KuCoinExtended({
     "password": config['KuCoin']['password']
 })
 
+hitbtc = ccxt.hitbtc({
+    "apiKey": config['HitBTC']['apiKey'],
+    "secret": config['HitBTC']['apiKey']
+})
+
 exchange = kucoin
 
 
@@ -28,14 +38,35 @@ exchange = kucoin
 async def main(base_pair=config['Global Settings']['base_pair_default'],
                quote_pair=config['Global Settings']['quote_pair_default']):
     running = True
-    strategy = N2SuperTrend(config, base_pair, quote_pair)
+    strategy = N2SuperTrend(exchange, config, base_pair, quote_pair)
     manager = strategy.position_manager
 
     while running:
 
         # This code is for one timeframe. Later, do the same iterated for each timeframe.
+        # ---------------------------------------------------
+        base_bars = exchange.fetch_ohlcv(base_pair)
+        quote_bars = exchange.fetch_ohlcv(quote_pair)
 
-        signal = strategy.get_timeframe_signal()
+        synth_pair = create_synthetic_pair(base_bars, quote_bars)
+
+        supertrend_data = supertrend(synth_pair)
+
+        signal = check_signals(supertrend_data)
+        # ---------------------------------------------------
+
+
+        # ---------------------------------------------------
+        # Trying to get the above to be abstracted away, but
+        # spent ages debugging and decided to implement this
+        # by using strategy.exchange instead of global exchange
+        #
+        # current_ohlcv = strategy.update_synthetic_pair()
+        # signal = strategy.get_timeframe_signal()
+        # ---------------------------------------------------
+
+
+
 
         # [DEBUG] Un-comment one of the three lines below to force a signal:
         # signal = 'LONG'

@@ -1,18 +1,22 @@
-# from main import config
 from configparser import ConfigParser
+
+import ccxt
+
 from strategies.strategy_base import StrategyBase
 import core.utils as utils
+from core.utils import get_exchange_module_from_id
 from core.position_manager import PositionManager
 
-# from pandas import DataFrame as df
+from pandas import DataFrame
 
 
 class N2SuperTrend(StrategyBase):
 
-    def __init__(self, config: ConfigParser, base_pair: str, quote_pair: str, timeframes=[],  paper_trade=False):
+    def __init__(self, exchange: ccxt.Exchange, config: ConfigParser, base_pair: str, quote_pair: str, timeframes=[], paper_trade=False):
         self.name = "SuperTrend Strategy"
         self.config = config
         self.exchange_id = config['Global Settings']['exchange']
+        self.exchange = exchange
         self.name = None
         self.current_signal = None
         self.base_pair = base_pair
@@ -22,13 +26,13 @@ class N2SuperTrend(StrategyBase):
         self.timeframes = []
         self.position_manager = PositionManager()
         self.ohlcv_data = {
-            "1m": None,
-            "5m": None,
-            "15m": None,
-            "1h": None,
-            "4h": None,
-            "1d": None,
-            "1w": None
+            "1m": DataFrame,
+            "5m": DataFrame,
+            "15m": DataFrame,
+            "1h": DataFrame,
+            "4h": DataFrame,
+            "1d": DataFrame,
+            "1w": DataFrame
         }
 
         for timeframe in timeframes:
@@ -37,8 +41,8 @@ class N2SuperTrend(StrategyBase):
 
     def get_timeframe_signal(self, timeframe="1m"):
         df = self.ohlcv_data.get('timeframe')
-
-
+        #raw_ohlcv = self.get_synth_ohlcv("1m")
+        #df = utils.create_synthetic_pair(raw_ohlcv)
 
         last_row_index = len(df.index) - 1
         previous_row_index = last_row_index - 1

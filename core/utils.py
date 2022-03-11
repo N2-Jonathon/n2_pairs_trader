@@ -116,10 +116,15 @@ def create_synthetic_pair(base_bars, quote_bars):
     return df_synth
 
 
-def get_exchange_module_from_name(name):
-    if name in ccxt.exchanges:
-        exchange = importlib.import_module(f"ccxt.{name}")
+def get_exchange_module_from_id(name: str):
+    if name.lower() in ccxt.exchanges:
+        exchange_module_path = f"ccxt.{name.lower()}"
+        print(exchange_module_path)
+        exchange = importlib.import_module(exchange_module_path)
         return exchange
+
+        pass
+        # return exchange
     else:
         raise ValueError("Invalid exchange name")
     pass

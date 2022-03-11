@@ -43,6 +43,16 @@ from ccxt.base.errors import ExchangeNotAvailable
 from ccxt.base.errors import InvalidNonce
 from ccxt.base.precise import Precise
 
+from ccxt.base.decimal_to_precision import decimal_to_precision
+from ccxt.base.decimal_to_precision import DECIMAL_PLACES, NO_PADDING, TRUNCATE, ROUND, ROUND_UP, ROUND_DOWN
+from ccxt.base.decimal_to_precision import number_to_string
+from requests.utils import default_user_agent
+from requests import Session
+import logging
+
+import types
+
+
 
 class KuCoinExtended(ccxt.kucoin):
     """
@@ -53,6 +63,71 @@ class KuCoinExtended(ccxt.kucoin):
     yet still keep the convenience of having all the ccxt.kucoin
     methods that do work (Which is most of them)
     """
+
+    def __init__(self, config={}):
+
+        self.precision = dict() if self.precision is None else self.precision
+        self.limits = dict() if self.limits is None else self.limits
+        self.exceptions = dict() if self.exceptions is None else self.exceptions
+        self.headers = dict() if self.headers is None else self.headers
+        self.balance = dict() if self.balance is None else self.balance
+        self.orderbooks = dict() if self.orderbooks is None else self.orderbooks
+        self.tickers = dict() if self.tickers is None else self.tickers
+        self.trades = dict() if self.trades is None else self.trades
+        self.transactions = dict() if self.transactions is None else self.transactions
+        self.positions = dict() if self.positions is None else self.positions
+        self.ohlcvs = dict() if self.ohlcvs is None else self.ohlcvs
+        self.currencies = dict() if self.currencies is None else self.currencies
+        self.options = dict() if self.options is None else self.options  # Python does not allow to define properties in run-time with setattr
+        self.decimal_to_precision = decimal_to_precision
+        self.number_to_string = number_to_string
+
+        # version = '.'.join(map(str, sys.version_info[:3]))
+        # self.userAgent = {
+        #     'User-Agent': 'ccxt/' + __version__ + ' (+https://github.com/ccxt/ccxt) Python/' + version
+        # }
+
+        self.origin = self.uuid()
+        self.userAgent = default_user_agent()
+
+        settings = self.deep_extend(self.describe(), config)
+
+        for key in settings:
+            if hasattr(self, key) and isinstance(getattr(self, key), dict):
+                setattr(self, key, self.deep_extend(getattr(self, key), settings[key]))
+            else:
+                setattr(self, key, settings[key])
+
+        if self.api:
+            self.define_rest_api(self.api, 'request')
+
+        if self.markets:
+            self.set_markets(self.markets)
+
+        # convert all properties from underscore notation foo_bar to camelcase notation fooBar
+        cls = type(self)
+        for name in dir(self):
+            if name[0] != '_' and name[-1] != '_' and '_' in name:
+                parts = name.split('_')
+                # fetch_ohlcv → fetchOHLCV (not fetchOhlcv!)
+                exceptions = {'ohlcv': 'OHLCV', 'le': 'LE', 'be': 'BE'}
+                camelcase = parts[0] + ''.join(exceptions.get(i, self.capitalize(i)) for i in parts[1:])
+                attr = getattr(self, name)
+                if isinstance(attr, types.MethodType):
+                    setattr(cls, camelcase, getattr(cls, name))
+                else:
+                    setattr(self, camelcase, attr)
+
+        self.tokenBucket = self.extend({
+            'refillRate': 1.0 / self.rateLimit if self.rateLimit > 0 else float('inf'),
+            'delay': 0.001,
+            'capacity': 1.0,
+            'defaultCost': 1.0,
+        }, getattr(self, 'tokenBucket', {}))
+
+        self.session = self.session if self.session or not self.synchronous else Session()
+        self.logger = self.logger if self.logger else logging.getLogger(__name__)
+
     def describe(self):
         return self.deep_extend(super(KuCoinExtended, self).describe(), {
             'id': 'kucoin_extended',
