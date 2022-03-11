@@ -15,6 +15,7 @@ exchange = ccxt.kucoin({
 })
 """
 
+
 def get_synth_pair_symbol(base_pair, quote_pair):
     return f"{base_pair}/{quote_pair}"
 
@@ -33,7 +34,6 @@ def fetch_ticker(_exchange, symbol, params={}):
 
 def is_valid_coin(_exchange: ccxt.Exchange, symbol, params={}):
     balances = _exchange.base_currencies
-
 
 
 def split_pair(exchange, pair, pair_type):
@@ -112,5 +112,6 @@ def create_synthetic_pair(base_bars, quote_bars):
         f"{df_synth}"
         "\n----------------------------------------------------------------\n")
     return df_synth
+
 
 

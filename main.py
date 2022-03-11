@@ -3,8 +3,8 @@ import pandas as pd
 import warnings
 from configparser import ConfigParser
 
+from strategies.n2_supertrend import N2SuperTrend
 from core.position_manager import Position, PositionManager
-from strategies.strategy_base import StrategyBase
 
 from scripts.kucoin_extended import KuCoinExtended
 """
@@ -12,7 +12,7 @@ pd.set_option('display.max_rows', None)
 warnings.filterwarnings('ignore')
 """
 config = ConfigParser()
-config.read("user-config.ini")
+config.read("user/user-config.ini")
 
 kucoin = KuCoinExtended({
     "apiKey": config['KuCoin']['apiKey'],
@@ -28,14 +28,14 @@ exchange = kucoin
 async def main(base_pair=config['Global Settings']['base_pair_default'],
                quote_pair=config['Global Settings']['quote_pair_default']):
     running = True
-    manager = PositionManager()
-    strategy = StrategyBase(config, base_pair, quote_pair)
+    strategy = N2SuperTrend(config, base_pair, quote_pair)
+    manager = strategy.position_manager
 
     while running:
 
         # This code is for one timeframe. Later, do the same iterated for each timeframe.
 
-        signal = strategy.get_current_signal()
+        signal = strategy.get_timeframe_signal()
 
         # [DEBUG] Un-comment one of the three lines below to force a signal:
         # signal = 'LONG'
@@ -46,7 +46,7 @@ async def main(base_pair=config['Global Settings']['base_pair_default'],
 
         if signal is not None and signal != 'CLOSE':
 
-            if strategy.manager.get_current_position() is None:
+            if manager.get_current_position() is None:
                 position = Position(base_pair, quote_pair,
                                     direction=signal,
                                     order_type='limit').open()

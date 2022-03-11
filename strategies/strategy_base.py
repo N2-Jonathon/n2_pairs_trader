@@ -5,22 +5,19 @@ import os
 print(os.getcwd())
 sys.path.append(os.getcwd())
 
-from main import config
 from core.position_manager import PositionManager, Position
 from core.utils import get_synth_pair_symbol, create_synthetic_pair
 from pandas import DataFrame
 
-
 """
-config = configparser.ConfigParser
-user_config_path = os.path.join(os.getcwd(), 'user-config.ini')
-user_config.read(config_path)
+config = ConfigParser
+user_config_path = os.path.join(os.getcwd(), 'user/user-config.ini')
+config.read(self=config, filenames=user_config_path)
 """
-
 
 class StrategyBase:
 
-    def __init__(self, base_pair: str, quote_pair: str, timeframes=[], paper_trade=False, config: ConfigParser = config):
+    def __init__(self, config: ConfigParser, base_pair: str, quote_pair: str, timeframes=[],  paper_trade=False):
         self.config = config
         self.exchange_id = config['Global Settings']['exchange']
         self.name = None
@@ -31,6 +28,15 @@ class StrategyBase:
         self.paper_trade = paper_trade
         self.timeframes = []
         self.manager = PositionManager
+        self.ohlcv_data = {
+            "1m": None,
+            "5m": None,
+            "15m": None,
+            "1h": None,
+            "4h": None,
+            "1d": None,
+            "1w": None
+        }
 
         for timeframe in timeframes:
             if timeframe.lower in ['1m', '5m', '15m', '1h', '4h', '1d', '1w']:
@@ -40,10 +46,10 @@ class StrategyBase:
         base_bars = self.fetch_ohlcv(self.base_pair, timeframe=timeframe, limit=limit)
         quote_bars = self.fetch_ohlcv(self.quote_pair, timeframe=timeframe, limit=limit)
 
-        ohlcv: DataFrame = create_synthetic_pair(base_bars, quote_bars)
+        self.ohlcv_data[timeframe]: DataFrame = create_synthetic_pair(base_bars, quote_bars)
 
-        return ohlcv
+        return self.ohlcv_data
 
-    def get_current_signal(self):
-
-        return self.current_signal
+    def get_timeframe_signal(self, timeframe="1m"):
+        # bars = self.e.fetch_ohlcv(pair, timeframe=_timeframe, limit=_limit)
+        pass
