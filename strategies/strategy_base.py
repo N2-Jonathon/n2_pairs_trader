@@ -3,11 +3,11 @@ from configparser import ConfigParser
 import os
 print(os.getcwd())
 sys.path.append(os.getcwd())
-from core.utils import get_synth_pair_symbol
+from core.utils import get_synth_pair_symbol, create_synthetic_pair
 """
 config = configparser.ConfigParser
-config_path = os.path.join(os.getcwd(), 'config.ini')
-config.read(config_path)
+user_config_path = os.path.join(os.getcwd(), 'user-config.ini')
+user_config.read(config_path)
 """
 
 
@@ -29,4 +29,13 @@ class StrategyBase:
             if timeframe.lower in ['1m', '5m', '15m', '1h', '4h', '1d', '1w']:
                 self.timeframes.append(timeframe)
 
+    def get_current_signal(self):
+        return self.current_signal
 
+    def get_synth_ohlcv(self, timeframe="1m", limit=50):
+        base_bars = self.fetch_ohlcv(self.base_pair, timeframe=timeframe, limit=limit)
+        quote_bars = self.fetch_ohlcv(self.quote_pair, timeframe=timeframe, limit=limit)
+
+        ohlcv = create_synthetic_pair(base_bars, quote_bars)
+
+        return ohlcv

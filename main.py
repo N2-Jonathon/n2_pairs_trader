@@ -1,30 +1,38 @@
 import asyncio
 import ccxt
-import configparser
 import pandas as pd
 import warnings
+from configparser import ConfigParser
 
 from core.indicators import supertrend
 from core.utils import check_signals, create_synthetic_pair
 from core.position_manager import Position, PositionManager
+from strategies.strategy_base import StrategyBase
+
+from scripts.kucoin_extended import KuCoinExtended
 
 pd.set_option('display.max_rows', None)
 warnings.filterwarnings('ignore')
 
-config = configparser.ConfigParser()
-config.read("config.ini")
+config = ConfigParser()
+config.read("user-config.ini")
 
-exchange = ccxt.kucoin({
+kucoin = KuCoinExtended({
     "apiKey": config['KuCoin']['apiKey'],
     "secret": config['KuCoin']['secret'],
     "password": config['KuCoin']['password']
 })
 
+exchange = kucoin
+
+
+# print(balances)
 
 async def main(base_pair=config['Global Settings']['base_pair_default'],
                quote_pair=config['Global Settings']['quote_pair_default']):
     running = True
     manager = PositionManager()
+    strategy = StrategyBase(config, base_pair, quote_pair)
 
     while running:
 
@@ -38,7 +46,6 @@ async def main(base_pair=config['Global Settings']['base_pair_default'],
 
         signal = check_signals(supertrend_data)
 
-
         # [DEBUG] Un-comment one of the three lines below to force a signal:
         # signal = 'LONG'
         # signal = 'SHORT'
@@ -46,7 +53,7 @@ async def main(base_pair=config['Global Settings']['base_pair_default'],
 
         print(f"Signal: {signal}")
 
-        if signal is not None and signal is not 'CLOSE':
+        if signal is not None and signal != 'CLOSE':
 
             if manager.get_current_position() is None:
                 position = Position(base_pair, quote_pair,
@@ -54,7 +61,7 @@ async def main(base_pair=config['Global Settings']['base_pair_default'],
                                     order_type='limit').open()
                 manager.set_current_position(position)
 
-        elif signal is 'CLOSE':
+        elif signal == 'CLOSE':
             manager.current_position.close()
 
         await asyncio.sleep(60)

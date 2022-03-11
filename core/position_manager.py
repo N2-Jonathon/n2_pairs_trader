@@ -1,12 +1,8 @@
 import ccxt
-import configparser
-import utils
+from configparser import ConfigParser
 from pprint import pprint
 
-from scripts.kucoin import fetch_borrow_rate
-
-config = configparser.ConfigParser()
-config.read("config.ini")
+# from scripts.kucoin import fetch_borrow_rate
 
 
 class Position:
@@ -18,6 +14,25 @@ class Position:
       of the pairs trade which must come before the long side
     * It can be instantiated either by assigning Position()
       or Position().open() to a variable.
+
+    EXAMPLE USAGE:
+
+        init_position = Position(base_pair='ETHUSDT',
+                               quote_pair='BTCUSDT',
+                               direction='LONG',
+                               order_type='market',
+                               prompt_borrow_qty=False)
+
+        open_position = init_position.open(direction='LONG',
+                                       order_type='market',
+                                       prompt_borrow_qty=False)
+
+        init_and_open = Position(base_pair='ETHUSDT',
+                               quote_pair='BTCUSDT',
+                               direction='LONG',
+                               order_type='market',
+                               prompt_borrow_qty=False).open()
+
     """
     borrow_coin = {
         "name": None,
@@ -34,24 +49,25 @@ class Position:
         else:
             raise ValueError("Invalid Position Direction.\n"
                              "Accepted values are: 'LONG' or 'SHORT'")
-        borrow_coin = utils.split_pair(short_pair, 'coin_pair')[0]
+        # borrow_coin = utils.split_pair(short_pair, 'coin_pair')[0]
 
-        return borrow_coin
+        # return borrow_coin
 
-    def __init__(self, base_pair, quote_pair, direction,
-                 order_type='market', prompt_borrow_qty=False, exchange=config['Global Settings']['exchange']):
+    def __init__(self, config: ConfigParser, base_pair, quote_pair, direction,
+                 order_type='market', prompt_borrow_qty=False):
+        self.config = config
         self.status = 'init'
-        self.exchange_name = exchange
+        self.exchange_id = config['Global Settings']['exchange']
         self.base_pair = base_pair
         self.quote_pair = quote_pair
-        self.synth_pair = utils.get_synth_pair_symbol(self.base_pair, self.quote_pair)
+        # self.synth_pair = utils.get_synth_pair_symbol(self.base_pair, self.quote_pair)
 
         self.direction = direction
         self.borrow_coin['name'] = self.get_borrow_coin(base_pair, quote_pair, direction)
         self.order_type = order_type
         self.prompt_borrow_qty = prompt_borrow_qty
 
-        if self.exchange_name.lower() == 'kucoin':
+        if self.exchange_id.lower() == 'kucoin':
             self.exchange = ccxt.kucoin({"apiKey": config['KuCoin']['apiKey'],
                                          "secret": config['KuCoin']['secret'],
                                          "password": config['KuCoin']['password']
@@ -59,7 +75,6 @@ class Position:
         else:
             raise NotImplementedError("Unsupported Exchange:\n"
                                       "Currently the only tested exchange is KuCoin.")
-
 
     def create_order(self, pair, direction, quantity, order_type='market'):
         """
@@ -208,14 +223,4 @@ class PositionManager:
 
 # DEBUG
 
-my_position = Position(base_pair='ETHUSDT',
-                       quote_pair='BTCUSDT',
-                       direction='LONG',
-                       order_type='market',
-                       prompt_borrow_qty=False)
 
-my_position = my_position.open(direction='LONG',
-                               order_type='market',
-                               prompt_borrow_qty=False)
-
-print(my_position)

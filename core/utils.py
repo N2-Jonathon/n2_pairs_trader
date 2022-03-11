@@ -6,7 +6,7 @@ from datetime import datetime
 
 """
 config = configparser.ConfigParser()
-config.read("config.ini")
+config.read("user-config.ini")
 
 exchange = ccxt.kucoin({
     "apiKey": config['KuCoin']['apiKey'],
