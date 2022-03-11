@@ -53,7 +53,6 @@ import logging
 import types
 
 
-
 class KuCoinExtended(ccxt.kucoin):
     """
     This class inherits ccxt.kucoin, and any methods defined here will

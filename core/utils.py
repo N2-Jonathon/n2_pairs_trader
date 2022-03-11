@@ -1,3 +1,5 @@
+import warnings
+
 import pandas as pd
 import ccxt
 import importlib
@@ -5,6 +7,9 @@ import importlib
 from ccxt.base.errors import BadSymbol
 import configparser
 from datetime import datetime
+
+pd.set_option('display.max_rows', None)
+warnings.filterwarnings('ignore')
 
 """
 config = configparser.ConfigParser()
