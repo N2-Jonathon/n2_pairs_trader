@@ -11,11 +11,10 @@ import ccxt
 import requests
 import configparser
 import time
-from pprint import pprint
 
 from ccxt.base.exchange import Exchange, long
 
-import utils
+from core import utils
 
 
 def iso8601(timestamp=None):

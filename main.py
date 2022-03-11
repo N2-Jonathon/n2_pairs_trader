@@ -1,15 +1,12 @@
 import asyncio
-import threading
 import ccxt
 import configparser
 import pandas as pd
-import time
 import warnings
 
-import utils
-from indicators import supertrend
-from utils import check_signals, create_synthetic_pair
-from position_manager import Position, PositionManager
+from core.indicators import supertrend
+from core.utils import check_signals, create_synthetic_pair
+from core.position_manager import Position, PositionManager
 
 pd.set_option('display.max_rows', None)
 warnings.filterwarnings('ignore')
@@ -24,12 +21,13 @@ exchange = ccxt.kucoin({
 })
 
 
-async def main(base_pair=config['Bot Settings']['base_pair_default'],
-               quote_pair=config['Bot Settings']['quote_pair_default']):
+async def main(base_pair=config['Global Settings']['base_pair_default'],
+               quote_pair=config['Global Settings']['quote_pair_default']):
     running = True
     manager = PositionManager()
 
     while running:
+
         # This code is for one timeframe. Later, do the same iterated for each timeframe.
         base_bars = exchange.fetch_ohlcv(base_pair, timeframe="1m", limit=50)
         quote_bars = exchange.fetch_ohlcv(quote_pair, timeframe="1m", limit=50)
@@ -39,6 +37,8 @@ async def main(base_pair=config['Bot Settings']['base_pair_default'],
         supertrend_data = supertrend(pair)
 
         signal = check_signals(supertrend_data)
+
+
         # [DEBUG] Un-comment one of the three lines below to force a signal:
         # signal = 'LONG'
         # signal = 'SHORT'

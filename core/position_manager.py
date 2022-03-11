@@ -39,7 +39,7 @@ class Position:
         return borrow_coin
 
     def __init__(self, base_pair, quote_pair, direction,
-                 order_type='market', prompt_borrow_qty=False, exchange=config['Bot Settings']['exchange']):
+                 order_type='market', prompt_borrow_qty=False, exchange=config['Global Settings']['exchange']):
         self.status = 'init'
         self.exchange_name = exchange
         self.base_pair = base_pair
