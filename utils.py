@@ -1,8 +1,10 @@
 import pandas as pd
 import ccxt
+from ccxt.base.errors import BadSymbol
 import configparser
 from datetime import datetime
 
+"""
 config = configparser.ConfigParser()
 config.read("config.ini")
 
@@ -11,13 +13,30 @@ exchange = ccxt.kucoin({
     "secret": config['KuCoin']['secret'],
     "password": config['KuCoin']['password']
 })
-
+"""
 
 def get_synth_pair_symbol(base_pair, quote_pair):
     return f"{base_pair}/{quote_pair}"
 
 
-def split_pair(pair, pair_type):
+def fetch_ticker(_exchange, symbol, params={}):
+    if _exchange.has['fetchTickers']:
+        tickers = _exchange.fetch_tickers([symbol], params)
+        ticker = _exchange.safe_value(tickers, symbol)
+        if ticker is None:
+            return None
+        else:
+            return ticker
+    else:
+        raise Exception(f' fetchTicker not supported yet by {_exchange}')
+
+
+def is_valid_coin(_exchange: ccxt.Exchange, symbol, params={}):
+    balances = _exchange.base_currencies
+
+
+
+def split_pair(exchange, pair, pair_type):
     if pair_type == 'coin_pair':
         valid_coins = exchange.fetch_balance()
         print(valid_coins)
@@ -30,13 +49,16 @@ def split_pair(pair, pair_type):
         pass
 
 
-def get_bars(pair: str, _timeframe: str, _limit: int):
+def get_bars(exchange, pair: str, _timeframe: str, _limit: int):
+    """
+    Unused
+    """
     # print(f"Fetching new bars for {datetime.now().isoformat()}")
     bars = exchange.fetch_ohlcv(pair, timeframe=_timeframe, limit=_limit)
     return bars
 
 
-def check_buy_sell_signals(df, open_position=None):
+def check_signals(df, open_position=None):
     # print("Checking for signals")
     # print(df.tail(50))
     last_row_index = len(df.index) - 1
@@ -90,3 +112,5 @@ def create_synthetic_pair(base_bars, quote_bars):
         f"{df_synth}"
         "\n----------------------------------------------------------------\n")
     return df_synth
+
+

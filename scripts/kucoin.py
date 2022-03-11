@@ -15,6 +15,7 @@ from pprint import pprint
 
 from ccxt.base.exchange import Exchange, long
 
+import utils
 
 
 def iso8601(timestamp=None):
@@ -71,20 +72,47 @@ def safe_number(dictionary, key, default=None):
     return parse_number(value, default)
 
 
-config = configparser.ConfigParser()
-os.path.join(os.getcwd(), '..', 'config.ini')
-config_path = os.path.join(os.getcwd(), 'config.ini')
-print(config_path)
-config.read(os.path.join(os.getcwd(), 'config.ini'))
+def split_pair(pair, pair_type):
+    if pair_type == 'coin_pair':
+        print(f"{pair}\n"
+              f"{pair[:4]}\n"
+              f"{pair[:3]}\n")
+        if utils.fetch_ticker(ccxt_kucoin, pair[:4]) is not None:
+            base_coin = pair[:4]
+            quote_index = 4
+        elif utils.fetch_ticker(ccxt_kucoin, pair[:3]) is not None:
+            base_coin = pair[:3]
+            quote_index = 3
+        else:
 
-print(config)
+            raise ValueError("Invalid Base Coin")
+
+        if utils.fetch_ticker(ccxt_kucoin, pair[quote_index:]) is not None:
+            quote_coin = pair[quote_index:]
+        else:
+            raise ValueError("Invalid Quote Coin")
+        return {
+            "pair": pair,
+            "base": base_coin,
+            "quote": quote_coin
+        }
+
+    elif pair_type == 'pair_of_coin_pairs':
+        if '/' in pair:
+            return pair.split('/')
+        else:
+            raise ValueError('Invalid trading pair')
+
+
+config = configparser.ConfigParser()
+config_path = os.path.join(os.getcwd(), 'config.ini')
+config.read(config_path)
 
 api_url = 'https://api.kucoin.com'
 
 api_key = config['KuCoin']['apiKey']
 api_secret = config['KuCoin']['secret']
 api_passphrase = config['KuCoin']['password']
-
 
 ccxt_kucoin = ccxt.kucoin({
     "apiKey": api_key,
@@ -95,7 +123,6 @@ ccxt_kucoin = ccxt.kucoin({
 
 def query_margin_risk_limit():
     endpoint = '/api/v1/risk/limit/strategy?marginModel=cross'
-    # endpoint = "/api/v1/sub/user"
     now = int(time.time() * 1000)
 
     str_to_sign = str(now) + 'GET' + endpoint
@@ -116,16 +143,10 @@ def query_margin_risk_limit():
 
 
 def fetch_borrow_rates(params={}, exchange=ccxt_kucoin):
-    # pprint(self)
-    # pprint(query_margin_risk_limit())
-
     response = json.loads(query_margin_risk_limit())
     now = int(time.time() * 1000)
-    # response_json = response.decode('utf-8').replace("'", '"')
-    # response_json = response.decode('utf-8').replace("'", '"').json
     data = safe_value(response, 'data')
     timestamp = str(now)
-    # pprint(data)
 
     rates = {}
     for i in range(0, len(data)):
@@ -151,6 +172,12 @@ def fetch_borrow_rate(coin):
 
 
 # [DEBUG]
+# print(split_pair('ETHUSD', 'coin_pair'))
+
+data = safe_value(ccxt_kucoin.base_currencies, 'data')
+
+print(data)
+
 
 # rate = fetch_borrow_rate('ETH')
 # rate = query_margin_risk_limit()

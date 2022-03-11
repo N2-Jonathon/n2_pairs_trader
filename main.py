@@ -6,9 +6,10 @@ import pandas as pd
 import time
 import warnings
 
+import utils
 from indicators import supertrend
-from utils import check_buy_sell_signals, create_synthetic_pair
-from position_manager import Position
+from utils import check_signals, create_synthetic_pair
+from position_manager import Position, PositionManager
 
 pd.set_option('display.max_rows', None)
 warnings.filterwarnings('ignore')
@@ -16,17 +17,17 @@ warnings.filterwarnings('ignore')
 config = configparser.ConfigParser()
 config.read("config.ini")
 
-
 exchange = ccxt.kucoin({
-  "apiKey": config['KuCoin']['apiKey'],
-  "secret": config['KuCoin']['secret'],
-  "password": config['KuCoin']['password']
+    "apiKey": config['KuCoin']['apiKey'],
+    "secret": config['KuCoin']['secret'],
+    "password": config['KuCoin']['password']
 })
 
 
 async def main(base_pair=config['Bot Settings']['base_pair_default'],
                quote_pair=config['Bot Settings']['quote_pair_default']):
     running = True
+    manager = PositionManager()
 
     while running:
         # This code is for one timeframe. Later, do the same iterated for each timeframe.
@@ -37,34 +38,26 @@ async def main(base_pair=config['Bot Settings']['base_pair_default'],
 
         supertrend_data = supertrend(pair)
 
-        signal = check_buy_sell_signals(supertrend_data)
+        signal = check_signals(supertrend_data)
+        # [DEBUG] Un-comment one of the three lines below to force a signal:
+        # signal = 'LONG'
+        # signal = 'SHORT'
+        # signal = 'CLOSE'
+
         print(f"Signal: {signal}")
 
-        """ Position Class Definition from ./position_manager.py
-        `def open(self, exchange, synth_pair, base_pair, quote_pair, borrow_coin, borrow_qty, direction,
-                     order_type='market', prompt_borrow_confirmation=False):`
-        """
+        if signal is not None and signal is not 'CLOSE':
 
-        if signal == "LONG":
-            live_position = Position(base_pair, quote_pair,
-                                     direction=signal,
-                                     order_type='limit')
-            live_position.open()
+            if manager.get_current_position() is None:
+                position = Position(base_pair, quote_pair,
+                                    direction=signal,
+                                    order_type='limit').open()
+                manager.set_current_position(position)
 
-            print(f"Opened LONG position on {exchange}.\n"
-                  f"Double Pair/Synthetic Pair: {synth}")
-            pass
-        elif signal == "SHORT":
-            live_position = Position.open(exchange,
-                                          'ETHUSDT/BTCUSDT',  # synth_pair
-                                          'ETH/USDT',  # base_pair
-                                          'BTC/USDT',  # quote_pair
-                                          'BTC',  # borrow_coin
-                                          'SHORT')            # position_type
-            pass
+        elif signal is 'CLOSE':
+            manager.current_position.close()
 
         await asyncio.sleep(60)
-
 
 
 asyncio.run(main())

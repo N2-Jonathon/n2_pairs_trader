@@ -34,7 +34,7 @@ class Position:
         else:
             raise ValueError("Invalid Position Direction.\n"
                              "Accepted values are: 'LONG' or 'SHORT'")
-        borrow_coin = utils.split_pair(short_pair)[0]
+        borrow_coin = utils.split_pair(short_pair, 'coin_pair')[0]
 
         return borrow_coin
 
@@ -59,7 +59,6 @@ class Position:
         else:
             raise NotImplementedError("Unsupported Exchange:\n"
                                       "Currently the only tested exchange is KuCoin.")
-
 
 
     def create_order(self, pair, direction, quantity, order_type='market'):
@@ -190,6 +189,21 @@ class Position:
               f'TODO: Implement logic for def close() in position_manager.py')
 
         return self, 0
+
+
+class PositionManager:
+
+    def __init__(self):
+        self.current_position: Position = None
+
+    def set_current_position(self, position: Position):
+        self.current_position = position
+
+    def get_current_position(self):
+        return self.current_position
+
+    def save_closed_position(self):
+        pass
 
 
 # DEBUG
