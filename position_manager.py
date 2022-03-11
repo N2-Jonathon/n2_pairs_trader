@@ -1,6 +1,9 @@
 import ccxt
 import configparser
 import utils
+from pprint import pprint
+
+from scripts.kucoin import fetch_borrow_rate
 
 config = configparser.ConfigParser()
 config.read("config.ini")
@@ -18,10 +21,22 @@ class Position:
     """
     borrow_coin = {
         "name": None,
-        "quantity": None,
         "borrow_timestamp": None,
         "repay_timestamp": None
     }
+
+    @staticmethod
+    def get_borrow_coin(base_pair, quote_pair, position_direction):
+        if position_direction == 'LONG':
+            short_pair = quote_pair
+        elif position_direction == 'SHORT':
+            short_pair = base_pair
+        else:
+            raise ValueError("Invalid Position Direction.\n"
+                             "Accepted values are: 'LONG' or 'SHORT'")
+        borrow_coin = utils.split_pair(short_pair)[0]
+
+        return borrow_coin
 
     def __init__(self, base_pair, quote_pair, direction,
                  order_type='market', prompt_borrow_qty=False, exchange=config['Bot Settings']['exchange']):
@@ -32,7 +47,7 @@ class Position:
         self.synth_pair = utils.get_synth_pair_symbol(self.base_pair, self.quote_pair)
 
         self.direction = direction
-
+        self.borrow_coin['name'] = self.get_borrow_coin(base_pair, quote_pair, direction)
         self.order_type = order_type
         self.prompt_borrow_qty = prompt_borrow_qty
 
@@ -44,6 +59,8 @@ class Position:
         else:
             raise NotImplementedError("Unsupported Exchange:\n"
                                       "Currently the only tested exchange is KuCoin.")
+
+
 
     def create_order(self, pair, direction, quantity, order_type='market'):
         """
@@ -104,8 +121,8 @@ class Position:
         #         is in the local dir. The other steps will be
         #         easy after that.
 
-        available_margin = self.exchange.fetch_borrow_rate(self.borrow_coin)
-        print(available_margin)
+        available_margin = fetch_borrow_rate(self.borrow_coin)
+        pprint(available_margin)
 
         # ----------------------------------------
         # Step 2: If prompt_borrow is true, print
@@ -180,7 +197,6 @@ class Position:
 my_position = Position(base_pair='ETHUSDT',
                        quote_pair='BTCUSDT',
                        direction='LONG',
-                       borrow_coin='BTC',
                        order_type='market',
                        prompt_borrow_qty=False)
 

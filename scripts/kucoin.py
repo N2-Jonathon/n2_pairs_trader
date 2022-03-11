@@ -5,6 +5,7 @@ import hashlib
 import hmac
 import json
 import datetime
+import os
 
 import ccxt
 import requests
@@ -71,7 +72,12 @@ def safe_number(dictionary, key, default=None):
 
 
 config = configparser.ConfigParser()
-config.read("../config.ini")
+os.path.join(os.getcwd(), '..', 'config.ini')
+config_path = os.path.join(os.getcwd(), 'config.ini')
+print(config_path)
+config.read(os.path.join(os.getcwd(), 'config.ini'))
+
+print(config)
 
 api_url = 'https://api.kucoin.com'
 
@@ -137,6 +143,7 @@ def fetch_borrow_rates(params={}, exchange=ccxt_kucoin):
         }
     return rates
 
+
 def fetch_borrow_rate(coin):
     rates = fetch_borrow_rates()
     _rate = rates[coin]
@@ -145,6 +152,6 @@ def fetch_borrow_rate(coin):
 
 # [DEBUG]
 
-rate = fetch_borrow_rate('ETH')
+# rate = fetch_borrow_rate('ETH')
 # rate = query_margin_risk_limit()
-print(rate)
+# print(rate)
