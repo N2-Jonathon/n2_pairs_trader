@@ -12,22 +12,25 @@ from core.config import Config
 pd.set_option('display.max_rows', None)
 warnings.filterwarnings('ignore')
 """
-user_config = ConfigParser()
-user_config.read("user/user-config.ini")
 
 
-# print(balances)
+async def main(config=Config()):
 
-async def main(exchange=exchanges[user_config['Global Settings']['exchange']],
-               strategy=user_config['Global Settings']['strategy'],
-               prompt_for_pairs=user_config['Global Settings']['prompt_for_pairs'],
-               base_pair=user_config['Global Settings']['base_pair_default'],
-               quote_pair=user_config['Global Settings']['quote_pair_default'],
-               stake_currency=user_config['Global Settings']['stake_currency']):
-
-    config = Config(exchange, strategy, prompt_for_pairs, base_pair, quote_pair, stake_currency)
+    # - The param inside main() `config=Config()` is
+    # doing the same thing as below, except with the
+    # values read from user-config
+    # - So, assigning it again  is actually redundant,
+    # and it's just to demonstrate how to override the
+    # default config
+    config = Config(exchange='kucoin',
+                    strategy='n2_supertrend',
+                    prompt_for_pairs=False,
+                    base_pair='ETH/USD',
+                    quote_pair='BTC/USD',
+                    stake_currency='USDT')
 
     running = True
+
     # strategy = N2SuperTrend(exchange, config, base_pair, quote_pair)
     # manager = strategy.position_manager
     manager = PositionManager()
@@ -48,8 +51,8 @@ async def main(exchange=exchanges[user_config['Global Settings']['exchange']],
         # This code is for one timeframe. Later, do the same iterated for each timeframe.
         # ---------------------------------------------------
         for timeframe in strategy_timeframes:
-            base_bars = exchange.fetch_ohlcv(base_pair, timeframe=timeframe, limit=50)
-            quote_bars = exchange.fetch_ohlcv(quote_pair, timeframe=timeframe, limit=50)
+            base_bars = config.exchange.fetch_ohlcv(config.base_pair, timeframe=timeframe, limit=50)
+            quote_bars = config.exchange.fetch_ohlcv(config.quote_pair, timeframe=timeframe, limit=50)
 
             synth_pair = create_synthetic_pair(base_bars, quote_bars)
 
@@ -85,7 +88,7 @@ async def main(exchange=exchanges[user_config['Global Settings']['exchange']],
         if signal is not None and signal != 'CLOSE':
 
             if manager.get_current_position() is None:
-                position = Position(base_pair, quote_pair,
+                position = Position(config.base_pair, config.quote_pair,
                                     direction=signal,
                                     order_type='limit').open()
                 manager.set_current_position(position)
