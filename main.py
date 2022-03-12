@@ -14,14 +14,15 @@ warnings.filterwarnings('ignore')
 """
 
 
-async def main(config: Config = Config()):
+async def main(_config: Config = Config()):
 
     # - The param inside main() `config=Config()` is
     # doing the same thing as below, except with the
     # values read from user-config
     # - So, assigning it again  is actually redundant,
     # and it's just to demonstrate how to override the
-    # default config
+    # default config.
+    config = _config
     config = Config(exchange='kucoin',
                     strategy='n2_supertrend',
                     prompt_for_pairs=False,
