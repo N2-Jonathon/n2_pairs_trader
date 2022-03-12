@@ -2,14 +2,16 @@ import sys
 from configparser import ConfigParser
 import os
 import ccxt
-
-print(os.getcwd())
-sys.path.append(os.getcwd())
-
-from core.position_manager import PositionManager, Position
-from core.utils import get_synth_pair_symbol, get_exchange_module_from_id  # , create_synthetic_pair
 import pandas as pd
 from pandas import DataFrame
+import importlib
+sys.path.append(os.getcwd())
+
+from core.exchanges.exchanges import exchanges
+from core.config import Config
+from core.position_manager import PositionManager, Position
+from core.utils import get_synth_pair_symbol, get_exchange_module_from_id  # , create_synthetic_pair
+
 
 """
 config = ConfigParser
@@ -20,15 +22,23 @@ config.read(self=config, filenames=user_config_path)
 
 class StrategyBase:
 
-    def __init__(self, exchange: ccxt.Exchange, config: ConfigParser, base_pair: str, quote_pair: str, timeframes=[], paper_trade=False):
-        self.config = config
-        self.exchange_id: str = config['Global Settings']['exchange']
-        self.exchange = exchange
+    def __int__(self, config=Config(ConfigParser.read("user/user-config.ini"))):
+        self.exchange_id = config.exchange_id
+        self.exchange = config.exchange
+        self.prompt_for_pairs = config.prompt_for_pairs
+        self.base_pair = config.base_pair
+        self.quote_pair = config.quote_pair
+        self.stake_currency = config.stake_currency
+
+    def __init__(self, exchange: ccxt.Exchange, base_pair: str, quote_pair: str, timeframes=[], paper_trade=False, config: Config = None, ):
+
+        self.exchange_id: str = exchange
+        self.exchange: ccxt.Exchange = exchanges[exchange]
+        self.base_pair: str = base_pair,
+        self.quote_pair: str = quote_pair,
 
         self.name = None
         self.current_signal = None
-        self.base_pair = base_pair
-        self.quote_pair = quote_pair
         self.synth_pair = get_synth_pair_symbol(base_pair, quote_pair)
         self.paper_trade = paper_trade
         self.timeframes = []

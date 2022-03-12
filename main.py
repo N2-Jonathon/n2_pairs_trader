@@ -5,33 +5,28 @@ import ccxt
 from core.indicators import supertrend
 from core.position_manager import Position, PositionManager
 from core.utils import create_synthetic_pair, check_signals
+from core.exchanges.exchanges import exchanges
+from core.config import Config
 
-from core.exchanges.kucoin_extended import KuCoinExtended
 """
 pd.set_option('display.max_rows', None)
 warnings.filterwarnings('ignore')
 """
-config = ConfigParser()
-config.read("user/user-config.ini")
-
-kucoin = KuCoinExtended({
-    "apiKey": config['KuCoin']['apiKey'],
-    "secret": config['KuCoin']['secret'],
-    "password": config['KuCoin']['password']
-})
-
-hitbtc = ccxt.hitbtc({
-    "apiKey": config['HitBTC']['apiKey'],
-    "secret": config['HitBTC']['apiKey']
-})
-
-exchange = kucoin
+user_config = ConfigParser()
+user_config.read("user/user-config.ini")
 
 
 # print(balances)
 
-async def main(base_pair=config['Global Settings']['base_pair_default'],
-               quote_pair=config['Global Settings']['quote_pair_default']):
+async def main(exchange=exchanges[user_config['Global Settings']['exchange']],
+               strategy=user_config['Global Settings']['strategy'],
+               prompt_for_pairs=user_config['Global Settings']['prompt_for_pairs'],
+               base_pair=user_config['Global Settings']['base_pair_default'],
+               quote_pair=user_config['Global Settings']['quote_pair_default'],
+               stake_currency=user_config['Global Settings']['stake_currency']):
+
+    config = Config(exchange, strategy, prompt_for_pairs, base_pair, quote_pair, stake_currency)
+
     running = True
     # strategy = N2SuperTrend(exchange, config, base_pair, quote_pair)
     # manager = strategy.position_manager
@@ -72,9 +67,6 @@ async def main(base_pair=config['Global Settings']['base_pair_default'],
         # current_ohlcv = strategy.update_synthetic_pair()
         # signal = strategy.get_timeframe_signal()
         # ---------------------------------------------------
-
-
-
 
         # [DEBUG] Un-comment one of the three lines below to force a signal:
         # signal = 'LONG'
