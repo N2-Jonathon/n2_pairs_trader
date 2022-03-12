@@ -14,7 +14,7 @@ warnings.filterwarnings('ignore')
 """
 
 
-async def main(config=Config()):
+async def main(config: Config = Config()):
 
     # - The param inside main() `config=Config()` is
     # doing the same thing as below, except with the
