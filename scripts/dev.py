@@ -1,12 +1,10 @@
-
-import importlib
-from pprint import pprint
-import ccxt
 import os
 import sys
 sys.path.append(os.getcwd())
-from strategies.strategy_base import StrategyBase
 from core.utils import get_exchange_module_from_id
+from core.exchanges.exchanges import kucoin
+
+type(kucoin)
 
 binance = get_exchange_module_from_id('binance')
 

@@ -1,17 +1,12 @@
 import asyncio
-import pandas as pd
-import warnings
 from configparser import ConfigParser
-from pprint import pprint
 import ccxt
 
 from core.indicators import supertrend
-from strategies.strategy_base import StrategyBase
-from strategies.n2_supertrend import N2SuperTrend
 from core.position_manager import Position, PositionManager
 from core.utils import create_synthetic_pair, check_signals
 
-from scripts.kucoin_extended import KuCoinExtended
+from core.exchanges.kucoin_extended import KuCoinExtended
 """
 pd.set_option('display.max_rows', None)
 warnings.filterwarnings('ignore')
