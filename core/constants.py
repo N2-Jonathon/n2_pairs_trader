@@ -17,7 +17,17 @@ locations.
 """
 import os
 
+USER_CONFIG_PATH = None
+"""
+`USER_CONFIG_FILEPATH` has to be assigned in __main__, 
+otherwise if I use `f"{os.getcwd()}/user/user-config.ini"`
+inside this file, then wherever I import it will mess up
+the relative path. So, here it's set to `None`
 
-USER_CONFIG_FILEPATH = f"{os.getcwd()}/user/user-config.ini"
+f"{os.getcwd()}/user/user-config.ini" will only work 
+when the current working directory is the project root.
+"""
 
-print(USER_CONFIG_FILEPATH)
+
+
+print(USER_CONFIG_PATH)
