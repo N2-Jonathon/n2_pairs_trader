@@ -9,14 +9,14 @@ print(f"{os.getcwd()}/user/user-config.ini")
 user_config_filepath = f"{os.getcwd()}/user/user-config.ini"
 user_config = ConfigParser()
 user_config.read("/user/user-config.ini")
-import strategies
 from core.exchanges.kucoin_extended import KuCoinExtended
 
 
 class Config:
     __dict__ = {
         "exchange": str,
-        "strategy": str,
+        "strategy_name": str,
+        "strategy": None,  # : StrategyBase, (Caused circular import when setting type to StrategyBase)
         "prompt_for_pairs": bool,
         "base_pair": str,
         "quote_pair": str,

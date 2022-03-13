@@ -14,26 +14,12 @@ from core.utils import get_synth_pair_symbol, get_exchange_module_from_id  # , c
 
 class StrategyBase(Config):
 
-    def __int__(self, config=Config(params=None),):
-        self.exchange_id = config.exchange_id
-        self.exchange = config.exchange
-        self.prompt_for_pairs = config.prompt_for_pairs
-        self.base_pair = config.base_pair
-        self.quote_pair = config.quote_pair
-        self.stake_currency = config.stake_currency
-
-    def __init__(self, exchange: ccxt.Exchange, base_pair: str, quote_pair: str, timeframes=[], paper_trade=False):
-
-        self.exchange_id: str = exchange
-        self.exchange: ccxt.Exchange = exchanges[exchange]
-        self.base_pair: str = base_pair
-        self.quote_pair: str = quote_pair
-        self.timeframes = timeframes
-        self.paper_trade = paper_trade
+    def __int__(self, params={}, config_filepath=None):
+        super(params, config_filepath)
 
         self.name = None
         self.current_signal = None
-        self.synth_pair = get_synth_pair_symbol(base_pair, quote_pair)
+        self.synth_pair = get_synth_pair_symbol(self.base_pair, self.quote_pair)
         self.manager = PositionManager
         self.ohlcv_data = {
             "1m": DataFrame,
@@ -45,9 +31,6 @@ class StrategyBase(Config):
             "1w": DataFrame
         }
 
-        for timeframe in timeframes:
-            if timeframe.lower in ['1m', '5m', '15m', '1h', '4h', '1d', '1w']:
-                self.timeframes.append(timeframe)
 
     def get_synth_ohlcv(self, timeframe="1m", limit=50):
         base_bars = self.exchange.fetch_ohlcv(self.base_pair, timeframe=timeframe, limit=limit)
