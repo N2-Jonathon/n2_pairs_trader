@@ -7,22 +7,14 @@ from pandas import DataFrame
 import importlib
 sys.path.append(os.getcwd())
 
-from core.exchanges.exchanges import exchanges
 from core.config import Config
 from core.position_manager import PositionManager, Position
 from core.utils import get_synth_pair_symbol, get_exchange_module_from_id  # , create_synthetic_pair
 
 
-"""
-config = ConfigParser
-user_config_path = os.path.join(os.getcwd(), 'user/user-config.ini')
-config.read(self=config, filenames=user_config_path)
-"""
+class StrategyBase(Config):
 
-
-class StrategyBase:
-
-    def __int__(self, config=Config(ConfigParser.read("user/user-config.ini"))):
+    def __int__(self, config=Config(params=None),):
         self.exchange_id = config.exchange_id
         self.exchange = config.exchange
         self.prompt_for_pairs = config.prompt_for_pairs
@@ -30,18 +22,18 @@ class StrategyBase:
         self.quote_pair = config.quote_pair
         self.stake_currency = config.stake_currency
 
-    def __init__(self, exchange: ccxt.Exchange, base_pair: str, quote_pair: str, timeframes=[], paper_trade=False, config: Config = None, ):
+    def __init__(self, exchange: ccxt.Exchange, base_pair: str, quote_pair: str, timeframes=[], paper_trade=False):
 
         self.exchange_id: str = exchange
         self.exchange: ccxt.Exchange = exchanges[exchange]
-        self.base_pair: str = base_pair,
-        self.quote_pair: str = quote_pair,
+        self.base_pair: str = base_pair
+        self.quote_pair: str = quote_pair
+        self.timeframes = timeframes
+        self.paper_trade = paper_trade
 
         self.name = None
         self.current_signal = None
         self.synth_pair = get_synth_pair_symbol(base_pair, quote_pair)
-        self.paper_trade = paper_trade
-        self.timeframes = []
         self.manager = PositionManager
         self.ohlcv_data = {
             "1m": DataFrame,

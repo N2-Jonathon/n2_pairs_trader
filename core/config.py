@@ -2,11 +2,15 @@ import os
 import ccxt
 import sys
 import importlib
+sys.path.append(os.getcwd())
 from configparser import ConfigParser
 
-sys.path.append(os.getcwd())
-from core.exchanges.exchanges import exchanges
-from strategies import strategy_base
+print(f"{os.getcwd()}/user/user-config.ini")
+user_config_filepath = f"{os.getcwd()}/user/user-config.ini"
+user_config = ConfigParser()
+user_config.read("/user/user-config.ini")
+import strategies
+from core.exchanges.kucoin_extended import KuCoinExtended
 
 
 class Config:
@@ -16,36 +20,14 @@ class Config:
         "prompt_for_pairs": bool,
         "base_pair": str,
         "quote_pair": str,
-        "stake_currency": str
+        "stake_currency": str,
+        "paper_trade": bool
     }
 
-    def __int__(self, config: ConfigParser.read = ConfigParser.read("user/user-config.ini")):
-        """
-        - This is the default way to initialize `Config()`
-        - It works with either no params, which defaults to the user config,
-        - Or it can be overridden with a python built-in parsed config file
-          as a param which you can get by calling:
-                `ConfigParser.read("<filepath>.ini")`
+    user_config = ConfigParser()
+    user_config_filepath = f"{os.getcwd()}/user/user-config.ini"
 
-        :param config:
-        :type ConfigParser.read:
-        :return:
-        :rtype:
-        """
-        try:
-            self.exchange_id = config['Global Settings']['exchange']
-            self.exchange = exchanges[config['Global Settings']['exchange']]
-            self.strategy = config['Global Settings']['strategy']
-            self.prompt_for_pairs = config['Global Settings']['prompt_for_pairs']
-            self.base_pair = config['Global Settings']['base_pair_default']
-            self.quote_pair = config['Global Settings']['quote_pair_default']
-            self.stake_currency = config['Global Settings']['stake_currency']
-        except:
-            raise ValueError("Failed to read from user-config.ini (Make sure all values are assigned)")
-        return self
-
-    def __init__(self, exchange: ccxt.Exchange, strategy: strategy_base, prompt_for_pairs: bool,
-                 base_pair: str, quote_pair: str, stake_currency: str):
+    def __init__(self, params={}, config_filepath=None):
         """
         This is another way to initialize Config() by specifying each
         of the values as params instead of reading from a file
@@ -64,36 +46,99 @@ class Config:
         :type str:
         """
 
+        self.params = params
+
+        if params is None or len(params) == 0:
+            if config_filepath is None:
+                self.config_filepath = f"{os.getcwd()}/user/user-config.ini"
+                print(f"[DEBUG] self.config_filepath = {self.config_filepath}")
+
+            self.user_config.read(self.user_config_filepath)
+
+            try:
+                self.exchange_id = self.user_config['Global Settings']['exchange']
+                self.strategy_name = self.user_config['Global Settings']['strategy']
+                self.strategy_import_path = f"strategies.{self.strategy_name}"
+
+                self.prompt_for_pairs = bool(self.user_config['Global Settings']['prompt_for_pairs'])
+                self.base_pair = self.user_config['Global Settings']['base_pair_default']
+                self.quote_pair = self.user_config['Global Settings']['quote_pair_default']
+                self.stake_currency = self.user_config['Global Settings']['stake_currency']
+                self.paper_trade = bool(self.user_config['Global Settings']['paper_trade'])
+
+                # self.strategy = importlib.import_module(f"strategies.{self.strategy_name}")
+                # self.exchange: ccxt.Exchange = self.enabled_exchanges[self.exchange_id]
+            except:
+                raise ValueError("Failed to read from config (Make sure all values are assigned)")
+        elif self.params is not None:
+            for param in self.params:
+                if param not in self.__dict__:
+                    raise ValueError(f"Invalid Parameter: '{param}'")
+
+            try:
+                self.exchange_id: str = self.params['exchange']
+                self.strategy_name = self.params['strategy']
+                self.strategy_import_path = f"strategies.{self.strategy_name['strategy']}"
+
+                self.prompt_for_pairs: bool = params['prompt_for_pairs'],
+                self.base_pair: str = params['base_pair'],
+                self.quote_pair: str = params['quote_pair'],
+                self.stake_currency: str = params['stake_currency']
+                self.paper_trade: bool = params['paper_trade']
+
+                # self.strategy = importlib.import_module(f"strategies.{self.strategy_name}")
+                # self.exchange: ccxt.Exchange = self.enabled_exchanges[self.exchange_id]
+            except:
+                raise ValueError("Params incomplete")
+        else:
+            raise ValueError("Cannot Initialize Config() without either params or config_filepath")
+        self.enabled_exchanges = self.get_enabled_exchanges()
+        self.exchange: ccxt.Exchange = self.enabled_exchanges[self.exchange_id.lower()]
+        if self.strategy_name is not None:
+            self.strategy = importlib.import_module(f"strategies.{self.strategy_name}")
+
+
+    def new(self, exchange: str, strategy_name: str, prompt_for_pairs: bool, base_pair: str,
+            quote_pair: str, stake_currency: str, paper_trade: bool):
+        self.get_enabled_exchanges()
+        self.strategy_name = strategy_name
         try:
-            self.exchange_id: str = exchange
-            self.exchange: ccxt.Exchange = exchanges[exchange]
-            self.strategy = importlib.import_module(f"strategies.{strategy}")
+            self.exchange_id = exchange
+            self.strategy_import_path = f"strategies.{strategy_name}"
+
             self.prompt_for_pairs: bool = prompt_for_pairs,
-            self.base_pair: str = base_pair,
-            self.quote_pair: str = quote_pair,
+            self.base_pair: str = base_pair
+            self.quote_pair: str = quote_pair
             self.stake_currency: str = stake_currency
+            self.paper_trade: bool = paper_trade
         except:
-            raise ValueError("Invalid params")
+            raise ValueError("Invalid Config Params")
 
-    def __init__(self, params={}):
-        """
-        Not sure if this is really necessary, but this third way of
-        initializing Config() it allows taking the params as a dict,
-        then assigns them to the class properties.
+        self.strategy_name = importlib.import_module(f"strategies.{self.strategy_name}")
+        self.exchange: ccxt.Exchange = self.enabled_exchanges[self.exchange_id]
 
-        :param params:
-        :type params:
-        """
-        for param in params:
-            if param not in self.__dict__:
-                raise ValueError(f"Invalid Parameter: '{param}'")
+    def get_enabled_exchanges(self):
+        self.user_config.read(user_config_filepath)
+
+        enabled_exchanges = {}
         try:
-            self.exchange_id: str = params['exchange']
-            self.exchange: ccxt.Exchange = exchanges[self.exchange_id]
-            self.strategy = importlib.import_module(f"strategies.{params['strategy']}")
-            self.prompt_for_pairs: bool = params['prompt_for_pairs'],
-            self.base_pair: str = params['base_pair'],
-            self.quote_pair: str = params['quote_pair'],
-            self.stake_currency: str = params['stake_currency']
+            enabled_exchanges['kucoin'] = KuCoinExtended({
+                                            "apiKey": self.user_config['KuCoin']['apiKey'],
+                                            "secret": self.user_config['KuCoin']['secret'],
+                                            "password": self.user_config['KuCoin']['password']
+                                        })
+            print("KuCoin enabled")
         except:
-            raise ValueError("Params incomplete")
+            print("Failed to enable KuCoin. Check API credentials")
+
+        try:
+            enabled_exchanges['hitbtc'] = hitbtc = ccxt.hitbtc({
+                                            "apiKey": self.user_config['HitBTC']['apiKey'],
+                                            "secret": self.user_config['HitBTC']['apiKey']
+                                        })
+            print("HitBTC enabled")
+        except:
+            print("Failed to enable KuCoin. Check API credentials")
+
+        self.enabled_exchanges = enabled_exchanges
+        return enabled_exchanges
