@@ -5,11 +5,17 @@ import ccxt
 import pandas as pd
 from pandas import DataFrame
 import importlib
+
 sys.path.append(os.getcwd())
 
 from core.config import Config
 from core.position_manager import PositionManager, Position
 from core.utils import get_synth_pair_symbol, get_exchange_module_from_id  # , create_synthetic_pair
+
+from finta.finta import inputvalidator
+
+
+inputvalidator()
 
 
 class StrategyBase(Config):
@@ -22,7 +28,10 @@ class StrategyBase(Config):
         self.synth_pair = get_synth_pair_symbol(self.base_pair, self.quote_pair)
         self.position_manager = PositionManager()
         self.ohlcv_data = {
-            "1m": DataFrame,
+            "1m": {
+                "df": DataFrame,
+                "raw_ohlcv": str
+            },
             "5m": DataFrame,
             "15m": DataFrame,
             "1h": DataFrame,
@@ -30,7 +39,6 @@ class StrategyBase(Config):
             "1d": DataFrame,
             "1w": DataFrame
         }
-
 
     def get_bars(self, timeframe="1m", limit=50):
         base_bars = self.exchange.fetch_ohlcv(self.base_pair, timeframe=timeframe, limit=limit)
@@ -61,7 +69,6 @@ class StrategyBase(Config):
         quote_bars = self.exchange.fetch_ohlcv(symbol=self.quote_pair, timeframe=timeframe, since=0, limit=limit)
 
         # base_bars = self.exchange.fe
-
 
         df_base = pd.DataFrame(base_bars[:-1], columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])
         df_base['timestamp'] = pd.to_datetime(df_base['timestamp'], unit='ms')

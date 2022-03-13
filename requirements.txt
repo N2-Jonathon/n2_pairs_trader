@@ -3,3 +3,4 @@ schedule~=1.1.0
 pandas~=1.4.1
 numpy~=1.22.3
 requests~=2.27.1
+finta~=1.3
