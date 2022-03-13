@@ -13,18 +13,9 @@ from pandas import DataFrame
 class N2SuperTrend(StrategyBase):
 
     def __init__(self, exchange: ccxt.Exchange, config: ConfigParser, base_pair: str, quote_pair: str, timeframes=[], paper_trade=False):
-        self.name = "SuperTrend Strategy"
-        self.config = config
-        self.exchange_id = config['Global Settings']['exchange']
-        self.exchange = exchange
-        self.name = None
-        self.current_signal = None
-        self.base_pair = base_pair
-        self.quote_pair = quote_pair
-        self.synth_pair = utils.get_synth_pair_symbol(base_pair, quote_pair)
-        self.paper_trade = paper_trade
-        self.timeframes = []
-        self.position_manager = PositionManager()
+
+        self.name = 'n2_supertrend'
+
         self.ohlcv_data = {
             "1m": DataFrame,
             "5m": DataFrame,
@@ -39,7 +30,7 @@ class N2SuperTrend(StrategyBase):
             if timeframe.lower in ['1m', '5m', '15m', '1h', '4h', '1d', '1w']:
                 self.timeframes.append(timeframe)
 
-    def get_timeframe_signal(self, timeframe="1m"):
+    def get_signal(self, timeframe="1m", timeframes=None):
         df = self.ohlcv_data.get('timeframe')
         #raw_ohlcv = self.get_synth_ohlcv("1m")
         #df = utils.create_synthetic_pair(raw_ohlcv)

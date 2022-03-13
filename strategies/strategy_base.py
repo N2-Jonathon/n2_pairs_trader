@@ -20,7 +20,7 @@ class StrategyBase(Config):
         self.name = None
         self.current_signal = None
         self.synth_pair = get_synth_pair_symbol(self.base_pair, self.quote_pair)
-        self.manager = PositionManager
+        self.position_manager = PositionManager()
         self.ohlcv_data = {
             "1m": DataFrame,
             "5m": DataFrame,
@@ -32,7 +32,7 @@ class StrategyBase(Config):
         }
 
 
-    def get_synth_ohlcv(self, timeframe="1m", limit=50):
+    def get_bars(self, timeframe="1m", limit=50):
         base_bars = self.exchange.fetch_ohlcv(self.base_pair, timeframe=timeframe, limit=limit)
         quote_bars = self.exchange.fetch_ohlcv(self.quote_pair, timeframe=timeframe, limit=limit)
 
@@ -40,7 +40,7 @@ class StrategyBase(Config):
 
         return self.ohlcv_data[timeframe]
 
-    def get_timeframe_signal(self, timeframe="1m"):
+    def get_signal(self, timeframe="1m", timeframes=None):
         # bars = self.e.fetch_ohlcv(pair, timeframe=_timeframe, limit=_limit)
         pass
 
