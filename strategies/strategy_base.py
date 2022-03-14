@@ -19,7 +19,7 @@ inputvalidator()
 
 class StrategyBase(Config):
     __dict__ = {
-        "exchange": str,
+        "exchange_id": str,
         "strategy_name": str,
         "prompt_for_pairs": bool,
         "base_pair": str,
@@ -29,9 +29,30 @@ class StrategyBase(Config):
         "paper_trade": bool,
 
         "position_manager": PositionManager,
+
         "previous_tick": datetime,
         "ohlcv_data": dict,
         "signal": str,
+
+        "multi_timeframe_mode": bool,
+        "multi_timeframe_signal_rules": dict,
+    }
+
+    multi_timeframe_mode: bool
+    """
+    Multi-timeframe signal rules mean that signals on multiple 
+    timeframes which are set to True must align with each other 
+    in the signals they give ie. They must each be LONG or SHORT
+    for an aggregated consensus signal to be made, otherwise the 
+    signal will be None
+    """
+    multi_timeframe_signal_rules = {
+        "1m": bool,
+        "5m": bool,
+        "15m": bool,
+        "1h": bool,
+        "1d": bool,
+        "1w": bool
     }
 
     ohlcv_data = {
@@ -123,6 +144,18 @@ class StrategyBase(Config):
     position_manager = PositionManager()
 
     def __int__(self, params={}, config_filepath=USER_CONFIG_PATH):
+        """
+        The first line `super().__init__(params, config_filepath)` means
+        it runs the __init__ method in Config and inherits its attributes
+        from there, then after that, the other attributes are set.
+
+        :param params:
+        :type params:
+        :param config_filepath:
+        :type config_filepath:
+        :return:
+        :rtype:
+        """
         super().__init__(self, params, config_filepath)
 
         self.name = None
@@ -140,7 +173,12 @@ class StrategyBase(Config):
           and returns a new DataFrame with the new 
           OHLCV values.
         """
-        print("Fetching bars...")
+        print(f"Fetching bars for: {self.synth_pair} {timeframe} (limit={limit}\n"
+              f"[timestamp (UTC): {datetime.utcnow().isoformat()}]")
+
+        if self.debug_mode:
+            pass
+
         base_bars = self.exchange.fetch_ohlcv(self.base_pair, timeframe=timeframe, limit=limit)
         quote_bars = self.exchange.fetch_ohlcv(self.quote_pair, timeframe=timeframe, limit=limit)
 

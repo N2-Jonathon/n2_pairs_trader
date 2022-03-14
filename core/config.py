@@ -16,10 +16,16 @@ class Config:
         "base_pair": str,
         "quote_pair": str,
         "stake_currency": str,
-        "paper_trade": bool
+        "paper_trade": bool,
+
+        "debug_mode": bool
     }
 
     cfg_parser = ConfigParser()
+
+    # I will disable or enable debug_mode by changing this hard-coded line
+    # so that it doesn't accidentally happen.
+    debug_mode = True
 
     def __init__(self, params={}, filepath=USER_CONFIG_PATH):
 

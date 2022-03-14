@@ -1,17 +1,27 @@
 import ccxt
+from pandas import DataFrame
 
+# Import local modules & constants:
 from strategies.strategy_base import StrategyBase
 from core.constants import USER_CONFIG_PATH
-import core.utils as utils
-from core.position_manager import PositionManager
-from core.indicators import supertrend
 
-from pandas import DataFrame
+# Import indicators needed by this strategy:
+from core.indicators import supertrend
 
 
 class N2SuperTrend(StrategyBase):
 
     def __init__(self, params={}, config_filepath=USER_CONFIG_PATH):
+        """
+        The first line `super().__init__(params, config_filepath)` means
+        it runs the __init__ method in StrategyBase and inherits its
+        attributes from there, then the name is set.
+
+        :param params:
+        :type params:
+        :param config_filepath:
+        :type config_filepath:
+        """
         super().__init__(params, config_filepath)
 
         self.name = 'n2_supertrend'
@@ -36,6 +46,7 @@ class N2SuperTrend(StrategyBase):
             else:
                 # If in a position, close signal
                 return "CLOSE"
+
         # If the supertrend changes from green to red:
         if supertrend_data['in_uptrend'][previous_row_index] and not supertrend_data['in_uptrend'][last_row_index]:
             if self.manager.get_current_position() is None:
@@ -44,5 +55,24 @@ class N2SuperTrend(StrategyBase):
             else:
                 # If in a position, close signal
                 return "CLOSE"
+
+
+    def get_signals(self, timeframes={"1m", "5m", "15m"}):
+        if timeframes is None or len(timeframes) == 0:
+            return ValueError("No timeframes were given")
+
+        signals = {}
+        for tf in timeframes:
+            signals[tf] = self.get_signal(timeframe=tf)
+
+        return signals
+
+    def set_multi_timeframe_signal_rules(self, rules={}):
+        if rules is None or len(rules) == 0:
+            return ValueError("No rules were given")
+
+
+        pass
+
 
 

@@ -5,10 +5,6 @@ import time
 from core.position_manager import Position, PositionManager
 from strategies.n2_supertrend import N2SuperTrend
 
-
-USER_CONFIG_PATH = f"{os.getcwd()}/user/user-config.ini"
-print(USER_CONFIG_PATH)
-
 """
 pd.set_option('display.max_rows', None)
 warnings.filterwarnings('ignore')
@@ -40,15 +36,17 @@ def main(strategy=N2SuperTrend()):
         elif signal == 'CLOSE':
             pm.current_position.close()
 
-        time.sleep(60)
-        # await asyncio.sleep(60)
+        tick_interval = 60  # This should be adjusted to take API rate limits into account
+
+        time.sleep(tick_interval)
+        # await asyncio.sleep(tick_interval)
 
 
 if __name__ == '__main__':
 
-    main()  # Can pass a Strategy to main to override default
+    main()  # Can pass a Strategy to main to override default eg. main(strategy=YourStrategy)
 
-# asyncio.run(main())
-
-# loop = asyncio.get_event_loop()
-# loop.run_until_complete(main())
+    # Later I plan to take advantage of async to run multiple strategies
+    # asyncio.run(main())
+    # loop = asyncio.get_event_loop()
+    # loop.run_until_complete(main())
