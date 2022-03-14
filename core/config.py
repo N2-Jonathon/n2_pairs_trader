@@ -1,14 +1,9 @@
-import os
 import ccxt
-import sys
 import importlib
-sys.path.append(os.getcwd())
 from configparser import ConfigParser
 
-print(f"{os.getcwd()}/user/user-config.ini")
-user_config_filepath = f"{os.getcwd()}/user/user-config.ini"
-user_config = ConfigParser()
-user_config.read("/user/user-config.ini")
+from core.constants import USER_CONFIG_PATH
+import core.utils as utils
 from core.exchanges.kucoin_extended import KuCoinExtended
 
 
@@ -24,48 +19,31 @@ class Config:
         "paper_trade": bool
     }
 
-    user_config = ConfigParser()
-    user_config_filepath = f"{os.getcwd()}/user/user-config.ini"
+    cfg_parser = ConfigParser()
 
-    def __init__(self, params={}, config_filepath=None):
-        """
-        This is another way to initialize Config() by specifying each
-        of the values as params instead of reading from a file
-
-        :param exchange:
-        :type ccxt.Exchange:
-        :param strategy:
-        :type base_strategy:
-        :param prompt_for_pairs:
-        :type bool:
-        :param base_pair:
-        :type str:
-        :param quote_pair:
-        :type str:
-        :param stake_currency:
-        :type str:
-        """
+    def __init__(self, params={}, filepath=USER_CONFIG_PATH):
 
         self.params = params
 
         if params is None or len(params) == 0:
-            if config_filepath is None:
-                self.config_filepath = f"{os.getcwd()}/user/user-config.ini"
-                print(f"[DEBUG] self.config_filepath = {self.config_filepath}")
 
-            self.user_config.read(self.user_config_filepath)
+            if filepath is not None:
+                self.cfg_parser.read([filepath])
+            elif filepath is None:
+                raise ValueError
 
             try:
-                self.exchange_id = self.user_config['Global Settings']['exchange']
-                self.strategy_name = self.user_config['Global Settings']['strategy']
+                self.exchange_id = self.cfg_parser['Global Settings']['exchange']
+                self.strategy_name = self.cfg_parser['Global Settings']['strategy']
                 self.strategy_import_path = f"strategies.{self.strategy_name}"
 
-                self.prompt_for_pairs = bool(self.user_config['Global Settings']['prompt_for_pairs'])
-                self.base_pair = self.user_config['Global Settings']['base_pair_default']
-                self.quote_pair = self.user_config['Global Settings']['quote_pair_default']
-                self.stake_currency = self.user_config['Global Settings']['stake_currency']
-                self.paper_trade = bool(self.user_config['Global Settings']['paper_trade'])
+                self.prompt_for_pairs = bool(self.cfg_parser['Global Settings']['prompt_for_pairs'])
+                self.base_pair = self.cfg_parser['Global Settings']['base_pair_default']
+                self.quote_pair = self.cfg_parser['Global Settings']['quote_pair_default']
+                self.stake_currency = self.cfg_parser['Global Settings']['stake_currency']
+                self.paper_trade = bool(self.cfg_parser['Global Settings']['paper_trade'])
 
+                # self.synth_pair = self.get_synth_pair_symbol(self.base_pair, self.quote_pair)
                 # self.strategy = importlib.import_module(f"strategies.{self.strategy_name}")
                 # self.exchange: ccxt.Exchange = self.enabled_exchanges[self.exchange_id]
             except:
@@ -92,11 +70,14 @@ class Config:
                 raise ValueError("Params incomplete")
         else:
             raise ValueError("Cannot Initialize Config() without either params or config_filepath")
+        self.synth_pair = utils.get_synth_pair_symbol(self.base_pair, self.quote_pair)
         self.enabled_exchanges = self.get_enabled_exchanges()
         self.exchange: ccxt.Exchange = self.enabled_exchanges[self.exchange_id.lower()]
+
+        """ This caused circular import
         if self.strategy_name is not None:
             self.strategy = importlib.import_module(f"strategies.{self.strategy_name}")
-
+        """
 
     def new(self, exchange: str, strategy_name: str, prompt_for_pairs: bool, base_pair: str,
             quote_pair: str, stake_currency: str, paper_trade: bool):
@@ -118,24 +99,24 @@ class Config:
         self.exchange: ccxt.Exchange = self.enabled_exchanges[self.exchange_id]
 
     def get_enabled_exchanges(self):
-        self.user_config.read(user_config_filepath)
+        self.cfg_parser.read(USER_CONFIG_PATH)
 
         enabled_exchanges = {}
         try:
             enabled_exchanges['kucoin'] = KuCoinExtended({
-                                            "apiKey": self.user_config['KuCoin']['apiKey'],
-                                            "secret": self.user_config['KuCoin']['secret'],
-                                            "password": self.user_config['KuCoin']['password']
-                                        })
+                "apiKey": self.cfg_parser['KuCoin']['apiKey'],
+                "secret": self.cfg_parser['KuCoin']['secret'],
+                "password": self.cfg_parser['KuCoin']['password']
+            })
             print("KuCoin enabled")
         except:
             print("Failed to enable KuCoin. Check API credentials")
 
         try:
             enabled_exchanges['hitbtc'] = hitbtc = ccxt.hitbtc({
-                                            "apiKey": self.user_config['HitBTC']['apiKey'],
-                                            "secret": self.user_config['HitBTC']['apiKey']
-                                        })
+                "apiKey": self.cfg_parser['HitBTC']['apiKey'],
+                "secret": self.cfg_parser['HitBTC']['apiKey']
+            })
             print("HitBTC enabled")
         except:
             print("Failed to enable KuCoin. Check API credentials")

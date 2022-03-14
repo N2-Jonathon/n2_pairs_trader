@@ -17,16 +17,14 @@ locations.
 """
 import os
 
-USER_CONFIG_PATH = None
-"""
-`USER_CONFIG_FILEPATH` has to be assigned in __main__, 
-otherwise if I use `f"{os.getcwd()}/user/user-config.ini"`
-inside this file, then wherever I import it will mess up
-the relative path. So, here it's set to `None`
+CORE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-f"{os.getcwd()}/user/user-config.ini" will only work 
-when the current working directory is the project root.
-"""
+ROOT_DIR = os.path.abspath(os.path.join(CORE_DIR, os.pardir))
+
+USER_CONFIG_PATH = f"{ROOT_DIR}/user/user-config.ini"
+
+EXCHANGE_API_KEYS = {}
+
 
 
 

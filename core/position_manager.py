@@ -1,11 +1,14 @@
 import ccxt
-from configparser import ConfigParser
 from pprint import pprint
 
 # from scripts.kucoin import fetch_borrow_rate
 
+from core.constants import USER_CONFIG_PATH
+from core.config import Config
+import core.utils as utils
 
-class Position:
+
+class Position():
     """
     * This class represents the aggregate PnL & meta-data
       of two simultaneous trades. ie. one for the base
@@ -53,28 +56,16 @@ class Position:
 
         # return borrow_coin
 
-    def __init__(self, config: ConfigParser, base_pair, quote_pair, direction,
-                 order_type='market', prompt_borrow_qty=False):
-        self.config = config
-        self.status = 'init'
-        self.exchange_id = config['Global Settings']['exchange']
-        self.base_pair = base_pair
-        self.quote_pair = quote_pair
-        # self.synth_pair = utils.get_synth_pair_symbol(self.base_pair, self.quote_pair)
+    def __init__(self, order_type='market', prompt_borrow_qty=False, base_pair=None, quote_pair=None,
+                 params={}, config_filepath=USER_CONFIG_PATH):
 
-        self.direction = direction
-        self.borrow_coin['name'] = self.get_borrow_coin(base_pair, quote_pair, direction)
+        if base_pair is not None and quote_pair is not None:
+            self.base_pair = base_pair
+            self.quote_pair = quote_pair
+            self.synth_pair = utils.get_synth_pair_symbol(self.base_pair, self.quote_pair)
+
         self.order_type = order_type
         self.prompt_borrow_qty = prompt_borrow_qty
-
-        if self.exchange_id.lower() == 'kucoin':
-            self.exchange = ccxt.kucoin({"apiKey": config['KuCoin']['apiKey'],
-                                         "secret": config['KuCoin']['secret'],
-                                         "password": config['KuCoin']['password']
-                                         })
-        else:
-            raise NotImplementedError("Unsupported Exchange:\n"
-                                      "Currently the only tested exchange is KuCoin.")
 
     def create_order(self, pair, direction, quantity, order_type='market'):
         """
@@ -135,8 +126,8 @@ class Position:
         #         is in the local dir. The other steps will be
         #         easy after that.
 
-        available_margin = fetch_borrow_rate(self.borrow_coin)
-        pprint(available_margin)
+        # available_margin = fetch_borrow_rate(self.borrow_coin)
+        # pprint(available_margin)
 
         # ----------------------------------------
         # Step 2: If prompt_borrow is true, print
@@ -206,10 +197,15 @@ class Position:
         return self, 0
 
 
-class PositionManager:
+class PositionManager(Config):
 
-    def __init__(self):
-        self.current_position: Position = None
+    __dict__ = {
+        "current_position": Position
+    }
+
+    def __init__(self, params={}, config_filepath=USER_CONFIG_PATH):
+        super().__init__(params, config_filepath)
+        self.current_position: Position = Position()
 
     def set_current_position(self, position: Position):
         self.current_position = position

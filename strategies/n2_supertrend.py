@@ -1,52 +1,48 @@
-from configparser import ConfigParser
-
 import ccxt
 
 from strategies.strategy_base import StrategyBase
+from core.constants import USER_CONFIG_PATH
 import core.utils as utils
-from core.utils import get_exchange_module_from_id
 from core.position_manager import PositionManager
+from core.indicators import supertrend
 
 from pandas import DataFrame
 
 
 class N2SuperTrend(StrategyBase):
 
-    def __init__(self, exchange: ccxt.Exchange, config: ConfigParser, base_pair: str, quote_pair: str, timeframes=[], paper_trade=False):
+    def __init__(self, params={}, config_filepath=USER_CONFIG_PATH):
+        super().__init__(params, config_filepath)
 
         self.name = 'n2_supertrend'
 
-        self.ohlcv_data = {
-            "1m": DataFrame,
-            "5m": DataFrame,
-            "15m": DataFrame,
-            "1h": DataFrame,
-            "4h": DataFrame,
-            "1d": DataFrame,
-            "1w": DataFrame
-        }
+    def get_signal(self, timeframe="1m"):
 
-        for timeframe in timeframes:
-            if timeframe.lower in ['1m', '5m', '15m', '1h', '4h', '1d', '1w']:
-                self.timeframes.append(timeframe)
+        self.fetch_bars(timeframe=timeframe)
+        bars = self.ohlcv_data[timeframe]["df"]["synth_pair"]
 
-    def get_signal(self, timeframe="1m", timeframes=None):
-        df = self.ohlcv_data.get('timeframe')
-        #raw_ohlcv = self.get_synth_ohlcv("1m")
-        #df = utils.create_synthetic_pair(raw_ohlcv)
+        supertrend_data = supertrend(bars, period=10, atr_multiplier=2)
 
-        last_row_index = len(df.index) - 1
+        # return 'DEBUG_LONG'
+
+        last_row_index = len(supertrend_data.index) - 1
         previous_row_index = last_row_index - 1
 
-        if not df['in_uptrend'][previous_row_index] and df['in_uptrend'][last_row_index]:
+        # If the supertrend changes from red to green:
+        if not supertrend_data['in_uptrend'][previous_row_index] and supertrend_data['in_uptrend'][last_row_index]:
             if self.manager.get_current_position() is None:
+                # If not in a position, long signal
                 return "LONG"
             else:
+                # If in a position, close signal
                 return "CLOSE"
-
-        if df['in_uptrend'][previous_row_index] and not df['in_uptrend'][last_row_index]:
+        # If the supertrend changes from green to red:
+        if supertrend_data['in_uptrend'][previous_row_index] and not supertrend_data['in_uptrend'][last_row_index]:
             if self.manager.get_current_position() is None:
+                # If not in a position, short signal
                 return "SHORT"
             else:
+                # If in a position, close signal
                 return "CLOSE"
+
 

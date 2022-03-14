@@ -3,6 +3,8 @@ import warnings
 import pandas as pd
 import ccxt
 import importlib
+import os
+import sys
 
 from ccxt.base.errors import BadSymbol
 import configparser
@@ -134,5 +136,25 @@ def get_exchange_module_from_id(name: str):
         raise ValueError("Invalid exchange name")
     pass
 
+
+def get_project_root():
+    root_dir_name = 'n2_pairs_trader'
+    cwd = os.getcwd()
+    sys.path.append(cwd)
+    for path in sys.path:
+        if path.endswith(root_dir_name):
+            return path
+        elif root_dir_name in path:
+            end_index = path.find(root_dir_name) + len(root_dir_name)
+            root_path = path[:end_index]
+            return root_path
+            pass
+
+    raise ValueError("It should be impossible for this error to raise. If it does, maybe the world has ended...")
+
+
+def get_user_config_path():
+    root = get_project_root()
+    return f"{root}/user/user-config.ini"
 # DEBUG
 
