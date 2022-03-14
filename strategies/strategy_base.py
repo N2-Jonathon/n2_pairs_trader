@@ -9,7 +9,6 @@ sys.path.append(os.getcwd())
 
 from core.config import Config
 from core.position_manager import PositionManager
-from core.utils import get_synth_pair_symbol  # , create_synthetic_pair
 from core.constants import USER_CONFIG_PATH
 
 from finta.finta import inputvalidator
@@ -18,6 +17,15 @@ inputvalidator()
 
 
 class StrategyBase(Config):
+    """
+    A strategy is an object whose main purpose is to contain regularly
+    updated market data by pulling OHLCV data from both the base pair
+    and the quote pair, then combining them to make the synth pair.
+
+    The main logic which is specific to your strategy should be
+    implemented in the `get_signal()` method which should then
+    be called at a regular defined interval.
+    """
     __dict__ = {
         "exchange_id": str,
         "strategy_name": str,
@@ -145,7 +153,7 @@ class StrategyBase(Config):
 
     def __int__(self, params={}, config_filepath=USER_CONFIG_PATH):
         """
-        The first line `super().__init__(params, config_filepath)` means
+        The first line: `super().__init__(params, config_filepath)` means
         it runs the __init__ method in Config and inherits its attributes
         from there, then after that, the other attributes are set.
 
@@ -160,7 +168,6 @@ class StrategyBase(Config):
 
         self.name = None
         self.current_signal = None
-        self.synth_pair = get_synth_pair_symbol(self.base_pair, self.quote_pair)
         self.position_manager = PositionManager()
 
     def fetch_bars(self, timeframe="1m", limit=50, timeframes=None):
@@ -215,7 +222,12 @@ class StrategyBase(Config):
                              "StrategyBase by writing a new method: `def get_signal(self, timeframe):`"
                              "then putting your strategy's logic in that method.")
 
-    def get_signals(self, timeframes=["1m", "5m", "15m"]):
+    def get_signals(self, timeframes={"1m", "5m", "15m"}):
+        if timeframes is None or len(timeframes) == 0:
+            return ValueError("No timeframes were given")
+
         signals = {}
         for tf in timeframes:
             signals[tf] = self.get_signal(timeframe=tf)
+
+        return signals

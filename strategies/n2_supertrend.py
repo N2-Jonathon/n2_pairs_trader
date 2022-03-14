@@ -56,17 +56,6 @@ class N2SuperTrend(StrategyBase):
                 # If in a position, close signal
                 return "CLOSE"
 
-
-    def get_signals(self, timeframes={"1m", "5m", "15m"}):
-        if timeframes is None or len(timeframes) == 0:
-            return ValueError("No timeframes were given")
-
-        signals = {}
-        for tf in timeframes:
-            signals[tf] = self.get_signal(timeframe=tf)
-
-        return signals
-
     def set_multi_timeframe_signal_rules(self, rules={}):
         if rules is None or len(rules) == 0:
             return ValueError("No rules were given")

@@ -1,0 +1,25 @@
+# mkdocs.yml
+site_name: N2 Pairs Trader Documentation
+
+theme:
+  name: "material"
+  custom_dir: "docs/n2_custom_theme"
+  palette:
+    primary: 'black'
+    accent: 'dark blue'
+
+extra_css: 
+- css/dark_theme.css
+- css/codehilite.css
+
+plugins:
+- search
+- mkdocstrings
+
+nav:
+  - Readme: 'index.md'
+  - Logical Sequence: 'Logical_Sequence.md'
+  - Creating a new strategy: 'creating_a_new_strategy.md'
+
+edit_uri: '#docs/'
+

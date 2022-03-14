@@ -75,7 +75,8 @@ class Config:
             except:
                 raise ValueError("Params incomplete")
         else:
-            raise ValueError("Cannot Initialize Config() without either params or config_filepath")
+            raise Exception("Cannot Initialize Config() without either params or config_filepath")
+
         self.synth_pair = utils.get_synth_pair_symbol(self.base_pair, self.quote_pair)
         self.enabled_exchanges = self.get_enabled_exchanges()
         self.exchange: ccxt.Exchange = self.enabled_exchanges[self.exchange_id.lower()]
