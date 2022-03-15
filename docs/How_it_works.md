@@ -1,8 +1,10 @@
 # How it works:
-**[Note]**These instructions are not complete yet and I can't garauntee everything works 100% until this note says otherwise.
+**[Note]**This is a work in progress  and I can't garauntee everything works 100% until this note says otherwise, after doing unit tests for everything. I am also still debugging and there are still a couple more things I have to add before it's operational, but should hopefully have that sorted later today (tomorrow for you).
 ---
 
 ---
+
+
 
 This is the sequence of events that happens when you run the bot. I'm writing this to explain what's going on, and also to be able to properly write unit tests to ensure that it's actually 
 working as it should.
@@ -198,4 +200,4 @@ Basically what it's doing is checking to see if params to override the default c
 
 - If params are supplied when `Config` or any of its subclasses ie. `StrategyBase` and `N2SuperTrend` are instantiated, then it will load those params as a configuration.
 
-- If params are not supplied, it will use a `user-config.ini` file specified by `filepath`, which defaults to the global constant `USER_CONFIG_PATH` (This was set automatically in `core.constants` when running `__main__.py`)
+- If params are not supplied, it will use a `user-config.ini` file specified by `filepath`, which defaults to the global constant `USER_CONFIG_PATH` (This is set in `core.constants`)
