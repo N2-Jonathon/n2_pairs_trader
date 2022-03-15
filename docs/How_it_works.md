@@ -175,7 +175,7 @@ class Config:
 
                 # self.synth_pair = self.get_synth_pair_symbol(self.base_pair, self.quote_pair)
                 # self.strategy = importlib.import_module(f"strategies.{self.strategy_name}")
-                # self.exchange: ccxt.Exchange = self.enabled_exchanges[self.exchange_id]
+                # self.exchange: ccxt.Exchange = self.enabled_exchanges[self.cfg_file_key]
             except:
                 raise ValueError("Failed to read from config (Make sure all values are assigned)")
         elif self.params is not None:
@@ -195,7 +195,7 @@ class Config:
                 self.paper_trade: bool = params['paper_trade']
 
                 # self.strategy = importlib.import_module(f"strategies.{self.strategy_name}")
-                # self.exchange: ccxt.Exchange = self.enabled_exchanges[self.exchange_id]
+                # self.exchange: ccxt.Exchange = self.enabled_exchanges[self.cfg_file_key]
             except:
                 raise ValueError("Params incomplete")
         else:

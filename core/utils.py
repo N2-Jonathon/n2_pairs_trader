@@ -6,6 +6,7 @@ import importlib
 import os
 import sys
 
+from core.constants import USER_CONFIG_PATH
 from ccxt.base.errors import BadSymbol
 import configparser
 from datetime import datetime
@@ -157,4 +158,6 @@ def get_user_config_path():
     root = get_project_root()
     return f"{root}/user/user-config.ini"
 # DEBUG
+
+
 

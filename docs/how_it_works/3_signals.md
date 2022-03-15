@@ -1,6 +1,6 @@
-# 3 After strategy is initialized:
+# 3. Market Data & Signals:
 
-- It will have its own ccxt.Exchange type initialized with api keys read from the user config and PositionManager object as a Fields and which can be accessed from inside or outside of the strategy class (better inside):
+- The strategy will have its own ccxt.Exchange type initialized with api keys read from the user config that gets stored in `self.exchange` and PositionManager object as a Fields and which can be accessed from inside or outside of the strategy class (better inside):
 
 ### Going back to the run_bot() function in __main__.py:
 
@@ -34,7 +34,7 @@ if __name__ == '__main__':
 - First, the strategy's PositionManager is assigned to the variable `pm` (can be called anything)
 - Then, it enters a while loop: `while running:`
   This while loop is essentially one tick, and it would be better to move this out of `__main__.py` and into a a new method of `StrategyBase` or `Config`: called `run()` or `start()`
-- The I haven't yet accounted for rate limits, but it's possible to fetch rate limits for an exchange with ccxt.
+- I haven't yet accounted for rate limits, but it's possible to fetch rate limits for an exchange with ccxt.
 
 ## Getting a signal from the strategy
 

@@ -26,6 +26,4 @@ USER_CONFIG_PATH = f"{ROOT_DIR}/user/user-config.ini"
 EXCHANGE_API_KEYS = {}
 
 
-
-
 print(USER_CONFIG_PATH)

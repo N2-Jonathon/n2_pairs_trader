@@ -2,14 +2,16 @@ import ccxt
 import importlib
 from configparser import ConfigParser
 
+import core.exchanges.kucoin_extended
 from core.constants import USER_CONFIG_PATH
 import core.utils as utils
 from core.exchanges.kucoin_extended import KuCoinExtended
+from scripts.load_api_keys import load_api_keys
 
 
 class Config:
     __dict__ = {
-        "exchange": str,
+        "cfg_file_key": str,
         "strategy_name": str,
         "strategy": None,  # : StrategyBase, (Caused circular import when setting type to StrategyBase)
         "prompt_for_pairs": bool,
@@ -29,6 +31,9 @@ class Config:
 
     def __init__(self, params={}, filepath=USER_CONFIG_PATH):
 
+        self.exchange_id = None
+        self.exchange = None
+        self.exchange_api_keys = None
         self.params = params
 
         if params is None or len(params) == 0:
@@ -48,10 +53,6 @@ class Config:
                 self.quote_pair = self.cfg_parser['Global Settings']['quote_pair_default']
                 self.stake_currency = self.cfg_parser['Global Settings']['stake_currency']
                 self.paper_trade = bool(self.cfg_parser['Global Settings']['paper_trade'])
-
-                # self.synth_pair = self.get_synth_pair_symbol(self.base_pair, self.quote_pair)
-                # self.strategy = importlib.import_module(f"strategies.{self.strategy_name}")
-                # self.exchange: ccxt.Exchange = self.enabled_exchanges[self.exchange_id]
             except:
                 raise ValueError("Failed to read from config (Make sure all values are assigned)")
         elif self.params is not None:
@@ -61,6 +62,7 @@ class Config:
 
             try:
                 self.exchange_id: str = self.params['exchange']
+                self.exchange = self.read_api_keys(cfg_file_key=self.exchange_id)
                 self.strategy_name = self.params['strategy']
                 self.strategy_import_path = f"strategies.{self.strategy_name['strategy']}"
 
@@ -71,15 +73,17 @@ class Config:
                 self.paper_trade: bool = params['paper_trade']
 
                 # self.strategy = importlib.import_module(f"strategies.{self.strategy_name}")
-                # self.exchange: ccxt.Exchange = self.enabled_exchanges[self.exchange_id]
+                # self.exchange: ccxt.Exchange = self.enabled_exchanges[self.cfg_file_key]
             except:
                 raise ValueError("Params incomplete")
         else:
             raise Exception("Cannot Initialize Config() without either params or config_filepath")
 
         self.synth_pair = utils.get_synth_pair_symbol(self.base_pair, self.quote_pair)
-        self.enabled_exchanges = self.get_enabled_exchanges()
-        self.exchange: ccxt.Exchange = self.enabled_exchanges[self.exchange_id.lower()]
+        self.exchange = self.read_api_keys(self.exchange_id)
+
+        # self.enabled_exchanges = self.get_enabled_exchanges()
+        # self.exchange: ccxt.Exchange = self.enabled_exchanges[self.cfg_file_key.lower()]
 
         """ This caused circular import
         if self.strategy_name is not None:
@@ -88,7 +92,7 @@ class Config:
 
     def new(self, exchange: str, strategy_name: str, prompt_for_pairs: bool, base_pair: str,
             quote_pair: str, stake_currency: str, paper_trade: bool):
-        self.get_enabled_exchanges()
+        # self.get_enabled_exchanges()
         self.strategy_name = strategy_name
         try:
             self.exchange_id = exchange
@@ -105,28 +109,22 @@ class Config:
         self.strategy_name = importlib.import_module(f"strategies.{self.strategy_name}")
         self.exchange: ccxt.Exchange = self.enabled_exchanges[self.exchange_id]
 
-    def get_enabled_exchanges(self):
-        self.cfg_parser.read(USER_CONFIG_PATH)
+    def read_api_key(self, cfg_file_key, filepath=USER_CONFIG_PATH):
+        if filepath is not None:
+            cfg = self.cfg_parser.read(self, filepath)
+            if cfg_file_key in cfg:
+                return cfg[cfg_file_key]
+        else:
+            raise ValueError(f"The key: {cfg_file_key} was not found in {filepath}")
 
-        enabled_exchanges = {}
-        try:
-            enabled_exchanges['kucoin'] = KuCoinExtended({
-                "apiKey": self.cfg_parser['KuCoin']['apiKey'],
-                "secret": self.cfg_parser['KuCoin']['secret'],
-                "password": self.cfg_parser['KuCoin']['password']
-            })
-            print("KuCoin enabled")
-        except:
-            print("Failed to enable KuCoin. Check API credentials")
+    def read_api_keys(self, cfg_file_keys, filepath=USER_CONFIG_PATH):
+        keys = {}
+        for cfg_file_key in cfg_file_keys:
 
-        try:
-            enabled_exchanges['hitbtc'] = hitbtc = ccxt.hitbtc({
-                "apiKey": self.cfg_parser['HitBTC']['apiKey'],
-                "secret": self.cfg_parser['HitBTC']['apiKey']
-            })
-            print("HitBTC enabled")
-        except:
-            print("Failed to enable KuCoin. Check API credentials")
+            pass
 
-        self.enabled_exchanges = enabled_exchanges
-        return enabled_exchanges
+    def read_exchange_api_keys(self, exchange_ids=[], filepath=USER_CONFIG_PATH):
+
+        for exchange_id in exchange_ids:
+
+            pass

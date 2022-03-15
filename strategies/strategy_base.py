@@ -27,7 +27,7 @@ class StrategyBase(Config):
     be called at a regular defined interval.
     """
     __dict__ = {
-        "exchange_id": str,
+        "cfg_file_key": str,
         "strategy_name": str,
         "prompt_for_pairs": bool,
         "base_pair": str,

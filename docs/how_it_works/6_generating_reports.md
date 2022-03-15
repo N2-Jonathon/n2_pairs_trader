@@ -1,1 +1,3 @@
-## 6. Generating report notifications:
+# 6. Generating report notifications:
+
+:: stub
