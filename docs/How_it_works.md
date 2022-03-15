@@ -1,5 +1,5 @@
 # How it works:
-**[Note]**This is a work in progress  and I can't garauntee everything works 100% until this note says otherwise, after doing unit tests for everything. I am also still debugging and there are still a couple more things I have to add before it's operational, but should hopefully have that sorted later today (tomorrow for you).
+**[Note]**This is a work in progress  and I can't garauntee everything works 100% until this note says otherwise, after doing unit tests for everything. I am also still debugging and there are still a couple more things I have to add before it's operational, but should hopefully have that sorted later today (15th).
 ---
 
 ---
@@ -29,14 +29,16 @@ if __name__ == '__main__':
 
 - **TODO**: I want to make it so that it you can pass the strategy as an argument from terminal, which could be useful for implementing backtesting
 
-- When a strategy class eg. `N2SuperTrend` is initialized without params then is loads the values set in `user/user-config.ini`
+## 2.1 Initialize strategy
+
+- When a strategy class eg. `N2SuperTrend` is initialized without params then it loads the values set in `user/user-config.ini`
 
 ```python
 def run_bot(strategy=N2SuperTrend()):
   ...
 ```
 
-- At this point, you can access the following Fields inherited by StrategyBase:
+- At this point, you can access the following Fields inherited by `StrategyBase` :
 
 
 ```python
@@ -58,8 +60,8 @@ strategy.multi_timeframe_mode: bool
 strategy.multi_timeframe_signal_rules: dict
 ```
 
-### Behind the scenes
-What happens when the strategy object is instantiated eg. `strategy = N2SuperTrend()` is that the `__init__` method inside the `N2SuperTrend` class is called, so let's look at that:
+### 2.2 How a strategy is initialized behind the scenes:
+What happens when the strategy object is instantiated eg. `strategy = N2SuperTrend()` is that the `__init__` method inside the `N2SuperTrend` class is called:
 
 ```python
 class N2SuperTrend(StrategyBase):
@@ -82,20 +84,18 @@ class N2SuperTrend(StrategyBase):
 - This is all you'd need to put in the `__init__` of any new strategy, and then put the strategy's logic for how it generates a signal inside of the method `YourStrategy.get_signal()`
 - Like it says in the comment, the `super()` function on the first line runs the `__init__` of the `StrategyBase` class so it inherits all the attributes and methods of `StrategyBase` and then it assigns a name for the strategy.
 
-Let's see what's happening in `StrategyBase.__init__()` before coming back to `N2SuperTrend`:
+Here's what's happening in `StrategyBase.__init__()` where the program executes next before coming back to `N2SuperTrend`:
 
 ```python
 from core.config import Config
 
 class StrategyBase(Config):
     """
-    A strategy is an object whose main purpose is to contain regularly
-    updated market data by pulling OHLCV data from both the base pair
-    and the quote pair, then combining them to make the synth pair.
+    A strategy is an object whose main purpose is to contain regularly updated market data by pulling OHLCV data from both the base pair and the quote pair, then combining them to make the synth pair, keeping track of PnL for both underlying trades.
 
-    The main logic which is specific to your strategy should be
-    implemented in the `get_signal()` method which should then
-    be called at a regular defined interval.
+    The main logic which is specific to your strategy should be implemented in the `get_signal()` method which should then be called at a regular defined interval.
+
+    The signal can be set either to be for a single timeframe or multiple timeframes by setting the value of `multi_timeframe_signal_mode: Bool` for that strategy.
     """
     ...
 
@@ -119,7 +119,13 @@ class StrategyBase(Config):
         self.position_manager = PositionManager()
 ```
 
-- As you can see, the `StrategyBase` class inherits the `Config` class and calls the `super()` function on the first line too, which calls the `__init__()` of `Config`. Let's go and look at that before coming back to `StrategyBase` (Config doesn't inherit anything so it's the lowest level of abstraction. It shouldn't need to be edited unless developing/debugging): 
+- The `StrategyBase` class inherits the `Config` class and calls the `super()` function on the first line too, which calls the `__init__()` of `Config`. 
+- `Config` doesn't inherit anything and it's a base class for other classes to inherit. It provides an extra layer between the strategy and lower level configuration options eg.
+
+-    **[TODO]** OHCLV data source should be configurable so that later when making a backtesting environment that will be given historic market data and a much faster tick interval, it will be possible to have multiple instances of running strategies configured differently. 
+    
+- It shouldn't need to be edited unless developing/debugging): 
+- This is what happens in `Config.__init__()` where the program executes next before coming back to `StrategyBase.__init__()`.
 
 ```python
 class Config:
@@ -136,10 +142,6 @@ class Config:
     }
 
     cfg_parser = ConfigParser()
-
-    # I will disable or enable debug_mode by changing this hard-coded line
-    # so that it doesn't accidentally happen.
-    debug_mode = True
 
     def __init__(self, params={}, filepath=USER_CONFIG_PATH):
 
@@ -196,8 +198,24 @@ class Config:
         self.exchange: ccxt.Exchange = self.enabled_exchanges[self.exchange_id.lower()]
 ```
 
-Basically what it's doing is checking to see if params to override the default config were supplied or not.
+ What it's doing is checking to see if params were supplied to override the default config.
 
-- If params are supplied when `Config` or any of its subclasses ie. `StrategyBase` and `N2SuperTrend` are instantiated, then it will load those params as a configuration.
+- If params are passed to `Config` or any of its subclasses ie. `StrategyBase` or `N2SuperTrend` are instantiated, then it will load those params as a configuration.
 
-- If params are not supplied, it will use a `user-config.ini` file specified by `filepath`, which defaults to the global constant `USER_CONFIG_PATH` (This is set in `core.constants`)
+- If params are not supplied, it will use a `config.ini` file specified by `filepath`, which defaults to the global constant `USER_CONFIG_PATH` (This is set in `core.constants` to `user/user-config.ini`)
+
+## 3. After strategy is initialized:
+
+- It will have its own PositionManager object as a Field which can be accessed from within a strategy class like this:
+```python
+    from core.constants import USER_CONFIG_PATH
+    from core.position_manager import PositionManager
+
+    class N2SuperTrend(BaseStrategy):
+        ...
+        def __init__(self, params={}, config_filepath=USER_CONFIG_PATH):
+            ...
+            self.position_manager: PositionManager = PositionManager()
+            ...
+```
+
