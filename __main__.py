@@ -18,26 +18,41 @@ def run_bot(strategy=N2SuperTrend()):
 
     while running:
 
-        signal = strategy.get_signal()
-
-        # [DEBUG] Un-comment one of the three lines below to force a signal:
-        # signal = 'LONG'
-        # signal = 'SHORT'
-        # signal = 'CLOSE'
+        if strategy.debug_mode:
+            """If in debug mode, prompt for signal override"""
+            override_signal = input("[DEBUG]Enter a signal to emulate ([LONG]|SHORT|CLOSE):")
+            if override_signal == "":
+                signal = 'LONG'  # Default if you just press enter at the prompt
+            elif override_signal.upper() == 'SHORT' or override_signal == 'LONG':
+                signal = override_signal
+        else:
+            """If not in debug mode, call the get_signal method of the strategy"""
+            signal = strategy.get_signal()
 
         if signal is not None and signal != 'CLOSE':
-
+            """If there is a new signal to LONG or SHORT:"""
             if pm.get_current_position() is None:
+                """
+                If there's no current position open, then open one
+                in the direction of the signal and set it as pm's
+                current_position
+                """
                 position = Position(strategy.base_pair, strategy.quote_pair,
                                     direction=signal,
                                     order_type='limit').open()
+                # TODO: Here is where the `core.notifier` class would be
+                #   used to generate a report about the position and send
+                #   it via telegram and/or email.
                 pm.set_current_position(position)
 
         elif signal == 'CLOSE':
+            """
+            If the signal is 'CLOSE', then close the pm.current_position
+            """
             pm.current_position.close()
 
         tick_interval = 60  # This should be adjusted to take API rate limits into account
-
+        """For now the tick_interval is set here, but it should be set by params or in Config"""
         time.sleep(tick_interval)
         # await asyncio.sleep(tick_interval)
 
