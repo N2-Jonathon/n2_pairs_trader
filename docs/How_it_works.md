@@ -1,4 +1,9 @@
 # How it works:
+**[Note]**These instructions are not complete yet and I can't garauntee everything works 100% until this note says otherwise.
+---
+
+---
+
 This is the sequence of events that happens when you run the bot. I'm writing this to explain what's going on, and also to be able to properly write unit tests to ensure that it's actually 
 working as it should.
 ## 1. Start the bot:
