@@ -11,7 +11,7 @@ warnings.filterwarnings('ignore')
 """
 
 
-def main(strategy=N2SuperTrend()):
+def run_bot(strategy=N2SuperTrend()):
     running = True
 
     pm: PositionManager = strategy.position_manager
@@ -44,9 +44,9 @@ def main(strategy=N2SuperTrend()):
 
 if __name__ == '__main__':
 
-    main()  # Can pass a Strategy to main to override default eg. main(strategy=YourStrategy)
+    run_bot()  # Can pass a Strategy to override default eg. main(strategy=YourStrategy)
 
     # Later I plan to take advantage of async to run multiple strategies
-    # asyncio.run(main())
+    # asyncio.run(run_bot())
     # loop = asyncio.get_event_loop()
-    # loop.run_until_complete(main())
+    # loop.run_until_complete(run_bot())

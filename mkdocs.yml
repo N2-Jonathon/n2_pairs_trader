@@ -1,9 +1,10 @@
 # mkdocs.yml
-site_name: N2 Pairs Trader Documentation
+site_name: N2 Pairs Trader Docs
 
 theme:
   name: "material"
   custom_dir: "docs/n2_custom_theme"
+  logo: "img/logo-96px.png"
   palette:
     primary: 'black'
     accent: 'dark blue'
@@ -11,6 +12,7 @@ theme:
 extra_css: 
 - css/dark_theme.css
 - css/codehilite.css
+- css/profont.css
 
 plugins:
 - search
@@ -23,3 +25,5 @@ nav:
 
 edit_uri: '#docs/'
 
+markdown_extensions:
+  - codehilite
