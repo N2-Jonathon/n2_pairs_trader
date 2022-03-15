@@ -51,7 +51,7 @@ actual syntax highlighting
 .codehilite .k { color: #66d9ef !important } /* Keyword */
 .codehilite .l { color: #ae81ff !important } /* Literal */
 .codehilite .n { color: #f8f8f2 !important } /* Name */
-.codehilite .o { color: #f92672 !important } /* Operator */
+.codehilite .o { color: #2681f9 !important } /* Operator */
 .codehilite .p { color: #f8f8f2 !important } /* Punctuation */
 .codehilite .cm { color: #75715e !important } /* Comment.Multiline */
 .codehilite .cp { color: #75715e !important } /* Comment.Preproc */

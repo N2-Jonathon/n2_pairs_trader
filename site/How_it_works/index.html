@@ -1,0 +1,623 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.2.5">
+    
+    
+      
+        <title>How it works - N2 Pairs Trader Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.2d9f7617.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.e6a45f82.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#000000">
+        
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../css/dark_theme.css">
+    
+      <link rel="stylesheet" href="../css/codehilite.css">
+    
+      <link rel="stylesheet" href="../css/profont.css">
+    
+    <script>__md_scope=new URL("..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+<meta name="theme-color" content="#212121">
+
+<link rel='icon' href='/img/favicon.ico'>
+
+<meta name='apple-mobile-web-app-capable' content='yes'>
+<meta name='mobile-web-app-capable' content='yes'>
+<link rel="manifest" href="/manifest.json">
+
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="black" data-md-color-accent="dark-blue">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#how-it-works" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="N2 Pairs Trader Docs" class="md-header__button md-logo" aria-label="N2 Pairs Trader Docs" data-md-component="logo">
+      
+  <img src="../img/logo-96px.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            N2 Pairs Trader Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              How it works
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="N2 Pairs Trader Docs" class="md-nav__button md-logo" aria-label="N2 Pairs Trader Docs" data-md-component="logo">
+      
+  <img src="../img/logo-96px.png" alt="logo">
+
+    </a>
+    N2 Pairs Trader Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Readme
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          How it works
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        How it works
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-start-the-bot" class="md-nav__link">
+    1. Start the bot:
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Start the bot:">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#behind-the-scenes" class="md-nav__link">
+    Behind the scenes
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../creating_a_new_strategy/" class="md-nav__link">
+        Creating a new strategy
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-start-the-bot" class="md-nav__link">
+    1. Start the bot:
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Start the bot:">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#behind-the-scenes" class="md-nav__link">
+    Behind the scenes
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+
+
+<h1 id="how-it-works">How it works:</h1>
+<p>This is the sequence of events that happens when you run the bot. I'm writing this to explain what's going on, and also to be able to properly write unit tests to ensure that it's actually 
+working as it should.</p>
+<h2 id="1-start-the-bot">1. Start the bot:</h2>
+<ul>
+<li>From a terminal, run <code>python __main__.py</code></li>
+<li>Inside <code>__main__.py</code>, the <code>run_bot()</code> function is called which takes the optional param <code>strategy=</code>. When it's not specified, it currently defaults to <code>strategy=N2SuperTrend()</code> which initializes the strategy.</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+
+    <span class="n">run_bot</span><span class="p">()</span>  <span class="c1"># Can pass a Strategy to override default eg. run_bot(strategy=YourStrategy)</span>
+</code></pre></div>
+
+<ul>
+<li>you can edit this part of <code>__main__.py</code> to override the default strategy. you also need to import the Strategy at the top of <code>__main__</code>:</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">strategies.another_strategy</span> <span class="kn">import</span> <span class="n">AnotherStrategy</span>
+<span class="o">...</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+
+    <span class="n">run_bot</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="n">AnotherStrategy</span><span class="p">())</span>
+</code></pre></div>
+
+<ul>
+<li>
+<p><strong>TODO</strong>: I want to make it so that it you can pass the strategy as an argument from terminal, which could be useful for implementing backtesting</p>
+</li>
+<li>
+<p>When a strategy class eg. <code>N2SuperTrend</code> is initialized without params then is loads the values set in <code>user/user-config.ini</code></p>
+</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">run_bot</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="n">N2SuperTrend</span><span class="p">()):</span>
+  <span class="o">...</span>
+</code></pre></div>
+
+<ul>
+<li>At this point, you can access the following Fields inherited by StrategyBase:</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="n">strategy</span><span class="o">.</span><span class="n">exchange</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="n">strategy</span><span class="o">.</span><span class="n">strategy_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="n">strategy</span><span class="o">.</span><span class="n">prompt_for_pairs</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+<span class="n">strategy</span><span class="o">.</span><span class="n">base_pair</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="n">strategy</span><span class="o">.</span><span class="n">quote_pair</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="n">strategy</span><span class="o">.</span><span class="n">synth_pair</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>  <span class="c1"># Not sure if this is set properly by __init__ yet</span>
+<span class="n">strategy</span><span class="o">.</span><span class="n">stake_currency</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="n">strategy</span><span class="o">.</span><span class="n">paper_trade</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+
+<span class="n">strategy</span><span class="o">.</span><span class="n">position_manager</span><span class="p">:</span> <span class="n">PositionManager</span><span class="p">,</span>
+<span class="n">strategy</span><span class="o">.</span><span class="n">previous_tick</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span>
+<span class="n">strategy</span><span class="o">.</span><span class="n">ohlcv_data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+<span class="n">strategy</span><span class="o">.</span><span class="n">signal</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+
+<span class="n">strategy</span><span class="o">.</span><span class="n">multi_timeframe_mode</span><span class="p">:</span> <span class="nb">bool</span>
+<span class="n">strategy</span><span class="o">.</span><span class="n">multi_timeframe_signal_rules</span><span class="p">:</span> <span class="nb">dict</span>
+</code></pre></div>
+
+<h3 id="behind-the-scenes">Behind the scenes</h3>
+<p>What happens when the strategy object is instantiated eg. <code>strategy = N2SuperTrend()</code> is that the <code>__init__</code> method inside the <code>N2SuperTrend</code> class is called, so let's look at that:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">N2SuperTrend</span><span class="p">(</span><span class="n">StrategyBase</span><span class="p">):</span>
+
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{},</span> <span class="n">config_filepath</span><span class="o">=</span><span class="n">USER_CONFIG_PATH</span><span class="p">):</span>
+          <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">          The first line `super().__init__(params, config_filepath)` means</span>
+<span class="sd">          it runs the __init__ method in StrategyBase and inherits its</span>
+<span class="sd">          attributes from there, then the name is set.</span>
+
+<span class="sd">          :param params:</span>
+<span class="sd">          :type params:</span>
+<span class="sd">          :param config_filepath:</span>
+<span class="sd">          :type config_filepath:</span>
+<span class="sd">          &quot;&quot;&quot;</span>
+          <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">config_filepath</span><span class="p">)</span>
+
+          <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;n2_supertrend&#39;</span>
+</code></pre></div>
+
+<ul>
+<li>This is all you'd need to put in the <code>__init__</code> of any new strategy, and then put the strategy's logic for how it generates a signal inside of the method <code>YourStrategy.get_signal()</code></li>
+<li>Like it says in the comment, the <code>super()</code> function on the first line runs the <code>__init__</code> of the <code>StrategyBase</code> class so it inherits all the attributes and methods of <code>StrategyBase</code> and then it assigns a name for the strategy.</li>
+</ul>
+<p>Let's see what's happening in <code>StrategyBase.__init__()</code> before coming back to <code>N2SuperTrend</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">core.config</span> <span class="kn">import</span> <span class="n">Config</span>
+
+<span class="k">class</span> <span class="nc">StrategyBase</span><span class="p">(</span><span class="n">Config</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A strategy is an object whose main purpose is to contain regularly</span>
+<span class="sd">    updated market data by pulling OHLCV data from both the base pair</span>
+<span class="sd">    and the quote pair, then combining them to make the synth pair.</span>
+
+<span class="sd">    The main logic which is specific to your strategy should be</span>
+<span class="sd">    implemented in the `get_signal()` method which should then</span>
+<span class="sd">    be called at a regular defined interval.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="o">...</span>
+
+    <span class="k">def</span> <span class="fm">__int__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{},</span> <span class="n">config_filepath</span><span class="o">=</span><span class="n">USER_CONFIG_PATH</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The first line: `super().__init__(params, config_filepath)` means</span>
+<span class="sd">        it runs the __init__ method in Config and inherits its attributes</span>
+<span class="sd">        from there, then after that, the other attributes are set.</span>
+
+<span class="sd">        :param params:</span>
+<span class="sd">        :type params:</span>
+<span class="sd">        :param config_filepath:</span>
+<span class="sd">        :type config_filepath:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        :rtype:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">config_filepath</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_signal</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">position_manager</span> <span class="o">=</span> <span class="n">PositionManager</span><span class="p">()</span>
+</code></pre></div>
+
+<ul>
+<li>As you can see, the <code>StrategyBase</code> class inherits the <code>Config</code> class and calls the <code>super()</code> function on the first line too, which calls the <code>__init__()</code> of <code>Config</code>. Let's go and look at that before coming back to <code>StrategyBase</code> (Config doesn't inherit anything so it's the lowest level of abstraction. It shouldn't need to be edited unless developing/debugging): </li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>
+    <span class="vm">__dict__</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;exchange&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="s2">&quot;strategy_name&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="s2">&quot;prompt_for_pairs&quot;</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+        <span class="s2">&quot;base_pair&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="s2">&quot;quote_pair&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="s2">&quot;stake_currency&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="s2">&quot;paper_trade&quot;</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+
+        <span class="s2">&quot;debug_mode&quot;</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="p">}</span>
+
+    <span class="n">cfg_parser</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="p">()</span>
+
+    <span class="c1"># I will disable or enable debug_mode by changing this hard-coded line</span>
+    <span class="c1"># so that it doesn&#39;t accidentally happen.</span>
+    <span class="n">debug_mode</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{},</span> <span class="n">filepath</span><span class="o">=</span><span class="n">USER_CONFIG_PATH</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="n">params</span>
+
+        <span class="k">if</span> <span class="n">params</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="n">filepath</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cfg_parser</span><span class="o">.</span><span class="n">read</span><span class="p">([</span><span class="n">filepath</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">filepath</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">exchange_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg_parser</span><span class="p">[</span><span class="s1">&#39;Global Settings&#39;</span><span class="p">][</span><span class="s1">&#39;exchange&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">strategy_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg_parser</span><span class="p">[</span><span class="s1">&#39;Global Settings&#39;</span><span class="p">][</span><span class="s1">&#39;strategy&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">strategy_import_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;strategies.</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">strategy_name</span><span class="si">}</span><span class="s2">&quot;</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">prompt_for_pairs</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg_parser</span><span class="p">[</span><span class="s1">&#39;Global Settings&#39;</span><span class="p">][</span><span class="s1">&#39;prompt_for_pairs&#39;</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">base_pair</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg_parser</span><span class="p">[</span><span class="s1">&#39;Global Settings&#39;</span><span class="p">][</span><span class="s1">&#39;base_pair_default&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">quote_pair</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg_parser</span><span class="p">[</span><span class="s1">&#39;Global Settings&#39;</span><span class="p">][</span><span class="s1">&#39;quote_pair_default&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stake_currency</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg_parser</span><span class="p">[</span><span class="s1">&#39;Global Settings&#39;</span><span class="p">][</span><span class="s1">&#39;stake_currency&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">paper_trade</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg_parser</span><span class="p">[</span><span class="s1">&#39;Global Settings&#39;</span><span class="p">][</span><span class="s1">&#39;paper_trade&#39;</span><span class="p">])</span>
+
+                <span class="c1"># self.synth_pair = self.get_synth_pair_symbol(self.base_pair, self.quote_pair)</span>
+                <span class="c1"># self.strategy = importlib.import_module(f&quot;strategies.{self.strategy_name}&quot;)</span>
+                <span class="c1"># self.exchange: ccxt.Exchange = self.enabled_exchanges[self.exchange_id]</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Failed to read from config (Make sure all values are assigned)&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">param</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid Parameter: &#39;</span><span class="si">{</span><span class="n">param</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">exchange_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;exchange&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">strategy_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;strategy&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">strategy_import_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;strategies.</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">strategy_name</span><span class="p">[</span><span class="s1">&#39;strategy&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">prompt_for_pairs</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;prompt_for_pairs&#39;</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">base_pair</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;base_pair&#39;</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">quote_pair</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;quote_pair&#39;</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stake_currency</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;stake_currency&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">paper_trade</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;paper_trade&#39;</span><span class="p">]</span>
+
+                <span class="c1"># self.strategy = importlib.import_module(f&quot;strategies.{self.strategy_name}&quot;)</span>
+                <span class="c1"># self.exchange: ccxt.Exchange = self.enabled_exchanges[self.exchange_id]</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Params incomplete&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Cannot Initialize Config() without either params or config_filepath&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">synth_pair</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_synth_pair_symbol</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_pair</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">quote_pair</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enabled_exchanges</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_enabled_exchanges</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exchange</span><span class="p">:</span> <span class="n">ccxt</span><span class="o">.</span><span class="n">Exchange</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enabled_exchanges</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">exchange_id</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
+</code></pre></div>
+
+<p>Basically what it's doing is checking to see if params to override the default config were supplied or not.</p>
+<ul>
+<li>
+<p>If params are supplied when <code>Config</code> or any of its subclasses ie. <code>StrategyBase</code> and <code>N2SuperTrend</code> are instantiated, then it will load those params as a configuration.</p>
+</li>
+<li>
+<p>If params are not supplied, it will use a <code>user-config.ini</code> file specified by <code>filepath</code>, which defaults to the global constant <code>USER_CONFIG_PATH</code> (This was set automatically in <code>core.constants</code> when running <code>__main__.py</code>)</p>
+</li>
+</ul>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href=".." class="md-footer__link md-footer__link--prev" aria-label="Previous: Readme" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Readme
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../creating_a_new_strategy/" class="md-footer__link md-footer__link--next" aria-label="Next: Creating a new strategy" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Creating a new strategy
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.bd0b6b67.min.js"}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.467223ff.min.js"></script>
+      
+    
+  </body>
+</html>

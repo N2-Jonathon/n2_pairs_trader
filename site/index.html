@@ -13,7 +13,7 @@
     
     
       
-        <title>N2 Pairs Trader Documentation</title>
+        <title>N2 Pairs Trader Docs</title>
       
     
     
@@ -45,12 +45,22 @@
     
       <link rel="stylesheet" href="css/codehilite.css">
     
+      <link rel="stylesheet" href="css/profont.css">
+    
     <script>__md_scope=new URL(".",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
     
     
+<meta name="theme-color" content="#212121">
+
+<link rel='icon' href='/img/favicon.ico'>
+
+<meta name='apple-mobile-web-app-capable' content='yes'>
+<meta name='mobile-web-app-capable' content='yes'>
+<link rel="manifest" href="/manifest.json">
+
   </head>
   
   
@@ -83,10 +93,9 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="." title="N2 Pairs Trader Documentation" class="md-header__button md-logo" aria-label="N2 Pairs Trader Documentation" data-md-component="logo">
+    <a href="." title="N2 Pairs Trader Docs" class="md-header__button md-logo" aria-label="N2 Pairs Trader Docs" data-md-component="logo">
       
-  
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <img src="img/logo-96px.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -96,7 +105,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            N2 Pairs Trader Documentation
+            N2 Pairs Trader Docs
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
@@ -169,13 +178,12 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="." title="N2 Pairs Trader Documentation" class="md-nav__button md-logo" aria-label="N2 Pairs Trader Documentation" data-md-component="logo">
+    <a href="." title="N2 Pairs Trader Docs" class="md-nav__button md-logo" aria-label="N2 Pairs Trader Docs" data-md-component="logo">
       
-  
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <img src="img/logo-96px.png" alt="logo">
 
     </a>
-    N2 Pairs Trader Documentation
+    N2 Pairs Trader Docs
   </label>
   
   <ul class="md-nav__list" data-md-scrollfix>
@@ -213,8 +221,8 @@
   
   
     <li class="md-nav__item">
-      <a href="Logical_Sequence/" class="md-nav__link">
-        Logical Sequence
+      <a href="How_it_works/" class="md-nav__link">
+        How it works
       </a>
     </li>
   
@@ -273,24 +281,26 @@ both users or developers.</p>
 <p>This initially started out as a way to implement a single strategy ie. the SuperTrend Long/Short Strategy, but it's
 designed in a way to be scalable for use with other strategies and exchanges, and have things abstracted in such a
 way that each strategy only needs to deal with checking indicator signals, and opening/closing positions, instead of
-having to think about the underlying trades that comprise the positionsn while writing new strategy.</p>
+having to think about the underlying trades that comprise the positions while writing a new strategy.</p>
 <p>It will also generate a report whenever a trade is opened or closed, then save it to a log file, and if notifications
 are enabled then it will send notifications either via email or telegram or both including information about each
 position, which strategy it's from, which pair, the signals taken, trades opened, timestamps, PnL, etc</p>
 <p>It should be possible out of the box to use margin trading for any exchange which ccxt has implemented that for, which
 unfortunately is not unified nor implemented for some exchanges, unlike some other unified methods for things like
-fetching market data, opening trades, etc.
-  - Unfortunately, KuCoin falls into that category of not having margin trading implemented currently, so I've had to
-    implement that myself by:
-    - extending the default ccxt.kucoin in <code>core.exchanges.kucoin_extended</code> and overriding the
-      methods so that it does still support margin trading. the default method ccxt uses for margin trading is
-      <code>exchange.fetch_borrow_rate()</code> but KuCoin's API doesn't have that, and it's only possible to get the max borrow
-      amount
-    - I've added a new method <code>KuCoinExtended.fetch_max_borrow_amount</code>, and I'm going to override the
-      <code>fetch_borrow_rate()</code> method so that it calculates what the rate would be if that's possible? And then it would be
-      possible for me to unify how all the strategies are implemented in this codebase so they always use the same
-      abstractions. I should make a wrapper method which handles which one to use but for now that has to be done inside
-      the strategy.</p>
+fetching market data, opening trades, etc.</p>
+<ul>
+<li>Unfortunately, KuCoin falls into that category of not having margin trading implemented currently, so I've had to
+  implement that myself by:</li>
+<li>Extending the default ccxt.kucoin in <code>core.exchanges.kucoin_extended</code> and overriding the
+    methods so that it does still support margin trading. the default method ccxt uses for margin trading is
+    <code>exchange.fetch_borrow_rate()</code> but KuCoin's API doesn't have that, and it's only possible to get the max borrow
+    amount</li>
+<li>I've added a new method <code>KuCoinExtended.fetch_max_borrow_amount</code>, and I'm going to override the
+    <code>fetch_borrow_rate()</code> method so that it calculates what the rate would be if that's possible? And then it would be
+    possible for me to unify how all the strategies are implemented in this codebase so they always use the same
+    abstractions. I should make a wrapper method which handles which one to use but for now that has to be done inside
+    the strategy.</li>
+</ul>
 
               
             </article>
@@ -305,13 +315,13 @@ fetching market data, opening trades, etc.
       
       
         
-        <a href="Logical_Sequence/" class="md-footer__link md-footer__link--next" aria-label="Next: Logical Sequence" rel="next">
+        <a href="How_it_works/" class="md-footer__link md-footer__link--next" aria-label="Next: How it works" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Logical Sequence
+              How it works
             </div>
           </div>
           <div class="md-footer__button md-icon">
