@@ -20,7 +20,7 @@ plugins:
 
 nav:
   - Readme: 'index.md'
-  - Logical Sequence: 'Logical_Sequence.md'
+  - How it works: 'How_it_works.md'
   - Creating a new strategy: 'creating_a_new_strategy.md'
 
 edit_uri: '#docs/'
