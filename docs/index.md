@@ -6,7 +6,7 @@ both users or developers.
 This initially started out as a way to implement a single strategy ie. the SuperTrend Long/Short Strategy, but it's
 designed in a way to be scalable for use with other strategies and exchanges, and have things abstracted in such a
 way that each strategy only needs to deal with checking indicator signals, and opening/closing positions, instead of
-having to think about the underlying trades that comprise the positionsn while writing new strategy.
+having to think about the underlying trades that comprise the positions while writing a new strategy.
 
 It will also generate a report whenever a trade is opened or closed, then save it to a log file, and if notifications
 are enabled then it will send notifications either via email or telegram or both including information about each

@@ -1,11 +1,12 @@
 # Creating a new strategy
 :: stub
 
-## TODO:
+### **[TODO]**:
 Write some content here which explains:
-- [ ] How to create a new strategy 
+
+- How to create a new strategy 
   by extending the BaseStrategy() class eg. `class N2SuperTrend(BaseStrategy)`
-- [ ] How to initialize those strategies in `__main__.py` with different configurations eg.
+- How to initialize those strategies in `__main__.py` with different configurations eg.
 
 ```python
 from strategies.n2_supertrend import N2SuperTrend
