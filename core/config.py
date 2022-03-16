@@ -12,18 +12,29 @@ import core.exchanges
 
 
 class Config:
-    __dict__ = {
-        "cfg_file_key": str,
-        "strategy_name": str,
-        "strategy": None,  # : StrategyBase, (Caused circular import when setting type to StrategyBase)
-        "prompt_for_pairs": bool,
-        "base_pair": str,
-        "quote_pair": str,
-        "stake_currency": str,
-        "paper_trade": bool,
 
-        "debug_mode": bool
-    }
+    name = 'Config'                       # This will be different for any sub-classes
+
+    cfg_filepath = USER_CONFIG_PATH       # Can be overridden
+    cfg_parser = ConfigParser()           # python built-in for parsing config files
+
+    exchange_name: str = None             # eg. 'KuCoin'
+    exchange_id: str = None               # lowercase eg. 'kucoin'
+    exchange: ccxt.Exchange = None        # an object that inherits ccxt.Exchange's methods.
+    """The ccxt.Exchange object later assigned to Config.exchange should be initialized with API Keys"""
+
+    debug_mode: bool = True               # For now this is hard-coded as true
+
+    strategy_name: str = None             # Decides which strategy to use
+    strategy_import_path: str = None      # Dynamically calculated as an f-string ie. f"strategies.{strategy_name}"
+
+    prompt_for_pairs: bool = None         # If True, the user will be prompted for which pairs to trade
+    prompt_borrow_qty: bool = None        # If True, the user will be prompted for quantity to borrow in short trades
+    base_pair: str = None                 # Base pair used to make the artificial pair
+    quote_pair: str = None                # Quote pair used to make the artificial pair
+    synth_pair: str = None                # Synth pair aka. artificial pair derived from base & quote pairs
+    stake_currency: str = None            # The currency which end balances are converted to after closing a position
+    paper_trade: bool = None              # When True, real orders won't be placed but positions will still be tracked
 
     api_keys = {
         "exchanges": {
@@ -39,17 +50,14 @@ class Config:
         },
         "telegram": None
     }
-
-    exchange = None
-
-    cfg_parser = ConfigParser()
-
-    # I will disable or enable debug_mode by changing this hard-coded line
-    # so that it doesn't accidentally happen.
-    debug_mode = True
+    """
+    For now the dictionary for api_keys is given here but it would be better to have it 
+    somewhere else, and use ccxt.Exchange.requiredCredentials to generate this structure. 
+    For now it's just 2 exchanges but that would need to be done before adding all of the 
+    exchanges otherwise the same  structure would be copy/pasted for all of the exchanges.
+    """
 
     def __init__(self, params={}, filepath=USER_CONFIG_PATH):
-
 
         self.exchange_id = None
         self.exchange = None
@@ -103,7 +111,7 @@ class Config:
 
         self.synth_pair = utils.get_synth_pair_symbol(self.base_pair, self.quote_pair)
         self.read_exchange_api_keys(self.exchange_id)
-        self.exchange = importlib(self.exchange_module_path)(self.api_keys['exchanges'][self.exchange_id])
+
         # self.enabled_exchanges = self.get_enabled_exchanges()
         # self.exchange: ccxt.Exchange = self.enabled_exchanges[self.cfg_file_key.lower()]
 
@@ -132,6 +140,12 @@ class Config:
         self.exchange: ccxt.Exchange = self.enabled_exchanges[self.exchange_id]
 
     def read_cfg_key(self, cfg_file_key, filepath=USER_CONFIG_PATH):
+        """
+        Not currently used but will be useful for telegram.
+        Also read_exchange_api_keys() can be refacroted to use this method.
+        The filepath can be any file that built-in configparses.ConfigParser
+        recognizes such as .ini or .cfg files
+        """
         if filepath is not None:
             cfg = self.cfg_parser.read(self, filepath)
             if cfg_file_key in cfg:
@@ -140,17 +154,20 @@ class Config:
             raise ValueError(f"The key: {cfg_file_key} was not found in {filepath}")
 
     def read_exchange_api_keys(self, exchange_name, filepath=USER_CONFIG_PATH):
+        """
+        This takes a given exchange_name (not the same as exchange_id which is always lowercase),
+        and a filepath
+        """
         keys = {}
+        if filepath is None:
+            filepath = USER_CONFIG_PATH
         if filepath is not None:
             self.cfg_parser.read([filepath])
             cfg = self.cfg_parser
             if cfg.has_section(exchange_name):
-                section_found = True
-                blah = self.api_keys
                 for credential in self.api_keys['exchanges'][exchange_name]:
                     key = cfg[exchange_name][credential]
                     keys[credential] = key
-                    print(keys)
 
                 self.api_keys['exchanges'][exchange_name] = keys
 
@@ -162,4 +179,4 @@ class Config:
         return keys
 
     def set_exchange(self):
-        pass
+        raise NotImplementedError
