@@ -8,6 +8,8 @@ import core.utils as utils
 from core.exchanges.kucoin_extended import KuCoinExtended
 from scripts.load_api_keys import load_api_keys
 
+import core.exchanges
+
 
 class Config:
     __dict__ = {
@@ -23,6 +25,23 @@ class Config:
         "debug_mode": bool
     }
 
+    api_keys = {
+        "exchanges": {
+            "KuCoin": {
+                "apiKey": None,
+                "secret": None,
+                "password": None
+            },
+            "HitBTC": {
+                "apiKey": None,
+                "password": None
+            }
+        },
+        "telegram": None
+    }
+
+    exchange = None
+
     cfg_parser = ConfigParser()
 
     # I will disable or enable debug_mode by changing this hard-coded line
@@ -30,6 +49,7 @@ class Config:
     debug_mode = True
 
     def __init__(self, params={}, filepath=USER_CONFIG_PATH):
+
 
         self.exchange_id = None
         self.exchange = None
@@ -45,6 +65,7 @@ class Config:
 
             try:
                 self.exchange_id = self.cfg_parser['Global Settings']['exchange']
+                self.exchange_module_path = f"core.{self.exchange_id}"
                 self.strategy_name = self.cfg_parser['Global Settings']['strategy']
                 self.strategy_import_path = f"strategies.{self.strategy_name}"
 
@@ -62,7 +83,8 @@ class Config:
 
             try:
                 self.exchange_id: str = self.params['exchange']
-                self.exchange = self.read_api_keys(cfg_file_key=self.exchange_id)
+                self.exchange_module_path = f"core.{self.exchange_id}"
+
                 self.strategy_name = self.params['strategy']
                 self.strategy_import_path = f"strategies.{self.strategy_name['strategy']}"
 
@@ -80,8 +102,8 @@ class Config:
             raise Exception("Cannot Initialize Config() without either params or config_filepath")
 
         self.synth_pair = utils.get_synth_pair_symbol(self.base_pair, self.quote_pair)
-        self.exchange = self.read_api_keys(self.exchange_id)
-
+        self.read_exchange_api_keys(self.exchange_id)
+        self.exchange = importlib(self.exchange_module_path)(self.api_keys['exchanges'][self.exchange_id])
         # self.enabled_exchanges = self.get_enabled_exchanges()
         # self.exchange: ccxt.Exchange = self.enabled_exchanges[self.cfg_file_key.lower()]
 
@@ -109,7 +131,7 @@ class Config:
         self.strategy_name = importlib.import_module(f"strategies.{self.strategy_name}")
         self.exchange: ccxt.Exchange = self.enabled_exchanges[self.exchange_id]
 
-    def read_api_key(self, cfg_file_key, filepath=USER_CONFIG_PATH):
+    def read_cfg_key(self, cfg_file_key, filepath=USER_CONFIG_PATH):
         if filepath is not None:
             cfg = self.cfg_parser.read(self, filepath)
             if cfg_file_key in cfg:
@@ -117,14 +139,27 @@ class Config:
         else:
             raise ValueError(f"The key: {cfg_file_key} was not found in {filepath}")
 
-    def read_api_keys(self, cfg_file_keys, filepath=USER_CONFIG_PATH):
+    def read_exchange_api_keys(self, exchange_name, filepath=USER_CONFIG_PATH):
         keys = {}
-        for cfg_file_key in cfg_file_keys:
+        if filepath is not None:
+            self.cfg_parser.read([filepath])
+            cfg = self.cfg_parser
+            if cfg.has_section(exchange_name):
+                section_found = True
+                blah = self.api_keys
+                for credential in self.api_keys['exchanges'][exchange_name]:
+                    key = cfg[exchange_name][credential]
+                    keys[credential] = key
+                    print(keys)
 
-            pass
+                self.api_keys['exchanges'][exchange_name] = keys
 
-    def read_exchange_api_keys(self, exchange_ids=[], filepath=USER_CONFIG_PATH):
+            else:
+                raise ValueError(f'Failed to read {exchange_name} API keys from {filepath}')
+        else:
+            raise ValueError('No filepath was given for reading exchange api key')
 
-        for exchange_id in exchange_ids:
+        return keys
 
-            pass
+    def set_exchange(self):
+        pass

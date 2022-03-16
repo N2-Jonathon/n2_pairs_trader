@@ -1,53 +1,7 @@
-from strategies.n2_supertrend import N2SuperTrend, StrategyBase
-# strategy = StrategyBase()
-
-strategy = N2SuperTrend()
-
-another = StrategyBase()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-from core.constants import USER_CONFIG_PATH
-from finta.finta import inputvalidator as ival
-from strategies.strategy_base import StrategyBase
+import core
+from pprint import pprint
 from core.config import Config
-import os
-import sys
 
-import core.utils as utils
+myconfig = Config()
 
-
-print(utils.get_project_root())
-print(utils.get_user_config_path())
-
-print(USER_CONFIG_PATH)
-
-cfg = Config()
-"""
+pprint(myconfig.exchange)
