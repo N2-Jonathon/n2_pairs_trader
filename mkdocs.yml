@@ -20,6 +20,7 @@ plugins:
 
 nav:
   - Readme: 'index.md'
+  - Objectives & Requirements: 'objectives_&_requirements.md'
   - How it works: 
       - 1. Start the Bot: how_it_works/1_start_the_bot.md
       - 2. Initialize Strategy: how_it_works/2_initialize_strategy.md

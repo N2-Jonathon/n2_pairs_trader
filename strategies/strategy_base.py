@@ -166,7 +166,7 @@ class StrategyBase(Config):
         """
         super().__init__(self, params, config_filepath)
 
-        self.name = None
+        self.name = 'StrategyBase'
         self.current_signal = None
         self.position_manager = PositionManager()
 
