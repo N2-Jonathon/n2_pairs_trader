@@ -1,4 +1,21 @@
-# Home:
+# **Home:**
+
+!!! todo 
+    ***(March 20th, 2022)***
+
+    Hi Nico, this is my first update in a couple of days since I got stuck on a problem which I've just recently (mostly) solved. I will explain that below.
+
+    I've also migrated the **TODO** list to here for now while I'm developing this, but after the first release I will migrate the **TODO** to its own page, and this will be the Index/Home
+
+    - [x] Write a script which scrapes the contents of what the `describe()` method returns. This was necessary to avoid having to import every exchange to be able to get this information which I was trying to do before with many issues.
+    - [ ] Fix imports in `core.constants` for the scraped data to not give any errors when saved as a python dict.
+        * [ ] For now I only need the content of `requiredCredentials` and `has` which don't have any out of scope variable names like the rest of the errors, so I can ommit the rest for now and focus on getting those two working first, then sort out the imports after.
+        * Having every exchange's `requiredCredentials` as a constant helps in the `Config` & `StrategyBase` classes where the exchange isn't yet imported or initialized but I still need to know what those credentials need to be
+        * Having every exchange's `has` as a constant will make it very easy to see which exchanges support what, and be able to judge which strategies are suitable for which exchanges. eg. which exchanges already support margin trading and `fetchBorrowRates` etc
+
+
+
+---
 
 In these docs I will explain how this program works and its architecture, and try to make it easy to understand for
 both users or developers.
