@@ -151,7 +151,7 @@ class StrategyBase(Config):
     }
     position_manager = PositionManager()
 
-    def __int__(self, params={}, config_filepath=USER_CONFIG_PATH):
+    def __init__(self, params={}, config_filepath=USER_CONFIG_PATH):
         """
         The first line: `super().__init__(params, config_filepath)` means
         it runs the __init__ method in Config and inherits its attributes

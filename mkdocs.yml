@@ -54,7 +54,7 @@ markdown_extensions:
   - codehilite
   - admonition
   - pymdownx.details
-  - pymdownx.superfences
+  # - pymdownx.superfences
   - def_list
   - pymdownx.tasklist:
       custom_checkbox: true
