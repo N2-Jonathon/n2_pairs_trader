@@ -7,11 +7,32 @@
 
     I've also migrated the **TODO** list to here for now while I'm developing this, but after the first release I will migrate the **TODO** to its own page, and this will be the Index/Home
 
-    - [x] Write a script which scrapes the contents of what the `describe()` method returns. This was necessary to avoid having to import every exchange to be able to get this information which I was trying to do before with many issues.
-    - [ ] Fix imports in `core.constants` for the scraped data to not give any errors when saved as a python dict.
+    ---
+
+    - [x] **1.** Write a script which scrapes the contents of what the `describe()` method returns. This was necessary to avoid having to import every exchange to be able to get this information which I was trying to do before with many issues.
+
+    ---
+
+    - [ ] **2.** Fix imports in `core.constants` for the scraped data to not give any errors when saved as a python dict.
         * [ ] For now I only need the content of `requiredCredentials` and `has` which don't have any out of scope variable names like the rest of the errors, so I can ommit the rest for now and focus on getting those two working first, then sort out the imports after.
         * Having every exchange's `requiredCredentials` as a constant helps in the `Config` & `StrategyBase` classes where the exchange isn't yet imported or initialized but I still need to know what those credentials need to be
         * Having every exchange's `has` as a constant will make it very easy to see which exchanges support what, and be able to judge which strategies are suitable for which exchanges. eg. which exchanges already support margin trading and `fetchBorrowRates` etc
+    
+    ---
+    - [ ] **3.** Make a list of all ccxt exchanges which have margin trading & `fetchBorrowRate`
+
+    ---
+
+    - [ ] **4.** Fully implement each step of Long/Short positions including borrowing.
+        * [ ] Make it work on all exchanges which have margin trading and borrowing supported by ccxt
+    
+    ---
+
+    - [ ] **5.** Implement Telegram Notifications
+    
+    ---
+
+    - [ ] **6.** Submit working Minimum Viable Product
 
 
 
