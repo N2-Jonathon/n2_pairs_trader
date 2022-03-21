@@ -18,12 +18,20 @@ locations.
 import os
 
 CORE_DIR = os.path.dirname(os.path.abspath(__file__))
-
 ROOT_DIR = os.path.abspath(os.path.join(CORE_DIR, os.pardir))
-
 USER_CONFIG_PATH = f"{ROOT_DIR}/user/user-config.ini"
 
 EXCHANGE_API_KEYS = {}
+
+EXCHANGES_WITH_fetchBorrowRate = ['ZB', 'BINANCE', 'HUOBI', 'OKX', 'FTX', 'BEQUANT']
+
+EXCHANGES_WITH_margin = ['ZB', 'BINANCE', 'GATEIO', 'HUOBI', 'WOO', 'KRAKEN', 'OKX', 'FTX', 'BEQUANT', 'CURRENCYCOM']
+
+EXCHANGES_WITH_KNOWN_requiredCredentials = ['RIPIO', 'BITMART', 'BITVAVO', 'BITGET', 'EQONEX', 'STEX', 'OKCOIN',
+                                            'COINMATE', 'KUCOIN', 'GATEIO', 'COINONE', 'HOLLAEX', 'BW', 'PHEMEX',
+                                            'OKX', 'KUCOINFUTURES', 'COINBASE', 'NOVADAX', 'PROBIT', 'BITSTAMP1',
+                                            'DELTA', 'BITSTAMP', 'CEX', 'COINBASEPRO', 'BLOCKCHAINCOM', 'IDEX',
+                                            'BITPANDA', 'NDAX', 'LYKKE']
 
 EXCHANGES =  {
   "COINSPOT": {

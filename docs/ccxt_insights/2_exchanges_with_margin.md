@@ -1,8 +1,3 @@
-These are the exchanges that have margin trading implemented by ccxt.
-
-It's not very many, and there are probably more exchanges like kucoin which do have margin trading but are not on this list. For those exchanges, extra work will be needed identify them and to implement margin trading by extending the ccxt exchange.
-
-
 |    | EXCHANGE    | requiredCredentials   | rateLimit   | has   | margin   | fetchBorrowRate   |
 |---:|:------------|:----------------------|:------------|:------|:---------|:------------------|
 | 19 | ZB          | False                 | True        | True  | True     | True              |
