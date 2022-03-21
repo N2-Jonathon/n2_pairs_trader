@@ -1,14 +1,21 @@
 # **Home:**
 
-!!! todo 
+!!! note
+
+    ***(March 21st, 2022)***
+
+    ***[11:08am CET | 06:08am EDT]***
+
+    Like I said last night, I'm trying to get this functional by the end of today. Since our last message, I've managed to get through steps 2 & 3 which is going to help a lot with step 4.
+
     ***(March 20th, 2022)***
 
     Hi Nico, this is my first update in a couple of days since I got stuck on a problem which I've just recently (mostly) solved. I will explain that below.
 
-    I've also migrated the **TODO** list to here for now while I'm developing this, but after the first release I will migrate the **TODO** to its own page, and this will be the Index/Home
+    I've also migrated the **TODO** list to here for now while I'm developing this, but after the first release I will migrate the **TODO** to its own page, and this will be the Index/Home.
 
-    ---
-
+!!! todo 
+   
     - [x] **1.** Write a script which scrapes the contents of what the `describe()` method returns. This was necessary to avoid having to import every exchange to be able to get this information which I was trying to do before with many issues.
 
     ---
