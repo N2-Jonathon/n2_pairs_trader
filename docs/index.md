@@ -13,8 +13,8 @@
 
     ---
 
-    - [ ] **2.** Fix imports in `core.constants` for the scraped data to not give any errors when saved as a python dict.
-        * [ ] For now I only need the content of `requiredCredentials` and `has` which don't have any out of scope variable names like the rest of the errors, so I can ommit the rest for now and focus on getting those two working first, then sort out the imports after.
+    - [x] **2.** Fix imports in `core.constants` for the scraped data to not give any errors when saved as a python dict.
+        * [x] For now I only need the content of `rateLimit` `requiredCredentials` and `has` which don't have any out of scope variable names like the rest of the errors, so I can ommit the rest for now and focus on getting those two working first, then sort out the imports after.
         * Having every exchange's `requiredCredentials` as a constant helps in the `Config` & `StrategyBase` classes where the exchange isn't yet imported or initialized but I still need to know what those credentials need to be
         * Having every exchange's `has` as a constant will make it very easy to see which exchanges support what, and be able to judge which strategies are suitable for which exchanges. eg. which exchanges already support margin trading and `fetchBorrowRates` etc
     

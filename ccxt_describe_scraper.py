@@ -82,29 +82,28 @@ for f in enumerate(files):
             describe_method_dict = describe_method[dict_start:dict_end]
             status = "Found describe method return contents"
 
-            _rateLimit_idx = describe_method_dict.find("'rateLimit': ") + 13
-            _rateLimit = describe_method_dict[_rateLimit_idx:describe_method_dict.find(',\n', _rateLimit_idx)]
-            status = f"Found at index: {_rateLimit_idx}\n'rateLimit': {_rateLimit}"
+            if "'rateLimit': " not in describe_method_dict:
+                has_rateLimit = False
+                _rateLimit = False
+                status = ValueError(f"{exchange_id} does not have 'rateLimit' specified")
 
-            _has_idx = describe_method_dict.find("'has': ") + 7
-            _has = describe_method_dict[_has_idx:describe_method_dict.find('}', _has_idx) + 1]
-            status = f"Found at index: {_has_idx}\n'has': {_has}"
+                # raise ValueError(f"{exchange_id} does not have 'rateLimit' specified")
+                DEBUG_output += ("<<<<! " + str(status) + " !>>>>\n")
+
+            else:
+                has_rateLimit = True
+                _rateLimit_idx = describe_method_dict.find("'rateLimit': ") + 13
+                _rateLimit = describe_method_dict[_rateLimit_idx:describe_method_dict.find(',\n', _rateLimit_idx)]
+                status = f"Found at index: {_rateLimit_idx}\n'rateLimit': {_rateLimit}"
 
             if "'requiredCredentials': " not in describe_method_dict:
                 has_requiredCredentials = False
+                _requiredCredentials = False
                 exchanges["requiredCredentials not provided"].append(exchange_id)
-                status = ValueError(f"{exchange_id} does not have requiredCredentials specified.")
-                DEBUG_output += ("<<<<! " + str(status) + " !>>>>\n")
+                status = ValueError(f"{exchange_id} does not have 'requiredCredentials' specified.")
 
-                new_output = (f'\n"{exchange_id.upper()}": ' + "{\n"
-                              f"""
-                                  "requiredCredentials": False,
-                                  "rateLimit": {_rateLimit},
-                                  "has": {_has}
-                              """
-                              "\n},\n")
-                output += new_output
-                DEBUG_output += new_output
+                # raise ValueError(f"{exchange_id} does not have 'requiredCredentials' specified.")
+                DEBUG_output += ("<<<<! " + str(status) + " !>>>>\n")
             else:
                 has_requiredCredentials = True
                 exchanges["requiredCredentials provided"].append(exchange_id)
@@ -112,16 +111,29 @@ for f in enumerate(files):
                 _requiredCredentials = describe_method_dict[_requiredCredentials_idx:describe_method_dict.find('}',
                                                                                                                _requiredCredentials_idx) + 1]
 
-                new_output = (f'\n"{exchange_id.upper()}": ' + "{\n"
-                              f"""
-                                  "requiredCredentials": {_requiredCredentials},
-                                  "rateLimit": {_rateLimit},
-                                  "has": {_has}
-                               """
-                              "\n},\n")
+            if "'has': " not in describe_method_dict:
+                has_has = False
+                _has = False
+                status = ValueError(f"{exchange_id} does not have 'has' specified.")
 
-                output += new_output
-                DEBUG_output += new_output
+                # raise ValueError(f"{exchange_id} does not have 'has' specified.")
+                DEBUG_output += ("<<<<! " + str(status) + " !>>>>\n")
+            else:
+                has_has = True
+                _has_idx = describe_method_dict.find("'has': ") + 7
+                _has = describe_method_dict[_has_idx:describe_method_dict.find('}', _has_idx) + 1]
+                status = f"Found at index: {_has_idx}\n'has': {_has}"
+
+            new_output = (f'\n"{exchange_id.upper()}": ' + "{\n"
+                          f"""
+                              "requiredCredentials": {_requiredCredentials},
+                              "rateLimit": {_rateLimit},
+                              "has": {_has}
+                           """
+                          "\n},\n")
+
+            output += new_output
+            DEBUG_output += new_output
 
             pr_output = f"[{f[0]}/{len(abs_paths)}] Added {exchange_id}.\n"
             print(pr_output)
