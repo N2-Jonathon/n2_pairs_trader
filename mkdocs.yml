@@ -28,6 +28,11 @@ extra_css:
 - css/codehilite.css
 - css/profont.css
 
+extra_javascript:
+  - https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.1/tablesort.min.js
+  - js/tablesort.js
+
+
 plugins:
 - search
 - mkdocstrings
@@ -44,6 +49,10 @@ nav:
       - 6. Generating Reports: how_it_works/6_generating_reports.md
       - 7. TODO: how_it_works/7_todo.md 
   - Creating a New Strategy: 'creating_a_new_strategy.md'
+  - CCXT Insights:
+      - Overview: 'ccxt_insights/1_overview.md'
+      - Exchanges with margin: 'ccxt_insights/2_exchanges_with_margin.md'
+      - Exchanges with fetchBorrowRate: 'ccxt_insights/3_exchanges_with_fetchBorrowRate.md'
   - Further Ideas: further_ideas.md
   - Questions, Feedback & Notes: notes.md
 
@@ -58,3 +67,4 @@ markdown_extensions:
   - def_list
   - pymdownx.tasklist:
       custom_checkbox: true
+  - tables

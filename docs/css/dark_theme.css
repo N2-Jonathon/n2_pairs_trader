@@ -71,6 +71,10 @@ html .md-nav--primary .md-nav__title:before {
   color: #FAFAFA !important;
 }
 
+.md-typeset__table {
+  color: #212121;
+}
+
 .md-nav__title {
   color: rgba(255,255,255,1) !important;
   background-color: #212121 !important;
