@@ -74,7 +74,7 @@ class Position(Config):
                            f"And also go long on {self.base_pair}"
                            f" (BUY {self.synth_pair_tuple[1]} with {self.synth_pair_tuple[2]})")
 
-            self.open_long(self.order_type, self.prompt_borrow_qty)
+            self.open_long(self.order_type)
         elif self.direction == 'SHORT':
             self.status = (f"Opening SHORT Position on {self.synth_pair}\n"
                            f"ie. Go short on {self.base_pair}"
@@ -141,6 +141,7 @@ class Position(Config):
         #           trading ie. with or without knowing that.
 
         self.borrow_coin['name'] = self.get_borrow_coin(self.synth_pair_tuple, 'LONG')
+        self.status = f"Borrow coin for {self.synth_pair} is: {self.borrow_coin['name']}"
 
         self.status = f"Checking which methods {self.exchange_name} has for margin...\n"
         if self.exchange.has['fetchBorrowRate']:
@@ -150,23 +151,33 @@ class Position(Config):
             self.status = (f"{self.exchange_name} doesn't have fetchBorrowRate.\n"
                            f"Checking if {self.exchange_name} has fetchMaxBorrowSize..\n"
                            f"Note: This is a non-standard method. If possible, find a way "
-                           f"to implement fetchBorrowRate instead. "
+                           f"to use fetchBorrowRate instead, or some other method. "
                            f"The only exchange which has the method `fetchMaxBorrowSize`"
                            " is kucoin_extended, but if others are added, this will find it.")
+
             if self.exchange.has['fetchMaxBorrowSize']:
-                self.status = f"{self.exchange_name} has fetchMaxBorrowSize"
+                self.status = f"{self.exchange_name} has fetchMaxBorrowSize."
 
                 max_borrow_size = self.exchange.fetch_max_borrow_size(self.borrow_coin['name'])
+                self.status = f"Max borrow size for {self.borrow_coin['name']}: {max_borrow_size}"
+                print(self.status)
             else:
                 raise Exception(f"{self.exchange_name} doesn't have fetchMaxBorrowSize or fetchBorrowRate. Can't proceed.")
         # ----------------------------------------
         # Step 2: If prompt_borrow is true, print
-        # TODO:  the max borrow amount retrieved
+        #         the max borrow amount retrieved
         #         in step 1, then prompt the user
         #         to either accept the max amount
         #         or instead enter an amount.
-        print(f"")
+
         if self.prompt_borrow_qty:
+            borrow_qty_input = input("To borrow the max amount, press enter. Otherwise, type an amount:")
+
+            if borrow_qty_input == "":
+                print(f"Borrowing max amount: {max_borrow_size} {self.borrow_coin['name']}")
+                borrow_qty = max_borrow_size
+            else:
+                print(f"Borrowing {borrow_qty_input} {self.borrow_coin['name']}")
             pass
         # ----------------------------------------
         # Step 3: Borrow from the exchange in the
