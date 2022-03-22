@@ -132,13 +132,13 @@ class Position(Config):
         self.status = 'OPEN'
         return self, 0
 
-    def open_long(self, order_type='market', prompt_borrow_qty=False):
+    def open_long(self, order_type='market'):
         # Step 1: * Query exchange to fetch max borrow quantity of borrow_coin.
         #         * Borrow_coin will be base coin of the quote pair
         #           e.g. in ETHUSDT/BTCUSDT it is BTC
         #         * ccxt.exchange.fetch_borrow_rate isn't implemented for
-        #           KuCoin so I had to create two approaches for margin trading:
-        #           1.
+        #           KuCoin so there needs to be at least two approaches for margin
+        #           trading ie. with or without knowing that.
 
         self.borrow_coin['name'] = self.get_borrow_coin(self.synth_pair_tuple, 'LONG')
 
@@ -156,14 +156,18 @@ class Position(Config):
             if self.exchange.has['fetchMaxBorrowAmount']:
                 self.status = f"{self.exchange_name} has fetchMaxBorrowAmount"
 
-        # pprint(available_margin)
-
+                max_borrow_amount = self.exchange.fetch_max_borrow_amount(self.borrow_coin['name'])
+            else:
+                raise Exception(f"{self.exchange_name} doesn't have fetchMaxBorrowAmount or fetchBorrowRate. Can't proceed.")
         # ----------------------------------------
         # Step 2: If prompt_borrow is true, print
         # TODO:  the max borrow amount retrieved
         #         in step 1, then prompt the user
         #         to either accept the max amount
         #         or instead enter an amount.
+        print(f"")
+        if self.prompt_borrow_qty:
+            pass
         # ----------------------------------------
         # Step 3: Borrow from the exchange in the
         # TODO:  desired quantity

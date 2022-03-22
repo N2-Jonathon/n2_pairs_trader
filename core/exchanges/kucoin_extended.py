@@ -1,55 +1,61 @@
 from ccxt.kucoin import kucoin
-from ccxt import Exchange
-
-from ccxt.base.exchange import Exchange
-import hashlib
-import math
-import json
-from ccxt.base.errors import ExchangeError
-from ccxt.base.errors import AuthenticationError
-from ccxt.base.errors import PermissionDenied
-from ccxt.base.errors import AccountSuspended
-from ccxt.base.errors import BadRequest
-from ccxt.base.errors import BadSymbol
-from ccxt.base.errors import InsufficientFunds
-from ccxt.base.errors import InvalidAddress
-from ccxt.base.errors import InvalidOrder
-from ccxt.base.errors import OrderNotFound
-from ccxt.base.errors import NotSupported
-from ccxt.base.errors import RateLimitExceeded
-from ccxt.base.errors import ExchangeNotAvailable
-from ccxt.base.errors import InvalidNonce
-from ccxt.base.precise import Precise
 
 
 class kucoin_extended(kucoin):
-    """ The default ccxt.kucoin which this inherits, doesn't have/need an __init__ method?
+    """
+    - KuCoin doesn't have an API method for fetchBorrowRate.
+    If it's possible to infer that from fetchMaxBorrowAmount (or any other way),
+    then I will be able to implement this in a way that conforms to CCXT's standards.
+
+    - fetchMaxBorrowAmount is a non-standard CCXT method that I made up. None of the other
+    exchanges seem to have it, so any strategies which need it won't work on other exchanges
+    (i.e. the N2SuperTrend strategy as it was written in the requirements).
+        * It would also be possible to make another version of the strategy which doesn't
+        rely on fetchMaxBorrowAmount, but I want to fulfil your requirements exactly as they
+        were written, so I'm implementing it.
     """
 
     def describe(self):
         return self.deep_extend(super(kucoin_extended, self).describe(), {
             'id': 'kucoin_extended',
             'alias': True,
+            'version': 'v0.0.1',
             'has': {
-                'fetchBorrowRate': True,
+                # 'fetchBorrowRate': True,  # If/when this is implemented, I'll un-comment this line
                 'fetchMaxBorrowAmount': True
             }
         })
 
-    """
-    def __init__(self, config={}):
-        super().__init__()
-    """
-        
+    def fetch_max_borrow_amount(self, currency):
+        """Fetches the maximum available borrow amount for a given currency"""
+        # self.load_markets()
+        currency = 'USDT'
+        response = self.privateGetMarginAccount()
+        # {
+        #     "accounts": [
+        #         {
+        #             "availableBalance": "990.11",
+        #             "currency": "USDT",
+        #             "holdBalance": "7.22",
+        #             "liability": "66.66",
+        #             "maxBorrowSize": "88.88",
+        #             "totalBalance": "997.33"
+        #         },
+        #         {...},
+        #         {...}
+        #     ],
+        #     "debtRatio": "0.33"
+        # }
+
+        try:
+            for account in response['data']['accounts']:
+                if account['currency'] == currency:
+                    max_borrow_size = account['maxBorrowSize']
+                    return max_borrow_size
+        except:
+            return ValueError(f'{currency} margin account not found')
 
     def fetch_borrow_rate(self, currency):
         """Not working yet"""
-        raise NotImplementedError("This isn't natively supported by Kucoin's API.\n"
-                                "It might be possible to implement this somehow")
-        rates = fetch_borrow_rates()
-        _rate = rates[coin]
-        return _rate
-
-    def fetch_max_borrow_amount(self, currency):
-        """Not working yet"""
-        raise NotImplementedError()
+        raise NotImplementedError("This isn't natively supported by KuCoin's API.\n"
+                                  "It might be possible to implement this somehow")
