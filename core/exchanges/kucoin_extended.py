@@ -24,6 +24,7 @@ from ccxt.base.precise import Precise
 class KuCoinExtended(kucoin):
     """ The default ccxt.kucoin which this inherits, doesn't have/need an __init__ method?
     """
+
     def describe(self):
         return self.deep_extend(super(kucoin, self).describe(), {
             'id': 'kucoin',

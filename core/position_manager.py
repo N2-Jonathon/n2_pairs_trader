@@ -144,8 +144,8 @@ class Position(Config):
                            f"Checking if {self.exchange_name} has fetchMaxBorrowAmount..\n"
                            f"Note: This is a non-standard method. If possible, find a way "
                            f"to implement fetchBorrowRate instead. "
-                           f"At this point, the only exchange known to have a method for "
-                           "fetchMaxBorrowAmount is KuCoinExtended.")
+                           f"The only exchange which has the method `fetchMaxBorrowAmount`"
+                           " is KuCoinExtended, but if others are added, this will find it.")
 
         # pprint(available_margin)
 
