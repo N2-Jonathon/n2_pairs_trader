@@ -5,7 +5,7 @@ from configparser import ConfigParser
 import core.exchanges.kucoin_extended
 from core.constants import USER_CONFIG_PATH, EXCHANGES, EXTENDED_EXCHANGES
 import core.utils as utils
-from core.exchanges.kucoin_extended import KuCoinExtended
+from core.exchanges.kucoin_extended import kucoin_extended
 from scripts.load_api_keys import load_api_keys
 
 import core.exchanges
@@ -43,12 +43,29 @@ class Config:
         "telegram": None
     }
 
-    """
-    For now the dictionary for api_keys is given here but it would be better to have it 
-    somewhere else, and use ccxt.Exchange.requiredCredentials to generate this structure. 
-    For now it's just 2 exchanges but that would need to be done before adding all of the 
-    exchanges otherwise the same  structure would be copy/pasted for all of the exchanges.
-    """
+    @staticmethod
+    def split_pair(pair, pair_type=None):
+
+        if '/' in pair:
+            return pair.split('/')
+        else:
+            raise ValueError('Invalid trading pair')
+        pass
+
+    @staticmethod
+    def get_synth_pair_tuple(base_pair, quote_pair):
+        base_pair_split = Config.split_pair(base_pair)
+        quote_pair_split = Config.split_pair(quote_pair)
+
+        synth_pair = (f"{base_pair_split[0]}{base_pair_split[1]}"
+                      f"/{quote_pair_split[0]}{quote_pair_split[1]}")
+
+        synth_pair_tuple = (synth_pair,
+                            base_pair_split[0],
+                            base_pair_split[1],
+                            quote_pair_split[0],
+                            quote_pair_split[1])
+        return synth_pair_tuple
 
     def __init__(self, params={}, filepath=USER_CONFIG_PATH):
 
@@ -101,7 +118,7 @@ class Config:
         else:
             raise Exception("Cannot Initialize Config() without either params or config_filepath")
 
-        self.synth_pair_tuple = utils.get_synth_pair_tuple(self.base_pair, self.quote_pair)
+        self.synth_pair_tuple = self.get_synth_pair_tuple(self.base_pair, self.quote_pair)
         self.synth_pair = self.synth_pair_tuple[0]
         self.read_exchange_api_keys()
 
@@ -114,7 +131,10 @@ class Config:
             self.using_extended_exchange = False
 
         self.exchange_module = importlib.import_module(self.exchange_module_path)
-        self.exchange = getattr(self.exchange_module, self.exchange_id)(self.api_keys['exchanges'][self.exchange_id])
+        self.exchange = getattr(self.exchange_module, self.exchange_id + '_extended')
+        self.exchange = self.exchange(self.api_keys['exchanges'][self.exchange_id])
+        DEBUG_describe_exchange = self.exchange.describe()
+
         pass
 
     def new(self, exchange: str, strategy_name: str, prompt_for_pairs: bool, base_pair: str,

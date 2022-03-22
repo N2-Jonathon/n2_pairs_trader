@@ -6,9 +6,9 @@ from core.constants import USER_CONFIG_PATH
 
 from pprint import pprint
 
-from core.exchanges.kucoin_extended import KuCoinExtended
+from core.exchanges.kucoin_extended import kucoin_extended
 
-exchange = KuCoinExtended()
+exchange = kucoin_extended()
 
 info = exchange.describe()
 

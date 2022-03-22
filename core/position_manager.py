@@ -7,7 +7,6 @@ from pprint import pprint
 
 from core.constants import USER_CONFIG_PATH, EXCHANGES_WITH_margin, EXCHANGES_WITH_fetchBorrowRate
 from core.config import Config
-import core.utils as utils
 
 
 class Position(Config):
@@ -33,28 +32,30 @@ class Position(Config):
 
     status = None
 
-    qp_open_timestamp = None
-    qp_open_fill_price = None
-    bp_open_timestamp = None
-    bp_open_fill_price = None
-
-    qp_close_timestamp = None
-    qp_close_fill_price = None
-    bp_close_timestamp = None
-    bp_close_fill_price = None
+    trades_info = {
+        "open": {
+            "base_pair": {"timestamp": None, "fillPrice": None},
+            "quote_pair": {"timestamp": None, "fillPrice": None},
+        },
+        "close": {
+            "base_pair": {"timestamp": None, "fillPrice": None},
+            "quote_pair": {"timestamp": None, "fillPrice": None},
+        },
+    }
 
     @staticmethod
-    def get_borrow_coin(base_pair, quote_pair, position_direction):
-        if position_direction == 'LONG':
-            short_pair = quote_pair
-        elif position_direction == 'SHORT':
-            short_pair = base_pair
-        else:
-            raise ValueError("Invalid Position Direction.\n"
-                             "Accepted values are: 'LONG' or 'SHORT'")
-        # borrow_coin = utils.split_pair(short_pair, 'coin_pair')[0]
+    def get_borrow_coin(synth_pair_tuple, position_direction):
 
-        # return borrow_coin
+        if position_direction == 'LONG':
+            borrow_coin = synth_pair_tuple[3]
+            pass
+        elif position_direction == 'SHORT':
+            borrow_coin = synth_pair_tuple[1]
+
+        else:
+            borrow_coin = ValueError("Invalid position direction. (Must be 'LONG' or 'SHORT')")
+
+        return borrow_coin
 
     def __init__(self, order_type, prompt_borrow_qty=False, base_pair=None, quote_pair=None, direction=None,
                  params={}, config_filepath=USER_CONFIG_PATH):
@@ -67,8 +68,20 @@ class Position(Config):
         self.prompt_borrow_qty = prompt_borrow_qty
 
         if self.direction == 'LONG':
+            self.status = (f"Opening LONG Position on {self.synth_pair}\n"
+                           f"ie. Go short on {self.quote_pair}"
+                           f" (Borrow then SELL {self.synth_pair_tuple[3]} for {self.synth_pair_tuple[4]})\n"
+                           f"And also go long on {self.base_pair}"
+                           f" (BUY {self.synth_pair_tuple[1]} with {self.synth_pair_tuple[2]})")
+
             self.open_long(self.order_type, self.prompt_borrow_qty)
         elif self.direction == 'SHORT':
+            self.status = (f"Opening SHORT Position on {self.synth_pair}\n"
+                           f"ie. Go short on {self.base_pair}"
+                           f" (Borrow then SELL {self.synth_pair_tuple[1]} for {self.synth_pair_tuple[2]})\n"
+                           f"And also go long on {self.quote_pair}"
+                           f" (BUY {self.synth_pair_tuple[3]} with {self.synth_pair_tuple[4]})")
+
             self.open_short(self.order_type, self.prompt_borrow_qty)
 
         self.status = 'OPEN'
@@ -120,11 +133,6 @@ class Position(Config):
         return self, 0
 
     def open_long(self, order_type='market', prompt_borrow_qty=False):
-        self.status = (f"Opening LONG Position on {self.synth_pair}\n"
-                       f"ie. Go short on {self.quote_pair}"
-                       f" (Borrow then SELL {self.synth_pair_tuple[3]} for {self.synth_pair_tuple[4]})\n"
-                       f"And also go long on {self.base_pair}"
-                       f" (BUY {self.synth_pair_tuple[1]} with {self.synth_pair_tuple[2]})")
         # Step 1: * Query exchange to fetch max borrow quantity of borrow_coin.
         #         * Borrow_coin will be base coin of the quote pair
         #           e.g. in ETHUSDT/BTCUSDT it is BTC
@@ -132,20 +140,21 @@ class Position(Config):
         #           KuCoin so I had to create two approaches for margin trading:
         #           1.
 
-
-        self.borrow_coin['name'] = utils.get_borrow_coin(self.synth_pair_tuple, 'LONG')
+        self.borrow_coin['name'] = self.get_borrow_coin(self.synth_pair_tuple, 'LONG')
 
         self.status = f"Checking which methods {self.exchange_name} has for margin...\n"
         if self.exchange.has['fetchBorrowRate']:
             self.status = f"{self.exchange_name} has fetchBorrowRate"
-            available_margin = self.exchange.fetch_borrow_rate(self.borrow_coin['name'])
+            # available_margin = self.exchange.fetch_borrow_rate(self.borrow_coin['name'])
         else:
             self.status = (f"{self.exchange_name} doesn't have fetchBorrowRate.\n"
                            f"Checking if {self.exchange_name} has fetchMaxBorrowAmount..\n"
                            f"Note: This is a non-standard method. If possible, find a way "
                            f"to implement fetchBorrowRate instead. "
                            f"The only exchange which has the method `fetchMaxBorrowAmount`"
-                           " is KuCoinExtended, but if others are added, this will find it.")
+                           " is kucoin_extended, but if others are added, this will find it.")
+            if self.exchange.has['fetchMaxBorrowAmount']:
+                self.status = f"{self.exchange_name} has fetchMaxBorrowAmount"
 
         # pprint(available_margin)
 
@@ -171,6 +180,7 @@ class Position(Config):
         # Step 6: Generate & Send Email with all
         # TODO:  of the details about the open
         #         position included.
+        self.status = '[DEBUG] OPEN'
         pass
 
     def open_short(base_pair: str,
