@@ -23,7 +23,6 @@ class N2SuperTrend(StrategyBase):
         :type config_filepath:
         """
         super().__init__(params, config_filepath)
-
         self.name = 'n2_supertrend'
 
     def get_signal(self, timeframe="1m"):

@@ -1,14 +1,16 @@
+from datetime import datetime
+
 import ccxt
 from pprint import pprint
 
 # from scripts.kucoin import fetch_borrow_rate
 
-from core.constants import USER_CONFIG_PATH
+from core.constants import USER_CONFIG_PATH, EXCHANGES_WITH_margin, EXCHANGES_WITH_fetchBorrowRate
 from core.config import Config
 import core.utils as utils
 
 
-class Position():
+class Position(Config):
     """
     * This class represents the aggregate PnL & meta-data
       of two simultaneous trades. ie. one for the base
@@ -37,11 +39,24 @@ class Position():
                                prompt_borrow_qty=False).open()
 
     """
+
     borrow_coin = {
         "name": None,
         "borrow_timestamp": None,
         "repay_timestamp": None
     }
+
+    status = None
+
+    qp_open_timestamp = None
+    qp_open_fill_price = None
+    bp_open_timestamp = None
+    bp_open_fill_price = None
+
+    qp_close_timestamp = None
+    qp_close_fill_price = None
+    bp_close_timestamp = None
+    bp_close_fill_price = None
 
     @staticmethod
     def get_borrow_coin(base_pair, quote_pair, position_direction):
@@ -56,16 +71,23 @@ class Position():
 
         # return borrow_coin
 
-    def __init__(self, order_type='market', prompt_borrow_qty=False, base_pair=None, quote_pair=None,
+    def __init__(self, order_type, prompt_borrow_qty=False, base_pair=None, quote_pair=None, direction=None,
                  params={}, config_filepath=USER_CONFIG_PATH):
 
-        if base_pair is not None and quote_pair is not None:
-            self.base_pair = base_pair
-            self.quote_pair = quote_pair
-            self.synth_pair = utils.get_synth_pair_symbol(self.base_pair, self.quote_pair)
+        super().__init__(params, config_filepath)
+        self.status = 'INIT Position'
 
         self.order_type = order_type
+        self.direction = direction
         self.prompt_borrow_qty = prompt_borrow_qty
+
+        if self.direction == 'LONG':
+            self.open_long(self.order_type, self.prompt_borrow_qty)
+        elif self.direction == 'SHORT':
+            self.open_short(self.order_type, self.prompt_borrow_qty)
+
+        self.status = 'OPEN'
+        self.open_timestamp = datetime.utcnow()
 
     def create_order(self, pair, direction, quantity, order_type='market'):
         """
@@ -109,6 +131,7 @@ class Position():
         elif self.direction != 'LONG' and self.direction != 'SHORT':
             raise ValueError('direction is invalid')
 
+        self.status = 'OPEN'
         return self, 0
 
     def open_long(self, order_type='market', prompt_borrow_qty=False):
@@ -119,14 +142,23 @@ class Position():
         #         eg. BTC
         #         of the quote_pair
         #         eg. BTCUSDT
-        #         ccxt.exchange.fetch_fetch_borrow_rate isn't
-        #         implemented for KuCoin I had to modify the
-        #         ccxt lib. The modified ccxt only exists in
-        #         my venv, so I will change it so the function
-        #         is in the local dir. The other steps will be
-        #         easy after that.
+        #         ccxt.exchange.fetch_borrow_rate isn't
+        #         implemented for KuCoin I had to create .
 
-        # available_margin = fetch_borrow_rate(self.borrow_coin)
+        self.status = "Opening LONG..."
+        self.borrow_coin['name'] = utils.get_borrow_coin(self.synth_pair_tuple, 'LONG')
+
+        self.status = f"Checking which methods {self.exchange_name} has for margin...\n"
+        if self.exchange.has['fetchBorrowRate']:
+            self.status = f"{self.exchange_name} has fetchBorrowRate"
+            available_margin = self.exchange.fetch_borrow_rate(self.borrow_coin['name'])
+        else:
+            self.status = (f"{self.exchange_name} doesn't have fetchBorrowRate.\n"
+                           f"Checking if {self.exchange_name} has fetchMaxBorrowAmount..\n"
+                           f"Note: This is a non-standard method. If possible, find a way"
+                           f"to implement fetchBorrowRate instead. At this point, the only"
+                           f"exchange known to have a fetchMaxBorrowAmount method is KuCoinExtended.")
+
         # pprint(available_margin)
 
         # ----------------------------------------
@@ -199,13 +231,11 @@ class Position():
 
 class PositionManager(Config):
 
-    __dict__ = {
-        "current_position": Position
-    }
+    current_position = None
+    history = None
 
     def __init__(self, params={}, config_filepath=USER_CONFIG_PATH):
         super().__init__(params, config_filepath)
-        self.current_position: Position = Position()
 
     def set_current_position(self, position: Position):
         self.current_position = position
@@ -215,6 +245,35 @@ class PositionManager(Config):
 
     def save_closed_position(self):
         pass
+
+    def open(self, direction=None, order_type='market'):
+
+        if direction is None:
+            raise ValueError('Direction not specified')
+        else:
+            DEBUG_direction = direction
+            if self.paper_trade:
+                self.current_position = Position(order_type=order_type,
+                                                 prompt_borrow_qty=False,  # TODO: make sure self.prompt_borrow_qty has a value before this gets executed=self.prompt_borrow_qty,
+                                                 base_pair=self.base_pair,
+                                                 quote_pair=self.quote_pair,
+                                                 direction=direction)
+
+                self.status = (f"[PAPER_TRADE]\n"
+                               f"Opened {self.current_position.direction} position:\n"
+                               f"{self.current_position.synth_pair}\n"
+                               f"Trade 1: SHORT Quote Pair (SELL {self.current_position.synth_pair_tuple[3]} for {self.current_position.synth_pair_tuple[4]})\n"
+                               f"    borrow coin: {self.current_position.borrow_coin}\n"
+                               f"     order type: {self.current_position.order_type}\n"
+                               f"     fill price: {self.current_position.qp_open_fill_price}\n"
+                               f"      timestamp: {self.current_position.qp_open_timestamp}\n"
+                               f"Trade 2: LONG Base Pair (BUY {self.current_position.synth_pair_tuple[1]} with {self.current_position.synth_pair_tuple[2]})\n"
+                               f"     order type: {self.current_position.order_type}\n"
+                               f"     fill price: {self.current_position.qp_open_fill_price}\n"
+                               f"      timestamp: {self.current_position.qp_open_timestamp}\n"
+                               )
+            return 0
+
 
 
 # DEBUG

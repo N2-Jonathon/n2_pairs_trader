@@ -149,7 +149,7 @@ class StrategyBase(Config):
             }
         },
     }
-    position_manager = PositionManager()
+    position_manager: PositionManager = None
 
     def __init__(self, params={}, config_filepath=USER_CONFIG_PATH):
         """
@@ -164,7 +164,7 @@ class StrategyBase(Config):
         :return:
         :rtype:
         """
-        super().__init__(self, params, config_filepath)
+        super().__init__(params, config_filepath)
 
         self.name = 'StrategyBase'
         self.current_signal = None

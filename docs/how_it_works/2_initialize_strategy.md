@@ -166,7 +166,7 @@ class Config:
         else:
             raise Exception("Cannot Initialize Config() without either params or config_filepath")
 
-        self.synth_pair = utils.get_synth_pair_symbol(self.base_pair, self.quote_pair)
+        self.synth_pair = utils.get_synth_pair_tuple(self.base_pair, self.quote_pair)
         self.enabled_exchanges = self.get_enabled_exchanges()
         self.exchange: ccxt.Exchange = self.enabled_exchanges[self.exchange_id.lower()]
 ```

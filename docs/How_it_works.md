@@ -132,78 +132,78 @@ class StrategyBase(Config):
 
 ```python
 class Config:
-    __dict__ = {
-        "exchange": str,
-        "strategy_name": str,
-        "prompt_for_pairs": bool,
-        "base_pair": str,
-        "quote_pair": str,
-        "stake_currency": str,
-        "paper_trade": bool,
+  __dict__ = {
+    "exchange": str,
+    "strategy_name": str,
+    "prompt_for_pairs": bool,
+    "base_pair": str,
+    "quote_pair": str,
+    "stake_currency": str,
+    "paper_trade": bool,
 
-        "debug_mode": bool
-    }
+    "debug_mode": bool
+  }
 
-    cfg_parser = ConfigParser()
+  cfg_parser = ConfigParser()
 
-    def __init__(self, params={}, filepath=USER_CONFIG_PATH):
-        """
-         **[TODO]**: the API Keys should be read from the config.ini file or given as params
-           then saved in self.exchange_api_keys: dict instead of how I'm currently handling
-           how API keys are accessed which isn't the best way. Then, self.exchange can 
-           be initialized taking self.exchange_api_keys as a param.
-        """
-        self.params = params
+  def __init__(self, params={}, filepath=USER_CONFIG_PATH):
+    """
+     **[TODO]**: the API Keys should be read from the config.ini file or given as params
+       then saved in self.exchange_api_keys: dict instead of how I'm currently handling
+       how API keys are accessed which isn't the best way. Then, self.exchange can 
+       be initialized taking self.exchange_api_keys as a param.
+    """
+    self.params = params
 
-        if params is None or len(params) == 0:
+    if params is None or len(params) == 0:
 
-            if filepath is not None:
-                self.cfg_parser.read([filepath])
-            elif filepath is None:
-                raise ValueError
+      if filepath is not None:
+        self.cfg_parser.read([filepath])
+      elif filepath is None:
+        raise ValueError
 
-            try:
-                self.exchange_id = self.cfg_parser['Global Settings']['exchange']
-                self.strategy_name = self.cfg_parser['Global Settings']['strategy']
-                self.strategy_import_path = f"strategies.{self.strategy_name}"
+      try:
+        self.exchange_id = self.cfg_parser['Global Settings']['exchange']
+        self.strategy_name = self.cfg_parser['Global Settings']['strategy']
+        self.strategy_import_path = f"strategies.{self.strategy_name}"
 
-                self.prompt_for_pairs = bool(self.cfg_parser['Global Settings']['prompt_for_pairs'])
-                self.base_pair = self.cfg_parser['Global Settings']['base_pair_default']
-                self.quote_pair = self.cfg_parser['Global Settings']['quote_pair_default']
-                self.stake_currency = self.cfg_parser['Global Settings']['stake_currency']
-                self.paper_trade = bool(self.cfg_parser['Global Settings']['paper_trade'])
+        self.prompt_for_pairs = bool(self.cfg_parser['Global Settings']['prompt_for_pairs'])
+        self.base_pair = self.cfg_parser['Global Settings']['base_pair_default']
+        self.quote_pair = self.cfg_parser['Global Settings']['quote_pair_default']
+        self.stake_currency = self.cfg_parser['Global Settings']['stake_currency']
+        self.paper_trade = bool(self.cfg_parser['Global Settings']['paper_trade'])
 
-                # self.synth_pair = self.get_synth_pair_symbol(self.base_pair, self.quote_pair)
-                # self.strategy = importlib.import_module(f"strategies.{self.strategy_name}")
-                # self.exchange: ccxt.Exchange = self.enabled_exchanges[self.cfg_file_key]
-            except:
-                raise ValueError("Failed to read from config (Make sure all values are assigned)")
-        elif self.params is not None:
-            for param in self.params:
-                if param not in self.__dict__:
-                    raise ValueError(f"Invalid Parameter: '{param}'")
+        # self.synth_pair = self.get_synth_pair_symbol(self.base_pair, self.quote_pair)
+        # self.strategy = importlib.import_module(f"strategies.{self.strategy_name}")
+        # self.exchange: ccxt.Exchange = self.enabled_exchanges[self.cfg_file_key]
+      except:
+        raise ValueError("Failed to read from config (Make sure all values are assigned)")
+    elif self.params is not None:
+      for param in self.params:
+        if param not in self.__dict__:
+          raise ValueError(f"Invalid Parameter: '{param}'")
 
-            try:
-                self.exchange_id: str = self.params['exchange']
-                self.strategy_name = self.params['strategy']
-                self.strategy_import_path = f"strategies.{self.strategy_name['strategy']}"
+      try:
+        self.exchange_id: str = self.params['exchange']
+        self.strategy_name = self.params['strategy']
+        self.strategy_import_path = f"strategies.{self.strategy_name['strategy']}"
 
-                self.prompt_for_pairs: bool = params['prompt_for_pairs'],
-                self.base_pair: str = params['base_pair'],
-                self.quote_pair: str = params['quote_pair'],
-                self.stake_currency: str = params['stake_currency']
-                self.paper_trade: bool = params['paper_trade']
+        self.prompt_for_pairs: bool = params['prompt_for_pairs'],
+        self.base_pair: str = params['base_pair'],
+        self.quote_pair: str = params['quote_pair'],
+        self.stake_currency: str = params['stake_currency']
+        self.paper_trade: bool = params['paper_trade']
 
-                # self.strategy = importlib.import_module(f"strategies.{self.strategy_name}")
-                # self.exchange: ccxt.Exchange = self.enabled_exchanges[self.cfg_file_key]
-            except:
-                raise ValueError("Params incomplete")
-        else:
-            raise Exception("Cannot Initialize Config() without either params or config_filepath")
+        # self.strategy = importlib.import_module(f"strategies.{self.strategy_name}")
+        # self.exchange: ccxt.Exchange = self.enabled_exchanges[self.cfg_file_key]
+      except:
+        raise ValueError("Params incomplete")
+    else:
+      raise Exception("Cannot Initialize Config() without either params or config_filepath")
 
-        self.synth_pair = utils.get_synth_pair_symbol(self.base_pair, self.quote_pair)
-        self.enabled_exchanges = self.get_enabled_exchanges()
-        self.exchange: ccxt.Exchange = self.enabled_exchanges[self.exchange_id.lower()]
+    self.synth_pair = utils.get_synth_pair_tuple(self.base_pair, self.quote_pair)
+    self.enabled_exchanges = self.get_enabled_exchanges()
+    self.exchange: ccxt.Exchange = self.enabled_exchanges[self.exchange_id.lower()]
 ```
 
 What it's doing is checking to see if params were supplied to override the default config.

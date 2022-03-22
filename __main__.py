@@ -20,29 +20,26 @@ def run_bot(strategy=N2SuperTrend()):
 
         if strategy.debug_mode:
             """If in debug mode, prompt for signal override"""
-            override_signal = input("[DEBUG]Enter a signal to emulate ([LONG]|SHORT|CLOSE):")
-            if override_signal == "":
+            DEBUG_override_signal = input("[DEBUG]Enter a signal to emulate ([LONG]|SHORT|CLOSE):")
+            if DEBUG_override_signal == "":
                 signal = 'LONG'  # Default if you just press enter at the prompt
-            elif override_signal.upper() == 'SHORT' or override_signal == 'LONG':
-                signal = override_signal
+            elif DEBUG_override_signal.upper() == 'SHORT' or DEBUG_override_signal == 'LONG':
+                signal = DEBUG_override_signal
         else:
             """If not in debug mode, call the get_signal method of the strategy"""
             signal = strategy.get_signal()
 
         if signal is not None and signal != 'CLOSE':
             """If there is a new signal to LONG or SHORT:"""
-            if pm.get_current_position() is None:
+            if pm.current_position is None:
                 """
                 If there's no current position open, then open one
                 in the direction of the signal and set it as pm's
                 current_position
                 """
-                position = Position(strategy.base_pair, strategy.quote_pair,
-                                    direction=signal,
-                                    order_type='limit').open()
-                # TODO: Here is where the `core.notifier` class would be
-                #   used to generate a report about the position and send
-                #   it via telegram and/or email.
+                position = pm.open(direction=signal,
+                                    order_type='limit')
+
                 pm.set_current_position(position)
 
         elif signal == 'CLOSE':

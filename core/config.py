@@ -3,7 +3,7 @@ import importlib
 from configparser import ConfigParser
 
 import core.exchanges.kucoin_extended
-from core.constants import USER_CONFIG_PATH
+from core.constants import USER_CONFIG_PATH, EXCHANGES
 import core.utils as utils
 from core.exchanges.kucoin_extended import KuCoinExtended
 from scripts.load_api_keys import load_api_keys
@@ -17,6 +17,7 @@ class Config:
 
     cfg_filepath = USER_CONFIG_PATH       # Can be overridden
     cfg_parser = ConfigParser()           # python built-in for parsing config files
+    params = None
 
     exchange_name: str = None             # eg. 'KuCoin'
     exchange_id: str = None               # lowercase eg. 'kucoin'
@@ -37,19 +38,10 @@ class Config:
     paper_trade: bool = None              # When True, real orders won't be placed but positions will still be tracked
 
     api_keys = {
-        "exchanges": {
-            "KuCoin": {
-                "apiKey": None,
-                "secret": None,
-                "password": None
-            },
-            "HitBTC": {
-                "apiKey": None,
-                "password": None
-            }
-        },
+        "exchanges": {},
         "telegram": None
     }
+
     """
     For now the dictionary for api_keys is given here but it would be better to have it 
     somewhere else, and use ccxt.Exchange.requiredCredentials to generate this structure. 
@@ -59,9 +51,6 @@ class Config:
 
     def __init__(self, params={}, filepath=USER_CONFIG_PATH):
 
-        self.exchange_id = None
-        self.exchange = None
-        self.exchange_api_keys = None
         self.params = params
 
         if params is None or len(params) == 0:
@@ -72,8 +61,9 @@ class Config:
                 raise ValueError
 
             try:
-                self.exchange_id = self.cfg_parser['Global Settings']['exchange']
-                self.exchange_module_path = f"core.{self.exchange_id}"
+                self.exchange_name = self.cfg_parser['Global Settings']['exchange']
+                self.exchange_id = self.exchange_name.lower()
+                self.exchange_module_path = f"ccxt.{self.exchange_id}"
                 self.strategy_name = self.cfg_parser['Global Settings']['strategy']
                 self.strategy_import_path = f"strategies.{self.strategy_name}"
 
@@ -90,8 +80,9 @@ class Config:
                     raise ValueError(f"Invalid Parameter: '{param}'")
 
             try:
-                self.exchange_id: str = self.params['exchange']
-                self.exchange_module_path = f"core.{self.exchange_id}"
+                self.exchange_name: str = self.params['exchange']
+                self.exchange_id = self.exchange_name.lower()
+                self.exchange_module_path = f"ccxt.{self.exchange_id}"
 
                 self.strategy_name = self.params['strategy']
                 self.strategy_import_path = f"strategies.{self.strategy_name['strategy']}"
@@ -109,16 +100,14 @@ class Config:
         else:
             raise Exception("Cannot Initialize Config() without either params or config_filepath")
 
-        self.synth_pair = utils.get_synth_pair_symbol(self.base_pair, self.quote_pair)
-        self.read_exchange_api_keys(self.exchange_id)
+        self.synth_pair_tuple = utils.get_synth_pair_tuple(self.base_pair, self.quote_pair)
+        self.synth_pair = self.synth_pair_tuple[0]
+        self.read_exchange_api_keys()
 
-        # self.enabled_exchanges = self.get_enabled_exchanges()
-        # self.exchange: ccxt.Exchange = self.enabled_exchanges[self.cfg_file_key.lower()]
-
-        """ This caused circular import
-        if self.strategy_name is not None:
-            self.strategy = importlib.import_module(f"strategies.{self.strategy_name}")
-        """
+        self.exchange_module = importlib.import_module(self.exchange_module_path)
+        # TODO: Add check here to see if there's a local extended version of the exchange
+        self.exchange = getattr(self.exchange_module, self.exchange_id)(self.api_keys['exchanges'][self.exchange_name])
+        pass
 
     def new(self, exchange: str, strategy_name: str, prompt_for_pairs: bool, base_pair: str,
             quote_pair: str, stake_currency: str, paper_trade: bool):
@@ -153,7 +142,7 @@ class Config:
         else:
             raise ValueError(f"The key: {cfg_file_key} was not found in {filepath}")
 
-    def read_exchange_api_keys(self, exchange_name, filepath=USER_CONFIG_PATH):
+    def read_exchange_api_keys(self, filepath=USER_CONFIG_PATH):
         """
         This takes a given exchange_name (not the same as exchange_id which is always lowercase),
         and a filepath
@@ -164,15 +153,22 @@ class Config:
         if filepath is not None:
             self.cfg_parser.read([filepath])
             cfg = self.cfg_parser
-            if cfg.has_section(exchange_name):
-                for credential in self.api_keys['exchanges'][exchange_name]:
-                    key = cfg[exchange_name][credential]
-                    keys[credential] = key
+            if cfg.has_section(self.exchange_name):
+                # for credential in self.api_keys['exchanges'][exchange_name]:
+                DEBUG_requiredCredentials = []
+                if EXCHANGES[self.exchange_id.upper()]['requiredCredentials']:
+                    for credential in EXCHANGES[self.exchange_id.upper()]['requiredCredentials']:
+                        key = cfg[self.exchange_name][credential]
+                        keys[credential] = key
+                        DEBUG_requiredCredentials.append(key)
 
-                self.api_keys['exchanges'][exchange_name] = keys
+                else:
+                    raise NotImplementedError(f'ccxt.{self.exchange_id} does not have requiredCredentials')
+
+                self.api_keys['exchanges'][self.exchange_name] = keys
 
             else:
-                raise ValueError(f'Failed to read {exchange_name} API keys from {filepath}')
+                raise ValueError(f'Failed to read {self.exchange_name} API keys from {filepath}')
         else:
             raise ValueError('No filepath was given for reading exchange api key')
 

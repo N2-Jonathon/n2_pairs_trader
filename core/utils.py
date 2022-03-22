@@ -26,8 +26,33 @@ exchange = ccxt.kucoin({
 """
 
 
-def get_synth_pair_symbol(base_pair, quote_pair):
-    return f"{base_pair}/{quote_pair}"
+def get_synth_pair_tuple(base_pair, quote_pair):
+    base_pair_split = split_pair(base_pair)
+    quote_pair_split = split_pair(quote_pair)
+
+    synth_pair = (f"{base_pair_split[0]}{base_pair_split[1]}"
+                  f"/{quote_pair_split[0]}{quote_pair_split[1]}")
+
+    synth_pair_tuple = (synth_pair,
+                        base_pair_split[0],
+                        base_pair_split[1],
+                        quote_pair_split[0],
+                        quote_pair_split[1])
+    return synth_pair_tuple
+
+
+def get_borrow_coin(synth_pair_tuple, position_direction):
+
+    if position_direction == 'LONG':
+        borrow_coin = synth_pair_tuple[3]
+        pass
+    elif position_direction == 'SHORT':
+        borrow_coin = synth_pair_tuple[1]
+
+    else:
+        borrow_coin = ValueError("Invalid position direction. (Must be 'LONG' or 'SHORT')")
+
+    return borrow_coin
 
 
 def fetch_ticker(_exchange, symbol, params={}):
@@ -46,17 +71,13 @@ def is_valid_coin(_exchange: ccxt.Exchange, symbol, params={}):
     balances = _exchange.base_currencies
 
 
-def split_pair(exchange, pair, pair_type):
-    if pair_type == 'coin_pair':
-        valid_coins = exchange.fetch_balance()
-        print(valid_coins)
-        pass
-    elif pair_type == 'pair_of_coin_pairs':
-        if '/' in pair:
-            return pair.split('/')
-        else:
-            raise ValueError('Invalid trading pair')
-        pass
+def split_pair(pair, pair_type=None):
+
+    if '/' in pair:
+        return pair.split('/')
+    else:
+        raise ValueError('Invalid trading pair')
+    pass
 
 
 def get_bars(exchange, pair: str, _timeframe: str, _limit: int):
