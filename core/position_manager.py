@@ -148,17 +148,17 @@ class Position(Config):
             # available_margin = self.exchange.fetch_borrow_rate(self.borrow_coin['name'])
         else:
             self.status = (f"{self.exchange_name} doesn't have fetchBorrowRate.\n"
-                           f"Checking if {self.exchange_name} has fetchMaxBorrowAmount..\n"
+                           f"Checking if {self.exchange_name} has fetchMaxBorrowSize..\n"
                            f"Note: This is a non-standard method. If possible, find a way "
                            f"to implement fetchBorrowRate instead. "
-                           f"The only exchange which has the method `fetchMaxBorrowAmount`"
+                           f"The only exchange which has the method `fetchMaxBorrowSize`"
                            " is kucoin_extended, but if others are added, this will find it.")
-            if self.exchange.has['fetchMaxBorrowAmount']:
-                self.status = f"{self.exchange_name} has fetchMaxBorrowAmount"
+            if self.exchange.has['fetchMaxBorrowSize']:
+                self.status = f"{self.exchange_name} has fetchMaxBorrowSize"
 
-                max_borrow_amount = self.exchange.fetch_max_borrow_amount(self.borrow_coin['name'])
+                max_borrow_size = self.exchange.fetch_max_borrow_size(self.borrow_coin['name'])
             else:
-                raise Exception(f"{self.exchange_name} doesn't have fetchMaxBorrowAmount or fetchBorrowRate. Can't proceed.")
+                raise Exception(f"{self.exchange_name} doesn't have fetchMaxBorrowSize or fetchBorrowRate. Can't proceed.")
         # ----------------------------------------
         # Step 2: If prompt_borrow is true, print
         # TODO:  the max borrow amount retrieved

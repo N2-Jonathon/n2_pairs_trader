@@ -73,7 +73,7 @@ fetching market data, opening trades, etc.
     methods so that it does still support margin trading. the default method ccxt uses for margin trading is
     `exchange.fetch_borrow_rate()` but KuCoin's API doesn't have that, and it's only possible to get the max borrow
     amount
-  - I've added a new method `kucoin_extended.fetch_max_borrow_amount`, and I'm going to override the
+  - I've added a new method `kucoin_extended.fetch_max_borrow_size`, and I'm going to override the
     `fetch_borrow_rate()` method so that it calculates what the rate would be if that's possible? And then it would be
     possible for me to unify how all the strategies are implemented in this codebase so they always use the same
     abstractions. I should make a wrapper method which handles which one to use but for now that has to be done inside

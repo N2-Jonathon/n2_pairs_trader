@@ -4,14 +4,14 @@ from ccxt.kucoin import kucoin
 class kucoin_extended(kucoin):
     """
     - KuCoin doesn't have an API method for fetchBorrowRate.
-    If it's possible to infer that from fetchMaxBorrowAmount (or any other way),
+    If it's possible to infer that from fetchMaxBorrowSize (or any other way),
     then I will be able to implement this in a way that conforms to CCXT's standards.
 
-    - fetchMaxBorrowAmount is a non-standard CCXT method that I made up. None of the other
+    - fetchMaxBorrowSize is a non-standard CCXT method that I made up. None of the other
     exchanges seem to have it, so any strategies which need it won't work on other exchanges
     (i.e. the N2SuperTrend strategy as it was written in the requirements).
         * It would also be possible to make another version of the strategy which doesn't
-        rely on fetchMaxBorrowAmount, but I want to fulfil your requirements exactly as they
+        rely on fetchMaxBorrowSize, but I want to fulfil your requirements exactly as they
         were written, so I'm implementing it.
     """
 
@@ -22,11 +22,11 @@ class kucoin_extended(kucoin):
             'version': 'v0.0.1',
             'has': {
                 # 'fetchBorrowRate': True,  # If/when this is implemented, I'll un-comment this line
-                'fetchMaxBorrowAmount': True
+                'fetchMaxBorrowSize': True
             }
         })
 
-    def fetch_max_borrow_amount(self, currency):
+    def fetch_max_borrow_size(self, currency):
         """Fetches the maximum available borrow amount for a given currency"""
         # self.load_markets()
         currency = 'USDT'
