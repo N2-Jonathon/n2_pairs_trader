@@ -23,6 +23,10 @@ USER_CONFIG_PATH = f"{ROOT_DIR}/user/user-config.ini"
 
 EXCHANGE_API_KEYS = {}
 
+EXTENDED_EXCHANGES = {'kucoin':
+                              ("core.exchanges.kucoin_extended", "KuCoinExtended")
+                     }  # (Original name: local import path, local class name)
+
 EXCHANGES_WITH_fetchBorrowRate = ['ZB', 'BINANCE', 'HUOBI', 'OKX', 'FTX', 'BEQUANT']
 
 EXCHANGES_WITH_margin = ['ZB', 'BINANCE', 'GATEIO', 'HUOBI', 'WOO', 'KRAKEN', 'OKX', 'FTX', 'BEQUANT', 'CURRENCYCOM']

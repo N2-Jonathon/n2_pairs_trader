@@ -20,23 +20,8 @@ class Position(Config):
     * It can be instantiated either by assigning Position()
       or Position().open() to a variable.
 
-    EXAMPLE USAGE:
+    EXAMPLE USAGE: (Outdated. TODO: update examples.)
 
-        init_position = Position(base_pair='ETHUSDT',
-                               quote_pair='BTCUSDT',
-                               direction='LONG',
-                               order_type='market',
-                               prompt_borrow_qty=False)
-
-        open_position = init_position.open(direction='LONG',
-                                       order_type='market',
-                                       prompt_borrow_qty=False)
-
-        init_and_open = Position(base_pair='ETHUSDT',
-                               quote_pair='BTCUSDT',
-                               direction='LONG',
-                               order_type='market',
-                               prompt_borrow_qty=False).open()
 
     """
 
@@ -135,17 +120,19 @@ class Position(Config):
         return self, 0
 
     def open_long(self, order_type='market', prompt_borrow_qty=False):
-        # ----------------------------------------
-        # Step 1: Query exchange to fetch max
-        # [TODO]  borrow quantity of borrow_coin
-        #         borrow_coin will be base coin
-        #         eg. BTC
-        #         of the quote_pair
-        #         eg. BTCUSDT
-        #         ccxt.exchange.fetch_borrow_rate isn't
-        #         implemented for KuCoin I had to create .
+        self.status = (f"Opening LONG Position on {self.synth_pair}\n"
+                       f"ie. Go short on {self.quote_pair}"
+                       f" (Borrow then SELL {self.synth_pair_tuple[3]} for {self.synth_pair_tuple[4]})\n"
+                       f"And also go long on {self.base_pair}"
+                       f" (BUY {self.synth_pair_tuple[1]} with {self.synth_pair_tuple[2]})")
+        # Step 1: * Query exchange to fetch max borrow quantity of borrow_coin.
+        #         * Borrow_coin will be base coin of the quote pair
+        #           e.g. in ETHUSDT/BTCUSDT it is BTC
+        #         * ccxt.exchange.fetch_borrow_rate isn't implemented for
+        #           KuCoin so I had to create two approaches for margin trading:
+        #           1.
 
-        self.status = "Opening LONG..."
+
         self.borrow_coin['name'] = utils.get_borrow_coin(self.synth_pair_tuple, 'LONG')
 
         self.status = f"Checking which methods {self.exchange_name} has for margin...\n"
@@ -155,33 +142,34 @@ class Position(Config):
         else:
             self.status = (f"{self.exchange_name} doesn't have fetchBorrowRate.\n"
                            f"Checking if {self.exchange_name} has fetchMaxBorrowAmount..\n"
-                           f"Note: This is a non-standard method. If possible, find a way"
-                           f"to implement fetchBorrowRate instead. At this point, the only"
-                           f"exchange known to have a fetchMaxBorrowAmount method is KuCoinExtended.")
+                           f"Note: This is a non-standard method. If possible, find a way "
+                           f"to implement fetchBorrowRate instead. "
+                           f"At this point, the only exchange known to have a method for "
+                           "fetchMaxBorrowAmount is KuCoinExtended.")
 
         # pprint(available_margin)
 
         # ----------------------------------------
         # Step 2: If prompt_borrow is true, print
-        # [TODO]  the max borrow amount retrieved
+        # TODO:  the max borrow amount retrieved
         #         in step 1, then prompt the user
         #         to either accept the max amount
         #         or instead enter an amount.
         # ----------------------------------------
         # Step 3: Borrow from the exchange in the
-        # [TODO]  desired quantity
+        # TODO:  desired quantity
         # ----------------------------------------
         # Step 4: Sell quote pair using the coins
-        # [TODO]  borrowed in step 3.
+        # TODO:  borrowed in step 3.
         #         eg. Sell BTC for USDT
         # ----------------------------------------
         # Step 5: Buy the base coin of the base
-        # [TODO]  pair using the quote coin of the
+        # TODO:  pair using the quote coin of the
         #         base pair.
         #         eg. Buy ETH with USDT
         # ----------------------------------------
         # Step 6: Generate & Send Email with all
-        # [TODO]  of the details about the open
+        # TODO:  of the details about the open
         #         position included.
         pass
 
@@ -192,32 +180,32 @@ class Position(Config):
                    prompt_confirmation: bool):
         # ----------------------------------------
         # Step 1: Query exchange to fetch max
-        # [TODO]  borrow quantity of borrow_coin
+        # TODO:  borrow quantity of borrow_coin
         #         borrow_coin will be base coin
         #         eg. ETH
         #         of the base_pair
         #         eg. ETHUSDT
         # ----------------------------------------
         # Step 2: If prompt_borrow is true, print
-        # [TODO]  the max borrow amount retrieved
+        # TODO:  the max borrow amount retrieved
         #         in step 1, then prompt the user
         #         to either accept the max amount
         #         or instead enter an amount.
         # ----------------------------------------
         # Step 3: Borrow from the exchange in the
-        # [TODO]  desired quantity
+        # TODO:  desired quantity
         # ----------------------------------------
         # Step 4: Sell base pair using the coins
-        # [TODO]  borrowed in step 3.
+        # TODO:  borrowed in step 3.
         #         eg. Sell ETH for USDT
         # ----------------------------------------
         # Step 5: Buy the base coin of the quote
-        # [TODO]  pair using the quote coin of the
+        # TODO:  pair using the quote coin of the
         #         quote pair.
         #         eg. Buy BTC with USDT
         # ----------------------------------------
         # Step 6: Generate & Send Email with all
-        # [TODO]  of the details about the open
+        # TODO:  of the details about the open
         #         position included.
         pass
 

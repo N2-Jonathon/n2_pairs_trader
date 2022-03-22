@@ -3,7 +3,7 @@ import importlib
 from configparser import ConfigParser
 
 import core.exchanges.kucoin_extended
-from core.constants import USER_CONFIG_PATH, EXCHANGES
+from core.constants import USER_CONFIG_PATH, EXCHANGES, EXTENDED_EXCHANGES
 import core.utils as utils
 from core.exchanges.kucoin_extended import KuCoinExtended
 from scripts.load_api_keys import load_api_keys
@@ -23,6 +23,7 @@ class Config:
     exchange_id: str = None               # lowercase eg. 'kucoin'
     exchange: ccxt.Exchange = None        # an object that inherits ccxt.Exchange's methods.
     """The ccxt.Exchange object later assigned to Config.exchange should be initialized with API Keys"""
+    using_extended_exchange: bool
 
     debug_mode: bool = True               # For now this is hard-coded as true
 
@@ -63,7 +64,7 @@ class Config:
             try:
                 self.exchange_name = self.cfg_parser['Global Settings']['exchange']
                 self.exchange_id = self.exchange_name.lower()
-                self.exchange_module_path = f"ccxt.{self.exchange_id}"
+
                 self.strategy_name = self.cfg_parser['Global Settings']['strategy']
                 self.strategy_import_path = f"strategies.{self.strategy_name}"
 
@@ -104,9 +105,16 @@ class Config:
         self.synth_pair = self.synth_pair_tuple[0]
         self.read_exchange_api_keys()
 
+        if self.exchange_id in EXTENDED_EXCHANGES:
+            self.exchange_module_path = EXTENDED_EXCHANGES[self.exchange_id][0]
+            self.exchange_name = EXTENDED_EXCHANGES[self.exchange_id][1]
+            self.using_extended_exchange = True
+        else:
+            self.exchange_module_path = f"ccxt.{self.exchange_id}"
+            self.using_extended_exchange = False
+
         self.exchange_module = importlib.import_module(self.exchange_module_path)
-        # TODO: Add check here to see if there's a local extended version of the exchange
-        self.exchange = getattr(self.exchange_module, self.exchange_id)(self.api_keys['exchanges'][self.exchange_name])
+        self.exchange = getattr(self.exchange_module, self.exchange_id)(self.api_keys['exchanges'][self.exchange_id])
         pass
 
     def new(self, exchange: str, strategy_name: str, prompt_for_pairs: bool, base_pair: str,
@@ -153,22 +161,22 @@ class Config:
         if filepath is not None:
             self.cfg_parser.read([filepath])
             cfg = self.cfg_parser
-            if cfg.has_section(self.exchange_name):
+            if cfg.has_section(self.exchange_id):
                 # for credential in self.api_keys['exchanges'][exchange_name]:
                 DEBUG_requiredCredentials = []
                 if EXCHANGES[self.exchange_id.upper()]['requiredCredentials']:
                     for credential in EXCHANGES[self.exchange_id.upper()]['requiredCredentials']:
-                        key = cfg[self.exchange_name][credential]
+                        key = cfg[self.exchange_id][credential]
                         keys[credential] = key
                         DEBUG_requiredCredentials.append(key)
 
                 else:
                     raise NotImplementedError(f'ccxt.{self.exchange_id} does not have requiredCredentials')
 
-                self.api_keys['exchanges'][self.exchange_name] = keys
+                self.api_keys['exchanges'][self.exchange_id] = keys
 
             else:
-                raise ValueError(f'Failed to read {self.exchange_name} API keys from {filepath}')
+                raise ValueError(f'Failed to read {self.exchange_id} API keys from {filepath}')
         else:
             raise ValueError('No filepath was given for reading exchange api key')
 
