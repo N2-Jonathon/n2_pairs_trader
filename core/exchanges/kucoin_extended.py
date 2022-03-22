@@ -23,6 +23,12 @@ class kucoin_extended(kucoin):
             'has': {
                 # 'fetchBorrowRate': True,  # If/when this is implemented, I'll un-comment this line
                 'fetchMaxBorrowSize': True
+            },
+            'urls': {  # Delete this to use on a live account
+                'api': {
+                    'public': 'https://openapi-sandbox.kucoin.com',
+                    'private': 'https://openapi-sandbox.kucoin.com',
+                }
             }
         })
 
