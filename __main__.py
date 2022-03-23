@@ -59,6 +59,20 @@ def run_bot(strategy=N2SuperTrend()):
 
 
 if __name__ == '__main__':
+    print("""
+      ₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿          N^2 Capital
+      ₿₿                             ₿₿          
+      ₿₿                             ₿₿          Crypto Pairs Trader
+      ₿₿                                         v0.0.1 (Alpha)
+      ₿₿                             ₿₿          
+      ₿₿                             ₿₿          
+      ₿₿                ₿₿₿₿         ₿₿          
+      ₿₿                ₿₿  ₿₿       ₿₿          
+      ₿₿                ₿₿    ₿₿     ₿₿          
+      ₿₿                ₿₿      ₿₿   ₿₿          
+      ₿₿                ₿₿        ₿₿ ₿₿          Created by
+      ₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿   ₿₿  ₿₿₿₿₿₿  ₿₿₿          Jonathon Quick
+          """)
 
     run_bot()  # Can pass a Strategy to override default eg. main(strategy=YourStrategy)
 

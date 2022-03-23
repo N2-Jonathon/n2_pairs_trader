@@ -3,16 +3,16 @@ from ccxt.kucoin import kucoin
 
 class kucoin_extended(kucoin):
     """
-    - KuCoin doesn't have an API method for fetchBorrowRate.
-    If it's possible to infer that from fetchMaxBorrowSize (or any other way),
-    then I will be able to implement this in a way that conforms to CCXT's standards.
+    This inherits ccxt.kucoin and overrides its methods to implement things which aren't
+    implemented by ccxt for kucoin eg. margin trading.
 
     - fetchMaxBorrowSize is a non-standard CCXT method that I made up. None of the other
     exchanges seem to have it, so any strategies which need it won't work on other exchanges
     (i.e. the N2SuperTrend strategy as it was written in the requirements).
-        * It would also be possible to make another version of the strategy which doesn't
-        rely on fetchMaxBorrowSize, but I want to fulfil your requirements exactly as they
-        were written, so I'm implementing it.
+
+    - It would also be possible to make another version of the strategy which doesn't
+    rely on fetchMaxBorrowSize, but I want to fulfil your requirements exactly as they
+    were written, so I'm implementing it.
     """
 
     def describe(self):
@@ -33,9 +33,20 @@ class kucoin_extended(kucoin):
         })
 
     def fetch_max_borrow_size(self, currency):
-        """Fetches the maximum available borrow amount for a given currency"""
+        """
+        Fetches the maximum available borrow amount for a given currency.
+
+        NOTE: From reading KuCoin's API, there's 2 ways to do this.
+            1. The first way is by querying the `margin/account` endpoint with a GET
+               request. (For more info, see https://docs.kucoin.com/#get-margin-account)
+            2. The second way is by querying the `risk/limit/strategy` endpoint which
+               requires a parameter `marginModel` which apparently only works when
+               set to 'corss' (typo?) and not 'isolated'.
+               (For more info, see https://docs.kucoin.com/#query-the-cross-isolated-margin-risk-limit)
+            * How this works now is the first way. I might try the other one to
+              see if there's any difference, but I don't think so.
+        """
         # self.load_markets()
-        currency = 'USDT'
         response = self.privateGetMarginAccount()
         # {
         #     "accounts": [
@@ -52,6 +63,12 @@ class kucoin_extended(kucoin):
         #     ],
         #     "debtRatio": "0.33"
         # }
+        """
+        NOTE: `privateGetMarginAccount()` is an implicit method which CCXT parses and maps to to a REST API request.
+                ie. `GET  margin/account`
+                
+                for another endpoint eg. 'risk/limit/strategy' it would be `self.privateGetRiskLimitStrategy()`
+        """
 
         try:
             for account in response['data']['accounts']:
@@ -62,6 +79,9 @@ class kucoin_extended(kucoin):
             return ValueError(f'{currency} margin account not found')
 
     def fetch_borrow_rate(self, currency):
-        """Not working yet"""
+        """
+        KuCoin doesn't have an API method for fetchBorrowRate. If it's possible to infer that somehow,
+        then it will be possible to implement this in a way that conforms to CCXT's standards.
+        """
         raise NotImplementedError("This isn't natively supported by KuCoin's API.\n"
                                   "It might be possible to implement this somehow")
