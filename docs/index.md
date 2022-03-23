@@ -1,6 +1,16 @@
 # **Home:**
 
 !!! note
+    ***(March 23rd, 2022)***
+    ***[07:37am CET | 03:37am EDT]***
+
+    So I didn't manage to get it finished on Wednesday since yet again I mis-judged how long it would take. However, I have made loads of progress since then and it's looking quite promising. Getting closer to the finish line, since I already managed to properly extend `ccxt.kucoin` and added 2 new methods to it: `fetchMaxBorrowSize` and `borrow` which work properly. 
+
+    - Actually making trades is simple compared to that, since it's already built in and it won't be difficult to figure out how to get ccxt to do that like it was with the margin-related stuff
+    - I've been using KuCoin's sandbox exchange for testing which works the same way as the real one.
+    - Once `open_long` works, then I can just copy, paste & tweak it for `open_short`
+    - Then I'll add a `close` method which closes the position & repays the loan 
+    - If you want to see how it's working, you can open the program in an IDE with a debugger, and just watch `self.status`. I will walk you through that when it's submitted.
 
     ***(March 21st, 2022)***
 
@@ -14,8 +24,8 @@
 
     I've also migrated the **TODO** list to here for now while I'm developing this, but after the first release I will migrate the **TODO** to its own page, and this will be the Index/Home.
 
-!!! todo 
-   
+!!! todo
+
     - [x] **1.** Write a script which scrapes the contents of what the `describe()` method returns. This was necessary to avoid having to import every exchange to be able to get this information which I was trying to do before with many issues.
 
     ---
@@ -24,31 +34,49 @@
         * [x] For now I only need the content of `rateLimit` `requiredCredentials` and `has` which don't have any out of scope variable names like the rest of the errors, so I can ommit the rest for now and focus on getting those two working first, then sort out the imports after.
         * Having every exchange's `requiredCredentials` as a constant helps in the `Config` & `StrategyBase` classes where the exchange isn't yet imported or initialized but I still need to know what those credentials need to be
         * Having every exchange's `has` as a constant will make it very easy to see which exchanges support what, and be able to judge which strategies are suitable for which exchanges. eg. which exchanges already support margin trading and `fetchBorrowRate` etc
-    
+
     ---
 
     - [x] **3.** Make a list of all ccxt exchanges which have:
-          * [x] margin trading 
-          * [x] `fetchBorrowRate`
+        * [x] margin trading 
+        * [x] `fetchBorrowRate`
     * ***NOTE:***
         You can view this info & more by looking at the 'CCXT Insights' section of the docs
 
     ---
 
     - [ ] **4.** Fully implement each step of Long/Short positions including borrowing.
-        * [ ] Make it work on all exchanges which have margin trading and borrowing supported by ccxt
-    
+        - [ ] **open_long:**
+            - [x] **Step 1:**
+            Query exchange to fetch max borrow quantity of borrow_coin.
+                - **borrow_coin** will be base coin of the quote pair
+                - e.g. in ETHUSDT/BTCUSDT it is **BTC**
+            - [x] **Step 2:**
+            If prompt_borrow is true, print the max borrow amount retrieved in step 1, then prompt the user to either accept the max amount or instead enter an amount.
+            - [x] **Step 3:**
+            Borrow from the exchange in the desired quantity
+            - [ ] **Step 4:**
+            Sell quote pair using the coins borrowed in step 3.
+                - eg. Sell BTC for USDT
+            - [ ] **Step 5:**
+            Buy the base coin of the base pair using the quote coin of the base pair.
+                - eg. Buy ETH with USDT
+        - [ ] **open_short:**
+            - [ ] Copy & modify steps from open_long
+        - [ ] **close:**
+            - [ ] Sell assets back to stake currency USDT 
+            - [ ] Re-pay loan
+
     ---
 
-    - [ ] **5.** Implement Telegram Notifications
-    
+    - [ ] **5.** Implement Telegram Notifications with telethon
+        - **Note:** I did this in my last project so I can just copy/paste that 
+
     ---
 
     - [ ] **6.** Submit working Minimum Viable Product
 
-
-
----
+    ---
 
 In these docs I will explain how this program works and its architecture, and try to make it easy to understand for
 both users or developers.
@@ -65,7 +93,6 @@ position, which strategy it's from, which pair, the signals taken, trades opened
 It should be possible out of the box to use margin trading for any exchange which ccxt has implemented that for, which
 unfortunately is not unified nor implemented for some exchanges, unlike some other unified methods for things like
 fetching market data, opening trades, etc.
-
 
 - Unfortunately, KuCoin falls into that category of not having margin trading implemented currently, so I've had to
   implement that myself by:
