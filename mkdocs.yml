@@ -48,6 +48,7 @@ nav:
       - 5. Closing a Position: how_it_works/5_closing_a_position.md
       - 6. Generating Reports: how_it_works/6_generating_reports.md
       - 7. TODO: how_it_works/7_todo.md 
+  - KuCoin Extended: 'KuCoin_Extended.md'
   - Creating a New Strategy: 'creating_a_new_strategy.md'
   - CCXT Insights:
       - Overview: 'ccxt_insights/1_overview.md'

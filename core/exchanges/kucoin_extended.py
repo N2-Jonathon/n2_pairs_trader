@@ -1,5 +1,6 @@
 from ccxt.kucoin import kucoin
-
+import random
+import string
 
 class kucoin_extended(kucoin):
     """
@@ -14,6 +15,11 @@ class kucoin_extended(kucoin):
       rely on fetchMaxBorrowSize, but to fulfil your requirements exactly as they
       were written, it needs to be implemented.
     """
+
+    @staticmethod
+    def generate_order_id(length=24):
+        str = string.ascii_lowercase
+        return ''.join(random.choice(str) for i in range(length))
 
     def describe(self):
         return self.deep_extend(super(kucoin_extended, self).describe(), {
@@ -92,3 +98,67 @@ class kucoin_extended(kucoin):
         response = self.privatePostMarginBorrow(params)
 
         return response
+
+    def fetch_available_margin_balance(self, currency="*"):
+        response = self.privateGetMarginAccount()
+        # {
+        #     "accounts": [
+        #         {
+        #             "availableBalance": "990.11",
+        #             "currency": "USDT",
+        #             "holdBalance": "7.22",
+        #             "liability": "66.66",
+        #             "maxBorrowSize": "88.88",
+        #             "totalBalance": "997.33"
+        #         },
+        #         {...},
+        #         {...}
+        #     ],
+        #     "debtRatio": "0.33"
+        # }
+        try:
+            for account in response['data']['accounts']:
+                if account['currency'] == currency:
+                    available_balance = account['availableBalance']
+                    return available_balance
+        except:
+            return ValueError(f'{currency} margin account not found')
+
+        pass
+
+    def fetch_transferable_balance(self, currency, account):
+        accounts = ['MAIN', 'TRADE', 'MARGIN']
+        if account.upper() not in accounts:
+            return ValueError(f'There is no account called {account}')
+        params = {
+            "currency": currency,
+            "type": account
+        }
+        response = self.privateGetAccountsTransferable(params)
+        raise NotImplementedError("Need to parse the response for this method to work, "
+                                  "but I realized I don't need this method yet")
+        return response
+
+    def transfer_between_accounts(self, currency, from_account, to_account, amount):
+        order_id = self.generate_order_id()
+        params = {
+
+        }
+        raise NotImplementedError("Don't need this yet.")
+
+    def place_margin_order(self, side, symbol, size, type='market'):
+        order_id = self.generate_order_id()
+
+        if type == 'market':
+            params = {
+                "clientOid": order_id,
+                "side": side,
+                "symbol": symbol,
+                "type": type,
+                "size": size
+            }
+        elif type == 'limit':
+            pass
+        response = self.privatePostMarginOrder(params)
+
+        pass

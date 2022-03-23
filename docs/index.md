@@ -2,6 +2,19 @@
 
 !!! note
     ***(March 23rd, 2022)***
+    ***[20:21 CET | 17:37 EDT]***
+
+    !!! bug
+        I thought that after borrowing, I'd be able to use normal trades, but KuCoin's API is different for trading with the regular trading account and the margin account, so I am adding a new method for posting a margin order which you can see [here](/KuCoin_Extended/)
+        
+        Right now I'm getting this error as a response from KuCoin:
+        ```
+        {'code': '200000', 'msg': 'position internal error'}
+        ```
+
+        I'm working on figuring it out, and I've also [posted an issue](https://github.com/ccxt/ccxt/issues/12457) in the ccxt repo (They are usually fast at getting back)
+
+    ***(March 23rd, 2022)***
     ***[07:37am CET | 03:37am EDT]***
 
     So I didn't manage to get it finished on Wednesday since yet again I mis-judged how long it would take. However, I have made loads of progress since then and it's looking quite promising. Getting closer to the finish line, since I already managed to properly extend `ccxt.kucoin` and added 2 new methods to it: `fetchMaxBorrowSize` and `borrow` which work properly. 

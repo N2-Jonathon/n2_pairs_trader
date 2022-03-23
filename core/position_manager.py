@@ -24,15 +24,15 @@ class Position(Config):
 
     """
 
+    borrow_coin = None
+
     borrow_info = {
-        "name": None,
+        "currency": None,
         "borrow_timestamp": None,
         "borrow_qty": None,
         "repay_timestamp": None,
         "repay_qty": None
     }
-
-    borrow_qty = None
 
     status = None
 
@@ -98,13 +98,14 @@ class Position(Config):
         #           KuCoin so there needs to be at least two approaches for margin
         #           trading ie. with or without knowing that.
 
-        self.borrow_info['currency'] = self.get_borrow_coin(self.synth_pair_tuple, 'LONG')
-        self.status = f"Borrow coin for {self.synth_pair} is: {self.borrow_info['currency']}"
+        self.borrow_coin = self.get_borrow_coin(self.synth_pair_tuple, 'LONG')
+        self.borrow_info['currency'] = self.borrow_coin
+        self.status = f"Borrow coin for {self.synth_pair} is: {self.borrow_coin}"
 
         self.status = f"Checking which methods {self.exchange_name} has for margin...\n"
         if self.exchange.has['fetchBorrowRate']:
             self.status = f"{self.exchange_name} has fetchBorrowRate"
-            # available_margin = self.exchange.fetch_borrow_rate(self.borrow_info['currency'])
+            # available_margin = self.exchange.fetch_borrow_rate(self.borrow_coin)
         else:
             self.status = (f"{self.exchange_name} doesn't have fetchBorrowRate.\n"
                            f"Checking if {self.exchange_name} has fetchMaxBorrowSize..\n"
@@ -116,8 +117,8 @@ class Position(Config):
             if self.exchange.has['fetchMaxBorrowSize']:
                 self.status = f"{self.exchange_name} has fetchMaxBorrowSize."
 
-                max_borrow_size = float(self.exchange.fetch_max_borrow_size(self.borrow_info['currency']))
-                self.status = f"\nMax borrow amount: {max_borrow_size}  {self.borrow_info['currency']}"
+                max_borrow_size = float(self.exchange.fetch_max_borrow_size(self.borrow_coin))
+                self.status = f"\nMax borrow amount: {max_borrow_size}  {self.borrow_coin}"
                 print(self.status)
             else:
                 raise Exception(f"{self.exchange_name} doesn't have fetchMaxBorrowSize or fetchBorrowRate. Can't proceed.")
@@ -131,34 +132,52 @@ class Position(Config):
 
             while self.borrow_info['borrow_qty'] is None:
                 borrow_qty_input = input(
-                    f"\nTo borrow the max amount ({max_borrow_size} {self.borrow_info['currency']}), press enter.\n"
+                    f"\nTo borrow the max amount/10 ({round(max_borrow_size/10, 4)} {self.borrow_coin}), press enter.\n"
                     "Otherwise, type an amount:")
                 if borrow_qty_input == "":
-                    self.borrow_info['borrow_qty'] = max_borrow_size
-                    self.status = f"Borrowing max amount: {max_borrow_size} {self.borrow_info['currency']}"
+                    self.borrow_info['borrow_qty'] = round(max_borrow_size/10, 4)
+                    self.status = f"Borrowing max amount: {max_borrow_size} {self.borrow_coin}"
                 else:
                     try:
                         self.borrow_info['borrow_qty'] = float(borrow_qty_input)
-                        self.status = f"Borrowing {borrow_qty_input} {self.borrow_info['currency']}\n"
+
+                        self.status = f"Borrowing {borrow_qty_input} {self.borrow_coin}\n"
                     except:
                         self.status = 'Invalid Number entered. Trying again..'
 
         else:
-            self.status = f"Borrowing max amount: {max_borrow_size} {self.borrow_info['currency']}"
+            self.status = f"Borrowing max amount: {max_borrow_size} {self.borrow_coin}"
             self.borrow_info['borrow_qty'] = max_borrow_size
 
         print(self.status)
         # ----------------------------------------
         # Step 3: Borrow from the exchange in the desired quantity
         if 'borrow' in self.exchange.has and self.exchange.has['borrow']:  # If the key is present and is True
-            self.borrow_order = self.exchange.borrow(self.borrow_info['currency'], self.borrow_info['borrow_qty'])
+            self.borrow_order = self.exchange.borrow(self.borrow_coin, self.borrow_info['borrow_qty'])
 
-            self.status = f"Borrowed {self.borrow_info['borrow_qty']} self.borrow_info['currency']"
+            self.status = f"Borrowed {self.borrow_info['borrow_qty']} {self.borrow_coin}"
+            print(self.status)
+
         else:
             raise ValueError(f"{self.exchange_id} doesn't have a 'borrow' method")
+
+        # self.status = f"Getting transferable amount of {self.borrow_coin} from margin account"
+        # transferable_amount = self.exchange.get_transferable_balance(self.borrow_coin, 'MARGIN')
+        # self.status = (f"Transferring {transferable_amount} {self.borrow_coin} from margin account to trading account...")
+
+
+
+        self.status = f"Fetching {self.borrow_coin} available margin balance..."
+        available_balance = self.exchange.fetch_available_margin_balance(self.borrow_coin)
+        self.status = f"{available_balance} {self.borrow_coin} available for margin trading."
+        print(self.status)
         # ----------------------------------------
         # Step 4: Sell quote pair using the coins borrowed in step 3.
         #         eg. Sell BTC for USDT
+        self.status = f"Selling {self.borrow_info['borrow_qty']} {self.borrow_coin}"
+        print(self.status)
+        self.sell_order = self.exchange.place_margin_order('sell', self.quote_pair, available_balance, 'market')
+        pass
         # ----------------------------------------
         # Step 5: Buy the base coin of the base pair using the quote coin of the base pair.
         #         eg. Buy ETH with USDT
