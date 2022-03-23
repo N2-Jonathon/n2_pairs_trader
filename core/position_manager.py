@@ -24,7 +24,7 @@ class Position(Config):
 
     """
 
-    borrow_coin = {
+    borrow_info = {
         "name": None,
         "borrow_timestamp": None,
         "borrow_qty": None,
@@ -90,51 +90,6 @@ class Position(Config):
         self.status = 'OPEN'
         self.open_timestamp = datetime.utcnow()
 
-    def create_order(self, pair, direction, quantity, order_type='market'):
-        """
-        This is for individual orders, and gets used by the self.open() method
-        """
-        order = self.exchange.create_order(pair, order_type, direction, quantity)
-        return order
-
-    # ----------------------------------------------------------------
-    # * Position.open() is for opening a position with two trades
-    #   It has the same params as the constructor __init__
-    #   TODO:
-    #   - [ ] Returns a DataFrame containing information about the open
-    #     trades.
-    #   - [ ] For calculating things like PnL, the DataFrame should then
-    #     be passed to `Position.refresh_live_data()`
-    # ----------------------------------------------------------------
-    # * When you supply an already initialized yet unopened
-    #   Position() instance to open, it will inherit its attributes.
-    # ----------------------------------------------------------------
-    def open(self, direction, order_type='market', prompt_borrow_qty=False):
-
-        self.status = 'opening'
-
-        self.direction = direction
-        self.order_type = order_type
-        self.prompt_borrow_qty = prompt_borrow_qty
-
-        print(f'Opening {self.direction} Position on {self.synth_pair}...\n'
-              f'Order Type: {order_type}')
-
-        if self.direction == 'LONG':
-            """
-                self.open_long(base_pair, quote_pair, borrow_coin, borrow_qty, prompt_borrow_confirmation, borrow_qty)
-            """
-            print("DEBUG: Open Long Position here:")
-            self.open_long(order_type, prompt_borrow_qty)
-        elif self.direction == 'SHORT':
-            # self.open_short(base_pair, quote_pair, borrow_coin)
-            print("DEBUG: Open Short Position here:")
-        elif self.direction != 'LONG' and self.direction != 'SHORT':
-            raise ValueError('direction is invalid')
-
-        self.status = 'OPEN'
-        return self, 0
-
     def open_long(self, order_type='market'):
         # Step 1: * Query exchange to fetch max borrow quantity of borrow_coin.
         #         * Borrow_coin will be base coin of the quote pair
@@ -143,13 +98,13 @@ class Position(Config):
         #           KuCoin so there needs to be at least two approaches for margin
         #           trading ie. with or without knowing that.
 
-        self.borrow_coin['name'] = self.get_borrow_coin(self.synth_pair_tuple, 'LONG')
-        self.status = f"Borrow coin for {self.synth_pair} is: {self.borrow_coin['name']}"
+        self.borrow_info['currency'] = self.get_borrow_coin(self.synth_pair_tuple, 'LONG')
+        self.status = f"Borrow coin for {self.synth_pair} is: {self.borrow_info['currency']}"
 
         self.status = f"Checking which methods {self.exchange_name} has for margin...\n"
         if self.exchange.has['fetchBorrowRate']:
             self.status = f"{self.exchange_name} has fetchBorrowRate"
-            # available_margin = self.exchange.fetch_borrow_rate(self.borrow_coin['name'])
+            # available_margin = self.exchange.fetch_borrow_rate(self.borrow_info['currency'])
         else:
             self.status = (f"{self.exchange_name} doesn't have fetchBorrowRate.\n"
                            f"Checking if {self.exchange_name} has fetchMaxBorrowSize..\n"
@@ -161,8 +116,8 @@ class Position(Config):
             if self.exchange.has['fetchMaxBorrowSize']:
                 self.status = f"{self.exchange_name} has fetchMaxBorrowSize."
 
-                max_borrow_size = float(self.exchange.fetch_max_borrow_size(self.borrow_coin['name']))
-                self.status = f"\nMax borrow amount: {max_borrow_size}  {self.borrow_coin['name']}"
+                max_borrow_size = float(self.exchange.fetch_max_borrow_size(self.borrow_info['currency']))
+                self.status = f"\nMax borrow amount: {max_borrow_size}  {self.borrow_info['currency']}"
                 print(self.status)
             else:
                 raise Exception(f"{self.exchange_name} doesn't have fetchMaxBorrowSize or fetchBorrowRate. Can't proceed.")
@@ -174,29 +129,31 @@ class Position(Config):
 
         if self.prompt_borrow_qty:
 
-            while self.borrow_coin['borrow_qty'] is None:
+            while self.borrow_info['borrow_qty'] is None:
                 borrow_qty_input = input(
-                    f"\nTo borrow the max amount ({max_borrow_size} {self.borrow_coin['name']}), press enter.\nOtherwise, type an amount:")
+                    f"\nTo borrow the max amount ({max_borrow_size} {self.borrow_info['currency']}), press enter.\n"
+                    "Otherwise, type an amount:")
                 if borrow_qty_input == "":
-                    self.borrow_coin['borrow_qty'] = max_borrow_size
-                    self.status = f"Borrowing max amount: {max_borrow_size} {self.borrow_coin['name']}"
+                    self.borrow_info['borrow_qty'] = max_borrow_size
+                    self.status = f"Borrowing max amount: {max_borrow_size} {self.borrow_info['currency']}"
                 else:
                     try:
-                        self.borrow_coin['borrow_qty'] = float(borrow_qty_input)
-                        self.status = f"Borrowing {borrow_qty_input} {self.borrow_coin['name']}"
+                        self.borrow_info['borrow_qty'] = float(borrow_qty_input)
+                        self.status = f"Borrowing {borrow_qty_input} {self.borrow_info['currency']}\n"
                     except:
                         self.status = 'Invalid Number entered. Trying again..'
 
         else:
-            self.status = f"Borrowing max amount: {max_borrow_size} {self.borrow_coin['name']}"
-            self.borrow_coin['borrow_qty'] = max_borrow_size
+            self.status = f"Borrowing max amount: {max_borrow_size} {self.borrow_info['currency']}"
+            self.borrow_info['borrow_qty'] = max_borrow_size
 
         print(self.status)
         # ----------------------------------------
         # Step 3: Borrow from the exchange in the desired quantity
         if 'borrow' in self.exchange.has and self.exchange.has['borrow']:  # If the key is present and is True
-            borrow_order = self.exchange.borrow(self.borrow_coin['name'], self.borrow_coin['borrow_qty'])
-            pass
+            self.borrow_order = self.exchange.borrow(self.borrow_info['currency'], self.borrow_info['borrow_qty'])
+
+            self.status = f"Borrowed {self.borrow_info['borrow_qty']} self.borrow_info['currency']"
         else:
             raise ValueError(f"{self.exchange_id} doesn't have a 'borrow' method")
         # ----------------------------------------
@@ -211,34 +168,26 @@ class Position(Config):
 
     def open_short(self, order_type='market'):
         # ----------------------------------------
-        # Step 1: Query exchange to fetch max
-        # TODO:  borrow quantity of borrow_coin
-        #         borrow_coin will be base coin
-        #         eg. ETH
-        #         of the base_pair
-        #         eg. ETHUSDT
+        # Step 1: TODO (Can copy/paste/modify from open_buy)
+        #         Query exchange to fetch max borrow quantity of borrow_coin
+        #         borrow_coin will be base coin of the base_pair
+        #          e.g. in ETHUSDT/BTCUSDT it is ETH
         # ----------------------------------------
-        # Step 2: If prompt_borrow is true, print
-        # TODO:  the max borrow amount retrieved
-        #         in step 1, then prompt the user
-        #         to either accept the max amount
+        # Step 2: TODO (Can copy/paste/modify from open_buy)
+        #         If prompt_borrow is true, print the max borrow amount retrieved
+        #         in step 1, then prompt the user to either accept the max amount
         #         or instead enter an amount.
         # ----------------------------------------
-        # Step 3: Borrow from the exchange in the
-        # TODO:  desired quantity
+        # Step 3: TODO (Can copy/paste/modify from open_buy)
+        #         Borrow from the exchange in the desired quantity
         # ----------------------------------------
-        # Step 4: Sell base pair using the coins
-        # TODO:  borrowed in step 3.
-        #         eg. Sell ETH for USDT
+        # Step 4: TODO (Can copy/paste/modify from open_buy)
+        #         Sell base pair using the coins borrowed in step 3.
+        #          eg. Sell ETH for USDT
         # ----------------------------------------
-        # Step 5: Buy the base coin of the quote
-        # TODO:  pair using the quote coin of the
-        #         quote pair.
-        #         eg. Buy BTC with USDT
-        # ----------------------------------------
-        # Step 6: Generate & Send Email with all
-        # TODO:  of the details about the open
-        #         position included.
+        # Step 5: TODO (Can copy/paste/modify from open_buy)
+        #         Buy the base coin of the quote pair using the quote coin of the quote pair.
+        #          eg. Buy BTC with USDT
         pass
 
     def close(self, order_type='market'):
@@ -282,7 +231,7 @@ class PositionManager(Config):
                                f"Opened {self.current_position.direction} position:\n"
                                f"{self.current_position.synth_pair}\n"
                                f"Trade 1: SHORT Quote Pair (SELL {self.current_position.synth_pair_tuple[3]} for {self.current_position.synth_pair_tuple[4]})\n"
-                               f"    borrow coin: {self.current_position.borrow_coin}\n"
+                               f"    borrow coin: {self.current_position.borrow_info}\n"
                                f"     order type: {self.current_position.order_type}\n"
                                f"     fill price: {self.current_position.qp_open_fill_price}\n"
                                f"      timestamp: {self.current_position.qp_open_timestamp}\n"
