@@ -27,8 +27,12 @@ class Position(Config):
     borrow_coin = {
         "name": None,
         "borrow_timestamp": None,
-        "repay_timestamp": None
+        "borrow_qty": None,
+        "repay_timestamp": None,
+        "repay_qty": None
     }
+
+    borrow_qty = None
 
     status = None
 
@@ -57,7 +61,7 @@ class Position(Config):
 
         return borrow_coin
 
-    def __init__(self, order_type, prompt_borrow_qty=False, base_pair=None, quote_pair=None, direction=None,
+    def __init__(self, order_type, base_pair=None, quote_pair=None, direction=None,
                  params={}, config_filepath=USER_CONFIG_PATH):
 
         super().__init__(params, config_filepath)
@@ -65,7 +69,6 @@ class Position(Config):
 
         self.order_type = order_type
         self.direction = direction
-        self.prompt_borrow_qty = prompt_borrow_qty
 
         if self.direction == 'LONG':
             self.status = (f"Opening LONG Position on {self.synth_pair}\n"
@@ -158,51 +161,55 @@ class Position(Config):
             if self.exchange.has['fetchMaxBorrowSize']:
                 self.status = f"{self.exchange_name} has fetchMaxBorrowSize."
 
-                max_borrow_size = self.exchange.fetch_max_borrow_size(self.borrow_coin['name'])
-                self.status = f"Max borrow size for {self.borrow_coin['name']}: {max_borrow_size}"
+                max_borrow_size = float(self.exchange.fetch_max_borrow_size(self.borrow_coin['name']))
+                self.status = f"\nMax borrow amount: {max_borrow_size}  {self.borrow_coin['name']}"
                 print(self.status)
             else:
                 raise Exception(f"{self.exchange_name} doesn't have fetchMaxBorrowSize or fetchBorrowRate. Can't proceed.")
+
         # ----------------------------------------
-        # Step 2: If prompt_borrow is true, print
-        #         the max borrow amount retrieved
-        #         in step 1, then prompt the user
-        #         to either accept the max amount
+        # Step 2: If prompt_borrow is true, print the max borrow amount retrieved
+        #         in step 1, then prompt the user to either accept the max amount
         #         or instead enter an amount.
 
         if self.prompt_borrow_qty:
-            borrow_qty_input = input("To borrow the max amount, press enter. Otherwise, type an amount:")
 
-            if borrow_qty_input == "":
-                print(f"Borrowing max amount: {max_borrow_size} {self.borrow_coin['name']}")
-                borrow_qty = max_borrow_size
-            else:
-                print(f"Borrowing {borrow_qty_input} {self.borrow_coin['name']}")
+            while self.borrow_coin['borrow_qty'] is None:
+                borrow_qty_input = input(
+                    f"\nTo borrow the max amount ({max_borrow_size} {self.borrow_coin['name']}), press enter.\nOtherwise, type an amount:")
+                if borrow_qty_input == "":
+                    self.borrow_coin['borrow_qty'] = max_borrow_size
+                    self.status = f"Borrowing max amount: {max_borrow_size} {self.borrow_coin['name']}"
+                else:
+                    try:
+                        self.borrow_coin['borrow_qty'] = float(borrow_qty_input)
+                        self.status = f"Borrowing {borrow_qty_input} {self.borrow_coin['name']}"
+                    except:
+                        self.status = 'Invalid Number entered. Trying again..'
+
+        else:
+            self.status = f"Borrowing max amount: {max_borrow_size} {self.borrow_coin['name']}"
+            self.borrow_coin['borrow_qty'] = max_borrow_size
+
+        print(self.status)
+        # ----------------------------------------
+        # Step 3: Borrow from the exchange in the desired quantity
+        if 'borrow' in self.exchange.has and self.exchange.has['borrow']:  # If the key is present and is True
+            borrow_order = self.exchange.borrow(self.borrow_coin['name'], self.borrow_coin['borrow_qty'])
             pass
+        else:
+            raise ValueError(f"{self.exchange_id} doesn't have a 'borrow' method")
         # ----------------------------------------
-        # Step 3: Borrow from the exchange in the
-        # TODO:  desired quantity
-        # ----------------------------------------
-        # Step 4: Sell quote pair using the coins
-        # TODO:  borrowed in step 3.
+        # Step 4: Sell quote pair using the coins borrowed in step 3.
         #         eg. Sell BTC for USDT
         # ----------------------------------------
-        # Step 5: Buy the base coin of the base
-        # TODO:  pair using the quote coin of the
-        #         base pair.
+        # Step 5: Buy the base coin of the base pair using the quote coin of the base pair.
         #         eg. Buy ETH with USDT
-        # ----------------------------------------
-        # Step 6: Generate & Send Email with all
-        # TODO:  of the details about the open
-        #         position included.
+
         self.status = '[DEBUG] OPEN'
         pass
 
-    def open_short(base_pair: str,
-                   quote_pair: str,
-                   borrow_coin: str,
-                   borrow_qty: float,
-                   prompt_confirmation: bool):
+    def open_short(self, order_type='market'):
         # ----------------------------------------
         # Step 1: Query exchange to fetch max
         # TODO:  borrow quantity of borrow_coin
@@ -265,9 +272,8 @@ class PositionManager(Config):
             raise ValueError('Direction not specified')
         else:
             DEBUG_direction = direction
-            if self.paper_trade:
+            if not self.paper_trade:
                 self.current_position = Position(order_type=order_type,
-                                                 prompt_borrow_qty=False,  # TODO: make sure self.prompt_borrow_qty has a value before this gets executed=self.prompt_borrow_qty,
                                                  base_pair=self.base_pair,
                                                  quote_pair=self.quote_pair,
                                                  direction=direction)

@@ -85,11 +85,14 @@ class Config:
                 self.strategy_name = self.cfg_parser['Global Settings']['strategy']
                 self.strategy_import_path = f"strategies.{self.strategy_name}"
 
-                self.prompt_for_pairs = bool(self.cfg_parser['Global Settings']['prompt_for_pairs'])
+                self.prompt_for_pairs = 'true' in self.cfg_parser['Global Settings']['prompt_for_pairs'].lower()
+                self.prompt_borrow_qty = 'true' in self.cfg_parser['Global Settings']['prompt_borrow_qty'].lower()
+
                 self.base_pair = self.cfg_parser['Global Settings']['base_pair_default']
                 self.quote_pair = self.cfg_parser['Global Settings']['quote_pair_default']
                 self.stake_currency = self.cfg_parser['Global Settings']['stake_currency']
-                self.paper_trade = bool(self.cfg_parser['Global Settings']['paper_trade'])
+                self.paper_trade = 'true' in self.cfg_parser['Global Settings']['paper_trade'].lower()
+                # breakpoint()
             except:
                 raise ValueError("Failed to read from config (Make sure all values are assigned)")
         elif self.params is not None:
