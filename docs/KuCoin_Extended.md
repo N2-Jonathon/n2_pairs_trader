@@ -47,6 +47,10 @@ def place_margin_order(self, side, symbol, size, type='market'):
     pass
 ```
 
+!!! note
+    `self.privatePostMarginOrder(params)` is equivilent to:
+    `POST /api/v1/margin/order?clientOid={order_id}&side={side}&symbol={symbol}&type={type}&size={size}`
+
 !!! bug
     I thought that after borrowing, I'd be able to use normal trades, but KuCoin's API is different for trading with the regular trading account and the margin account, so I am adding a new method for posting a margin order.
     
