@@ -131,12 +131,12 @@ class Position(Config):
         if self.prompt_borrow_qty:
 
             while self.borrow_info['borrow_qty'] is None:
-                borrow_qty_input = input(
-                    f"\nTo borrow the max amount/10 ({round(max_borrow_size/10, 4)} {self.borrow_coin}), press enter.\n"
+                borrow_qty_input = input(  # Will change this to max amount, but it's at 1% for testing
+                    f"\nTo borrow 1% of the max amount ({round(max_borrow_size/100, 4)} {self.borrow_coin}), press enter.\n"
                     "Otherwise, type an amount:")
                 if borrow_qty_input == "":
-                    self.borrow_info['borrow_qty'] = round(max_borrow_size/10, 4)
-                    self.status = f"Borrowing max amount: {max_borrow_size} {self.borrow_coin}"
+                    self.borrow_info['borrow_qty'] = round(max_borrow_size/100, 4)
+                    self.status = f"Borrowing 1% of max amount: {self.borrow_info['borrow_qty']} {self.borrow_coin}"
                 else:
                     try:
                         self.borrow_info['borrow_qty'] = float(borrow_qty_input)
@@ -161,28 +161,35 @@ class Position(Config):
         else:
             raise ValueError(f"{self.exchange_id} doesn't have a 'borrow' method")
 
-        # self.status = f"Getting transferable amount of {self.borrow_coin} from margin account"
-        # transferable_amount = self.exchange.get_transferable_balance(self.borrow_coin, 'MARGIN')
-        # self.status = (f"Transferring {transferable_amount} {self.borrow_coin} from margin account to trading account...")
-
-
+        # ----------------------------------------
+        # Step 4: Sell quote pair using the coins borrowed in step 3.
+        #         eg. Sell BTC for USDT
 
         self.status = f"Fetching {self.borrow_coin} available margin balance..."
         available_balance = self.exchange.fetch_available_margin_balance(self.borrow_coin)
         self.status = f"{available_balance} {self.borrow_coin} available for margin trading."
         print(self.status)
-        # ----------------------------------------
-        # Step 4: Sell quote pair using the coins borrowed in step 3.
-        #         eg. Sell BTC for USDT
-        self.status = f"Selling {self.borrow_info['borrow_qty']} {self.borrow_coin}"
+
+        self.status = f"Selling {available_balance} {self.borrow_coin} for {self.synth_pair_tuple[4]}"
         print(self.status)
-        self.sell_order = self.exchange.place_margin_order('sell', self.quote_pair, available_balance, 'market')
-        pass
+        current_bid_price = self.exchange.fetch_ticker(self.quote_pair)
+        self.sell_order = self.exchange.place_margin_order('sell', self.quote_pair, available_balance, order_type)
+        self.status = f"Sold {available_balance} {self.borrow_coin} for {self.synth_pair_tuple[4]}"
+        # print(self.status)
         # ----------------------------------------
         # Step 5: Buy the base coin of the base pair using the quote coin of the base pair.
         #         eg. Buy ETH with USDT
 
-        self.status = '[DEBUG] OPEN'
+        self.status = f"Fetching {self.synth_pair_tuple[4]} available margin balance..."
+        available_balance = self.exchange.fetch_available_margin_balance(self.synth_pair_tuple[4])
+        self.status = f"{available_balance} {self.synth_pair_tuple[4]} available for margin trading."
+        print(self.status)
+
+        current_bid_price = self.exchange.fetch_ticker(self.quote_pair)
+        self.buy_order = self.exchange.place_margin_order('buy', self.base_pair, available_balance, order_type)
+        self.status = (f"Opened {order_type} BUY order on {self.base_pair}.\n"
+                       f"Quantity: {available_balance}")
+        print(self.status)
         pass
 
     def open_short(self, order_type='market'):

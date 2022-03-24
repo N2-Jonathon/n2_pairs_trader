@@ -146,19 +146,28 @@ class kucoin_extended(kucoin):
         }
         raise NotImplementedError("Don't need this yet.")
 
-    def place_margin_order(self, side, symbol, size, type='market'):
-        order_id = self.generate_order_id()
+    def place_margin_order(self, side, symbol, size, type='market', price=None, params={}):
+        self.load_markets()
+        marketId = self.market_id(symbol)
+        clientOrderId = self.safe_string_2(params, 'clientOid', 'clientOrderId', self.uuid())
 
         if type == 'market':
             params = {
-                "clientOid": order_id,
+                "clientOid": clientOrderId,
                 "side": side,
-                "symbol": symbol,
+                "symbol": marketId,
                 "type": type,
                 "size": size
             }
         elif type == 'limit':
-            pass
+            params = {
+                # "clientOid": order_id,
+                "side": side,
+                "symbol": marketId,
+                "type": type,
+                "size": size,
+                "price": price
+            }
         response = self.privatePostMarginOrder(params)
 
-        pass
+        return response
