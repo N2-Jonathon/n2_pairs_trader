@@ -1,48 +1,5 @@
 # **Home:**
 
-!!! note
-
-    ***(March 24th, 2022)***
-    ***[16:31 CET | 11:31 EDT]***
-
-    Now each step in open_long works. So next I will do (almost) the same thing for open_short, then move onto close & send notification.
-
-    ***(March 23rd, 2022)***
-    ***[20:21 CET | 17:37 EDT]***
-
-    !!! success
-        I thought that after borrowing, I'd be able to use normal trades, but KuCoin's API is different for trading with the regular trading account and the margin account, so I am adding a new method for posting a margin order which you can see [here](/KuCoin_Extended/)
-        
-        ~~Right now I'm~~ I was getting this error as a response from KuCoin:
-        ```
-        {'code': '200000', 'msg': 'position internal error'}
-        ```
-
-        ~~I'm working on figuring it out~~ I figured it out, and I've also [posted an issue](https://github.com/ccxt/ccxt/issues/12457) in the ccxt repo. I was calling the API incorrectly, but also it seems a bug on their end didn't give the correct error code. 
-
-    ***(March 23rd, 2022)***
-    ***[07:37am CET | 03:37am EDT]***
-
-    So I didn't manage to get it finished on Wednesday since yet again I mis-judged how long it would take. However, I have made loads of progress since then and it's looking quite promising. Getting closer to the finish line, since I already managed to properly extend `ccxt.kucoin` and added 2 new methods to it: `fetchMaxBorrowSize` and `borrow` which work properly. 
-
-    - Actually making trades is simple compared to that, since it's already built in and it won't be difficult to figure out how to get ccxt to do that like it was with the margin-related stuff
-    - I've been using KuCoin's sandbox exchange for testing which works the same way as the real one.
-    - Once `open_long` works, then I can just copy, paste & tweak it for `open_short`
-    - Then I'll add a `close` method which closes the position & repays the loan 
-    - If you want to see how it's working, you can open the program in an IDE with a debugger, and just watch `self.status`. I will walk you through that when it's submitted.
-
-    ***(March 21st, 2022)***
-
-    ***[11:08am CET | 06:08am EDT]***
-
-    Like I said last night, I'm trying to get this functional by the end of today. Since our last message, I've managed to get through steps 2 & 3 which is going to help a lot with step 4.
-
-    ***(March 20th, 2022)***
-
-    Hi Nico, this is my first update in a couple of days since I got stuck on a problem which I've just recently (mostly) solved. I will explain that below.
-
-    I've also migrated the **TODO** list to here for now while I'm developing this, but after the first release I will migrate the **TODO** to its own page, and this will be the Index/Home.
-
 !!! todo
 
     - [x] **1.** Write a script which scrapes the contents of what the `describe()` method returns. This was necessary to avoid having to import every exchange to be able to get this information which I was trying to do before with many issues.
@@ -96,6 +53,49 @@
     - [ ] **6.** Submit working Minimum Viable Product
 
     ---
+
+!!! note
+
+    ***(March 24th, 2022)***
+    ***[16:31 CET | 11:31 EDT]***
+
+    Now each step in open_long works. So next I will do (almost) the same thing for open_short, then move onto close & send notification.
+
+    ***(March 23rd, 2022)***
+    ***[20:21 CET | 17:37 EDT]***
+
+    !!! success
+        I thought that after borrowing, I'd be able to use normal trades, but KuCoin's API is different for trading with the regular trading account and the margin account, so I am adding a new method for posting a margin order which you can see [here](/KuCoin_Extended/)
+        
+        ~~Right now I'm~~ I was getting this error as a response from KuCoin:
+        ```
+        {'code': '200000', 'msg': 'position internal error'}
+        ```
+
+        ~~I'm working on figuring it out~~ I figured it out, and I've also [posted an issue](https://github.com/ccxt/ccxt/issues/12457) in the ccxt repo. I was calling the API incorrectly, but also it seems a bug on their end didn't give the correct error code. 
+
+    ***(March 23rd, 2022)***
+    ***[07:37am CET | 03:37am EDT]***
+
+    So I didn't manage to get it finished on Wednesday since yet again I mis-judged how long it would take. However, I have made loads of progress since then and it's looking quite promising. Getting closer to the finish line, since I already managed to properly extend `ccxt.kucoin` and added 2 new methods to it: `fetchMaxBorrowSize` and `borrow` which work properly. 
+
+    - Actually making trades is simple compared to that, since it's already built in and it won't be difficult to figure out how to get ccxt to do that like it was with the margin-related stuff
+    - I've been using KuCoin's sandbox exchange for testing which works the same way as the real one.
+    - Once `open_long` works, then I can just copy, paste & tweak it for `open_short`
+    - Then I'll add a `close` method which closes the position & repays the loan 
+    - If you want to see how it's working, you can open the program in an IDE with a debugger, and just watch `self.status`. I will walk you through that when it's submitted.
+
+    ***(March 21st, 2022)***
+
+    ***[11:08am CET | 06:08am EDT]***
+
+    Like I said last night, I'm trying to get this functional by the end of today. Since our last message, I've managed to get through steps 2 & 3 which is going to help a lot with step 4.
+
+    ***(March 20th, 2022)***
+
+    Hi Nico, this is my first update in a couple of days since I got stuck on a problem which I've just recently (mostly) solved. I will explain that below.
+
+    I've also migrated the **TODO** list to here for now while I'm developing this, but after the first release I will migrate the **TODO** to its own page, and this will be the Index/Home.
 
 In these docs I will explain how this program works and its architecture, and try to make it easy to understand for
 both users or developers.
