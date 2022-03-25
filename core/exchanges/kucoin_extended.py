@@ -99,7 +99,7 @@ class kucoin_extended(kucoin):
 
         return response
 
-    def fetch_available_margin_balance(self, currency="*"):
+    def fetch_available_margin_balance(self, currency="*", non_zero=False):
         response = self.privateGetMarginAccount()
         # {
         #     "accounts": [
@@ -116,6 +116,7 @@ class kucoin_extended(kucoin):
         #     ],
         #     "debtRatio": "0.33"
         # }
+
         try:
             for account in response['data']['accounts']:
                 if account['currency'] == currency:
@@ -123,6 +124,35 @@ class kucoin_extended(kucoin):
                     return available_balance
         except:
             return ValueError(f'{currency} margin account not found')
+
+        pass
+
+    def fetch_available_margin_balances(self):
+        response = self.privateGetMarginAccount()
+        # {
+        #     "accounts": [
+        #         {
+        #             "availableBalance": "990.11",
+        #             "currency": "USDT",
+        #             "holdBalance": "7.22",
+        #             "liability": "66.66",
+        #             "maxBorrowSize": "88.88",
+        #             "totalBalance": "997.33"
+        #         },
+        #         {...},
+        #         {...}
+        #     ],
+        #     "debtRatio": "0.33"
+        # }
+
+        available_balances = {}
+
+        for account in response['data']['accounts']:
+            if float(account['availableBalance']) > 0:
+                available_balances[account['currency']] = account['availableBalance']
+
+        return available_balances
+
 
         pass
 

@@ -119,7 +119,8 @@ class Position(Config):
 
                 max_borrow_size = float(self.exchange.fetch_max_borrow_size(self.borrow_coin))
                 self.status = f"\nMax borrow amount: {max_borrow_size}  {self.borrow_coin}"
-                print(self.status)
+                print("--------------------------------\n"
+                      f"{self.status}")
             else:
                 raise Exception(f"{self.exchange_name} doesn't have fetchMaxBorrowSize or fetchBorrowRate. Can't proceed.")
 
@@ -133,7 +134,7 @@ class Position(Config):
             while self.borrow_info['borrow_qty'] is None:
                 borrow_qty_input = input(  # Will change this to max amount, but it's at 1% for testing
                     f"\nTo borrow 1% of the max amount ({round(max_borrow_size/100, 4)} {self.borrow_coin}), press enter.\n"
-                    "Otherwise, type an amount:")
+                    "Otherwise, type an amount:\n")
                 if borrow_qty_input == "":
                     self.borrow_info['borrow_qty'] = round(max_borrow_size/100, 4)
                     self.status = f"Borrowing 1% of max amount: {self.borrow_info['borrow_qty']} {self.borrow_coin}"
@@ -146,7 +147,7 @@ class Position(Config):
                         self.status = 'Invalid Number entered. Trying again..'
 
         else:
-            self.status = f"Borrowing max amount: {max_borrow_size} {self.borrow_coin}"
+            self.status = f"Borrowing max amount: {max_borrow_size} {self.borrow_coin}\n"
             self.borrow_info['borrow_qty'] = max_borrow_size
 
         print(self.status)
@@ -155,7 +156,7 @@ class Position(Config):
         if 'borrow' in self.exchange.has and self.exchange.has['borrow']:  # If the key is present and is True
             self.borrow_order = self.exchange.borrow(self.borrow_coin, self.borrow_info['borrow_qty'])
 
-            self.status = f"Borrowed {self.borrow_info['borrow_qty']} {self.borrow_coin}"
+            self.status = f"Borrowed {self.borrow_info['borrow_qty']} {self.borrow_coin}\n"
             print(self.status)
 
         else:
@@ -170,7 +171,7 @@ class Position(Config):
         self.status = f"{available_balance} {self.borrow_coin} available for margin trading."
         print(self.status)
 
-        self.status = f"Selling {available_balance} {self.borrow_coin} for {self.synth_pair_tuple[4]}"
+        self.status = f"Selling {available_balance} {self.borrow_coin} for {self.synth_pair_tuple[4]}\n"
         print(self.status)
         current_bid_price = self.exchange.fetch_ticker(self.quote_pair)
         self.sell_order = self.exchange.place_margin_order('sell', self.quote_pair, available_balance, order_type)
@@ -190,6 +191,7 @@ class Position(Config):
         self.status = (f"Opened {order_type} BUY order on {self.base_pair}.\n"
                        f"Quantity: {available_balance}")
         print(self.status)
+        print(f"\nAvailable Balances: \n{self.exchange.fetch_available_margin_balances()}")
         pass
 
     def open_short(self, order_type='market'):
@@ -220,7 +222,8 @@ class Position(Config):
 
                 max_borrow_size = round(float(self.exchange.fetch_max_borrow_size(self.borrow_coin)), 2)
                 self.status = f"\nMax borrow amount: {max_borrow_size}  {self.borrow_coin}"
-                print(self.status)
+                print("--------------------------------\n"
+                      f"{self.status}")
             else:
                 raise Exception(
                     f"{self.exchange_name} doesn't have fetchMaxBorrowSize or fetchBorrowRate. Can't proceed.")
@@ -234,7 +237,7 @@ class Position(Config):
             while self.borrow_info['borrow_qty'] is None:
                 borrow_qty_input = input(  # Will change this to max amount, but it's at 1% for testing
                     f"\nTo borrow 1% of the max amount ({round(max_borrow_size/100, 2)} {self.borrow_coin}), press enter.\n"
-                    "Otherwise, type an amount:")
+                    "Otherwise, type an amount:\n")
                 if borrow_qty_input == "":
                     self.borrow_info['borrow_qty'] = round(max_borrow_size/100, 2)
                     self.status = f"Borrowing 1% of max amount: {self.borrow_info['borrow_qty']} {self.borrow_coin}"
@@ -257,7 +260,7 @@ class Position(Config):
         if 'borrow' in self.exchange.has and self.exchange.has['borrow']:  # If the key is present and is True
             self.borrow_order = self.exchange.borrow(self.borrow_coin, self.borrow_info['borrow_qty'])
 
-            self.status = f"Borrowed {self.borrow_info['borrow_qty']} {self.borrow_coin}"
+            self.status = f"Borrowed {self.borrow_info['borrow_qty']} {self.borrow_coin}\n"
             print(self.status)
 
         else:
@@ -269,9 +272,12 @@ class Position(Config):
         self.status = f"Fetching {self.borrow_coin} available margin balance..."
         available_balance = self.exchange.fetch_available_margin_balance(self.borrow_coin)
         self.status = f"{available_balance} {self.borrow_coin} available for margin trading."
-        print(self.status)
+        print("--------------------------------\n"
+              f"{self.status}")
 
-        self.status = f"Selling {available_balance} {self.borrow_coin} for {self.synth_pair_tuple[2]}"
+        self.status = (f"Selling {available_balance} {self.borrow_coin} for {self.synth_pair_tuple[2]}\n"
+                       f"Opened {order_type} BUY order on {self.base_pair}.\n"
+                       f"Quantity: {available_balance}")
         print(self.status)
         current_bid_price = self.exchange.fetch_ticker(self.quote_pair)
         self.sell_order = self.exchange.place_margin_order('sell', self.quote_pair, available_balance, order_type)
@@ -283,13 +289,18 @@ class Position(Config):
         self.status = f"Fetching {self.synth_pair_tuple[4]} available margin balance..."
         available_balance = self.exchange.fetch_available_margin_balance(self.synth_pair_tuple[4])
         self.status = f"{available_balance} {self.synth_pair_tuple[4]} available for margin trading."
-        print(self.status)
+        print("--------------------------------\n"
+              f"{self.status}")
 
         current_bid_price = self.exchange.fetch_ticker(self.quote_pair)
         self.buy_order = self.exchange.place_margin_order('buy', self.base_pair, available_balance, order_type)
-        self.status = (f"Opened {order_type} BUY order on {self.base_pair}.\n"
+        self.status = (f"Selling {available_balance} {self.borrow_coin} for {self.synth_pair_tuple[2]}\n"
+                       f"Opened {order_type} BUY order on {self.base_pair}.\n"
                        f"Quantity: {available_balance}")
         print(self.status)
+
+        print("\n--------------------------------\n"
+              f"\nAvailable Balances: \n{self.exchange.fetch_available_margin_balances()}")
         pass
 
     def close(self, order_type='market'):
@@ -323,6 +334,7 @@ class PositionManager(Config):
             raise ValueError('Direction not specified')
         else:
             DEBUG_direction = direction
+            print(f"Pre-position Available Balances: \n{self.exchange.fetch_available_margin_balances()}")
             if not self.paper_trade:
                 self.current_position = Position(order_type=order_type,
                                                  base_pair=self.base_pair,
@@ -342,6 +354,7 @@ class PositionManager(Config):
                                f"     fill price: {self.current_position.qp_open_fill_price}\n"
                                f"      timestamp: {self.current_position.qp_open_timestamp}\n"
                                )
+            print(f"Post-open Balances: \n{self.exchange.fetch_available_margin_balances()}")
             return 0
 
 

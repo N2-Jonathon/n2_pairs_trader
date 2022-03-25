@@ -22,11 +22,11 @@
     ---
 
     - [ ] **4.** Fully implement each step of Long/Short positions including borrowing.
-        - [x] **open_long:**
+        - [x] ***[4.1]*** **open_long:**
             - [x] **Step 1:**
             Query exchange to fetch max borrow quantity of borrow_coin.
-                - **borrow_coin** will be base coin of the quote pair
-                - e.g. in ETHUSDT/BTCUSDT it is **BTC**
+                - **borrow_coin** will be the base coin of the quote pair
+                - e.g. in ETHUSDT/**BTC**USDT it is **BTC**
             - [x] **Step 2:**
             If prompt_borrow is true, print the max borrow amount retrieved in step 1, then prompt the user to either accept the max amount or instead enter an amount.
             - [x] **Step 3:**
@@ -37,11 +37,13 @@
             - [x] **Step 5:**
             Buy the base coin of the base pair using the quote coin of the base pair.
                 - eg. Buy ETH with USDT
-        - [x] **open_short:**
-            - [x] Copy & modify steps from open_long
-        - [ ] **close:**
-            - [ ] Sell assets back to stake currency USDT 
+        - [x] ***[4.2]*** **open_short:**
+            - [x] Copy & modify steps from open_long (refactor this later)
+            - **borrow_coin** will be the base coin of the base pair
+                - e.g. in **ETH**USDT/BTCUSDT it is **ETH**
+        - [ ] ***[4.3]*** **close:**
             - [ ] Re-pay loan
+            - [ ] Sell assets back to stake currency USDT 
 
     ---
 
