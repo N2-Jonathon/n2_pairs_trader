@@ -51,7 +51,7 @@ nav:
       - Overview: 'ccxt_insights/1_overview.md'
       - Exchanges with margin: 'ccxt_insights/2_exchanges_with_margin.md'
       - Exchanges with fetchBorrowRate: 'ccxt_insights/3_exchanges_with_fetchBorrowRate.md'
-  - Source Documentation:
+  - Source Reference:
     - Index: Docstrings/index.md
     - core/: 
       - core.exchanges: 'Docstrings/core/core.md'
