@@ -131,6 +131,9 @@ class Position(Config):
         print(self.status['msg'])
         current_bid_price = self.exchange.fetch_ticker(self.quote_pair)
         self.sell_order = self.exchange.place_margin_order('sell', self.quote_pair, available_balance, order_type)
+        self.trades_info['open']['quote_pair']['timestamp'] = datetime.utcnow()
+        self.trades_info['open']['quote_pair']['quantity'] = self.exchange.fetch_available_margin_balance(self.synth_pair_tuple[3])
+
         self.status['msg'] = f"Sold {available_balance} {self.borrow_coin} for {self.synth_pair_tuple[4]}"
         # print(self.status['msg'])
         # ----------------------------------------
@@ -144,7 +147,8 @@ class Position(Config):
 
         current_bid_price = self.exchange.fetch_ticker(self.quote_pair)
         self.buy_order = self.exchange.place_margin_order('buy', self.base_pair, available_balance, order_type)
-        self.trades_info['open'][''] = self.exchange.fetch_available_margin_balance(self.synth_pair_tuple[1])
+        self.trades_info['open']['base_pair']['timestamp'] = datetime.utcnow()
+        self.trades_info['open']['base_pair']['quantity'] = self.exchange.fetch_available_margin_balance(self.synth_pair_tuple[1])
 
         self.status['msg'] = (f"Opened {order_type} BUY order on {self.base_pair}.\n"
                               f"Bought {self.synth_pair_tuple[1]} with {available_balance} {self.synth_pair_tuple[2]}")
@@ -335,8 +339,11 @@ class PositionManager(Config):
 
             print(f"Post-open Balances: \n{self.exchange.fetch_available_margin_balances()}\n")
 
-            print(f"Position info: \n"
-                  f"{dir(self.current_position)}")
+            print(f"POSITION INFO: \n"
+                  f"Borrow Info:\n"
+                  f"{str(self.current_position.borrow_info)}\n\n"
+                  f"Trades Info:\n"
+                  f"{str(self.current_position.trades_info)}\n")
 
             return 0
 

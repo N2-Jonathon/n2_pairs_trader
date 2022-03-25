@@ -70,3 +70,7 @@ markdown_extensions:
       custom_checkbox: true
   - pymdownx.tilde
   - tables
+  - pymdownx.critic
+  - pymdownx.caret
+  - pymdownx.keys
+  - pymdownx.mark
