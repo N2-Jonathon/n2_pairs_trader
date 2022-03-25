@@ -85,7 +85,7 @@ class Position(Config):
                            f"And also go long on {self.quote_pair}"
                            f" (BUY {self.synth_pair_tuple[3]} with {self.synth_pair_tuple[4]})")
 
-            self.open_short(self.order_type, self.prompt_borrow_qty)
+            self.open_short(self.order_type)
 
         self.status = 'OPEN'
         self.open_timestamp = datetime.utcnow()
@@ -180,8 +180,8 @@ class Position(Config):
         # Step 5: Buy the base coin of the base pair using the quote coin of the base pair.
         #         eg. Buy ETH with USDT
 
-        self.status = f"Fetching {self.synth_pair_tuple[4]} available margin balance..."
-        available_balance = self.exchange.fetch_available_margin_balance(self.synth_pair_tuple[4])
+        self.status = f"Fetching {self.synth_pair_tuple[2]} available margin balance..."
+        available_balance = self.exchange.fetch_available_margin_balance(self.synth_pair_tuple[2])
         self.status = f"{available_balance} {self.synth_pair_tuple[4]} available for margin trading."
         print(self.status)
 
@@ -198,22 +198,98 @@ class Position(Config):
         #         Query exchange to fetch max borrow quantity of borrow_coin
         #         borrow_coin will be base coin of the base_pair
         #          e.g. in ETHUSDT/BTCUSDT it is ETH
+
+        self.borrow_coin = self.get_borrow_coin(self.synth_pair_tuple, 'SHORT')
+        self.borrow_info['currency'] = self.borrow_coin
+        self.status = f"Borrow coin for {self.synth_pair} is: {self.borrow_coin}"
+
+        self.status = f"Checking which methods {self.exchange_name} has for margin...\n"
+        if self.exchange.has['fetchBorrowRate']:
+            self.status = f"{self.exchange_name} has fetchBorrowRate"
+            # available_margin = self.exchange.fetch_borrow_rate(self.borrow_coin)
+        else:
+            self.status = (f"{self.exchange_name} doesn't have fetchBorrowRate.\n"
+                           f"Checking if {self.exchange_name} has fetchMaxBorrowSize..\n"
+                           f"Note: This is a non-standard method. If possible, find a way "
+                           f"to use fetchBorrowRate instead, or some other method. "
+                           f"The only exchange which has the method `fetchMaxBorrowSize`"
+                           " is kucoin_extended, but if others are added, this will find it.")
+
+            if self.exchange.has['fetchMaxBorrowSize']:
+                self.status = f"{self.exchange_name} has fetchMaxBorrowSize."
+
+                max_borrow_size = round(float(self.exchange.fetch_max_borrow_size(self.borrow_coin)), 2)
+                self.status = f"\nMax borrow amount: {max_borrow_size}  {self.borrow_coin}"
+                print(self.status)
+            else:
+                raise Exception(
+                    f"{self.exchange_name} doesn't have fetchMaxBorrowSize or fetchBorrowRate. Can't proceed.")
         # ----------------------------------------
         # Step 2: TODO (Can copy/paste/modify from open_buy)
         #         If prompt_borrow is true, print the max borrow amount retrieved
         #         in step 1, then prompt the user to either accept the max amount
         #         or instead enter an amount.
+        if self.prompt_borrow_qty:
+
+            while self.borrow_info['borrow_qty'] is None:
+                borrow_qty_input = input(  # Will change this to max amount, but it's at 1% for testing
+                    f"\nTo borrow 1% of the max amount ({round(max_borrow_size/100, 2)} {self.borrow_coin}), press enter.\n"
+                    "Otherwise, type an amount:")
+                if borrow_qty_input == "":
+                    self.borrow_info['borrow_qty'] = round(max_borrow_size/100, 2)
+                    self.status = f"Borrowing 1% of max amount: {self.borrow_info['borrow_qty']} {self.borrow_coin}"
+                else:
+                    try:
+                        self.borrow_info['borrow_qty'] = float(borrow_qty_input)
+
+                        self.status = f"Borrowing {borrow_qty_input} {self.borrow_coin}\n"
+                    except:
+                        self.status = 'Invalid Number entered. Trying again..'
+
+        else:
+            self.status = f"Borrowing max amount: {max_borrow_size} {self.borrow_coin}"
+            self.borrow_info['borrow_qty'] = max_borrow_size
+
+        print(self.status)
         # ----------------------------------------
         # Step 3: TODO (Can copy/paste/modify from open_buy)
         #         Borrow from the exchange in the desired quantity
+        if 'borrow' in self.exchange.has and self.exchange.has['borrow']:  # If the key is present and is True
+            self.borrow_order = self.exchange.borrow(self.borrow_coin, self.borrow_info['borrow_qty'])
+
+            self.status = f"Borrowed {self.borrow_info['borrow_qty']} {self.borrow_coin}"
+            print(self.status)
+
+        else:
+            raise ValueError(f"{self.exchange_id} doesn't have a 'borrow' method")
         # ----------------------------------------
         # Step 4: TODO (Can copy/paste/modify from open_buy)
         #         Sell base pair using the coins borrowed in step 3.
         #          eg. Sell ETH for USDT
+        self.status = f"Fetching {self.borrow_coin} available margin balance..."
+        available_balance = self.exchange.fetch_available_margin_balance(self.borrow_coin)
+        self.status = f"{available_balance} {self.borrow_coin} available for margin trading."
+        print(self.status)
+
+        self.status = f"Selling {available_balance} {self.borrow_coin} for {self.synth_pair_tuple[2]}"
+        print(self.status)
+        current_bid_price = self.exchange.fetch_ticker(self.quote_pair)
+        self.sell_order = self.exchange.place_margin_order('sell', self.quote_pair, available_balance, order_type)
+        self.status = f"Sold {available_balance} {self.borrow_coin} for {self.synth_pair_tuple[2]}"
         # ----------------------------------------
         # Step 5: TODO (Can copy/paste/modify from open_buy)
         #         Buy the base coin of the quote pair using the quote coin of the quote pair.
         #          eg. Buy BTC with USDT
+        self.status = f"Fetching {self.synth_pair_tuple[4]} available margin balance..."
+        available_balance = self.exchange.fetch_available_margin_balance(self.synth_pair_tuple[4])
+        self.status = f"{available_balance} {self.synth_pair_tuple[4]} available for margin trading."
+        print(self.status)
+
+        current_bid_price = self.exchange.fetch_ticker(self.quote_pair)
+        self.buy_order = self.exchange.place_margin_order('buy', self.base_pair, available_balance, order_type)
+        self.status = (f"Opened {order_type} BUY order on {self.base_pair}.\n"
+                       f"Quantity: {available_balance}")
+        print(self.status)
         pass
 
     def close(self, order_type='market'):

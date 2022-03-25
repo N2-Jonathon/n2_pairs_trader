@@ -92,7 +92,7 @@ class kucoin_extended(kucoin):
         params = {
             "currency": currency,
             "type": order_type,
-            "size": size
+            "size": round(size, 2)
         }
         # POST /api/v1/margin/borrow
         response = self.privatePostMarginBorrow(params)
