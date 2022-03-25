@@ -63,7 +63,7 @@
     This is already partially usable. At the very least, you can see it open long or short positions, and now I'm just making it save more metadata which will be used to close each position. Once that works, the telegram bot will just send the contents of either `pm.current_position.status` or `pm.current_position.borrow_info` & `pm.current_position.trade_info`.
 
     - If you want to test this out, then I'd recommend doing so on [KuCoin's sandbox exchange](https://sandbox.kucoin.com/) which works the same as the normal exchange but without real funds. 
-    - Right now the bot is using the sandbox API endpoints, so to try it on the real exchange you'd need to delete lines **38-38** from **core/exchanges/kucoin_extended.py**
+    - Right now the bot is using the sandbox API urls/endpoints, so to try it on the real exchange you'd need to delete lines **34-39** from **core/exchanges/kucoin_extended.py**
 
     ***(March 24th, 2022)***
     ***[16:31 CET | 11:31 EDT]***
