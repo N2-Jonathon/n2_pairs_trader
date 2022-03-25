@@ -39,23 +39,41 @@ plugins:
 
 nav:
   - Readme: 'index.md'
-  - Objectives & Requirements: 'objectives_&_requirements.md'
   - How it works: 
       - 1. Start the Bot: how_it_works/1_start_the_bot.md
       - 2. Initialize Strategy: how_it_works/2_initialize_strategy.md
       - 3. Market Data & Signals: how_it_works/3_signals.md
       - 4. Opening a Position: how_it_works/4_opening_a_position.md
       - 5. Closing a Position: how_it_works/5_closing_a_position.md
-      - 6. Generating Reports: how_it_works/6_generating_reports.md
-      - 7. TODO: how_it_works/7_todo.md 
-  - KuCoin Extended: 'KuCoin_Extended.md'
-  - Creating a New Strategy: 'creating_a_new_strategy.md'
+      - 6. Notifications: how_it_works/6_generating_reports.md
+      - 7. Creating New Strategies: 'how_it_works/7_creating_a_new_strategy.md'
   - CCXT Insights:
       - Overview: 'ccxt_insights/1_overview.md'
       - Exchanges with margin: 'ccxt_insights/2_exchanges_with_margin.md'
       - Exchanges with fetchBorrowRate: 'ccxt_insights/3_exchanges_with_fetchBorrowRate.md'
+  - Source Documentation:
+    - Index: Docstrings/index.md
+    - core/: 
+      - core.exchanges: 'Docstrings/core/core.md'
+      - core.config: 'Docstrings/core/config.md'
+      - core.constants: 'Docstrings/core/constants.md'
+      - core.indicators: 'Docstrings/core/indicators.md'
+      - core.notifier: 'Docstrings/core/notifier.md'
+      - core.position_manager: 'Docstrings/core/position_manager.md'
+      - core.utils: 'Docstrings/core/utils.md'
+    - strategies/: 
+      - strategies.n2_supertrend: 'Docstrings/strategies/n2_supertrend.md'
+      - strategies.strategy_base: 'Docstrings/strategies/strategy_base.md'
+    - user/: 
+      - /user/config-template.ini: 'Docstrings/user/config-template.ini.md'
+      - /user/user-config.ini: 'Docstrings/user/user-config.ini.md'
+    - __main__.py: '__main__.md'
+    - requirements.txt: 'requirements.txt.md'
+    - mkdocs.yml: 'mkdocs.yml.md'
+    - requirements_dev.txt: 'requirements_dev.txt.md'
+
+
   - Further Ideas: further_ideas.md
-  - Questions, Feedback & Notes: notes.md
 
 
 edit_uri: '#docs/'
