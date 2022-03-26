@@ -52,9 +52,9 @@ def run_bot(strategy=N2SuperTrend()):
             """
             pm.current_position.close()
 
-        tick_interval = 60  # This should be adjusted to take API rate limits into account
+        check_signal_interval = 60  # This should be adjusted to take API rate limits into account
         """For now the tick_interval is set here, but it should be set by params or in Config"""
-        time.sleep(tick_interval)
+        time.sleep(check_signal_interval)
         # await asyncio.sleep(tick_interval)
 
 

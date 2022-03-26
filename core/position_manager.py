@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import ccxt
+import pandas as pd
 from pprint import pprint
 
 # from scripts.kucoin import fetch_borrow_rate
@@ -38,8 +39,8 @@ class Position(Config):
 
     trades_info = {
         "open": {
-            "base_pair": {"side": '', "timestamp": '', "fillPrice": ''},
-            "quote_pair": {"side": '', "timestamp": '', "fillPrice": ''},
+            "base_pair": {"side": None, "timestamp": None, "fillPrice": None},
+            "quote_pair": {"side": None, "timestamp": datetime, "fillPrice": None},
         },
         "close": {
             "base_pair": {"side": '', "timestamp": '', "fillPrice": ''},
@@ -61,11 +62,18 @@ class Position(Config):
 
         return borrow_coin
 
-    def __init__(self, order_type, base_pair=None, quote_pair=None, direction=None,
+    def __init__(self, order_type, direction=None, position_id=None,
                  params={}, config_filepath=USER_CONFIG_PATH):
 
         super().__init__(params, config_filepath)
+
+        if position_id is None:
+            self.position_id = ccxt.Exchange.uuid()
+        else:
+            self.position_id = position_id
+
         self.status['msg'] = 'INIT Position'
+        self.status['position_id'] = self.position_id
         self.status['trades_info'] = self.trades_info
 
         self.order_type = order_type
@@ -92,7 +100,7 @@ class Position(Config):
             self.open_short(self.order_type)
 
         self.status['msg'] = 'OPEN'
-        self.open_timestamp = datetime.utcnow()
+        self.open_timestamp = datetime.utcnow().timestamp()
 
     def open_long(self, order_type='market'):
         # Step 1: * Query exchange to fetch max borrow quantity of borrow_coin.
@@ -131,7 +139,7 @@ class Position(Config):
         print(self.status['msg'])
         current_bid_price = self.exchange.fetch_ticker(self.quote_pair)
         self.sell_order = self.exchange.place_margin_order('sell', self.quote_pair, available_balance, order_type)
-        self.trades_info['open']['quote_pair']['timestamp'] = datetime.utcnow()
+        self.trades_info['open']['quote_pair']['timestamp'] = datetime.utcnow().timestamp()
         self.trades_info['open']['quote_pair']['quantity'] = self.exchange.fetch_available_margin_balance(self.synth_pair_tuple[3])
 
         self.status['msg'] = f"Sold {available_balance} {self.borrow_coin} for {self.synth_pair_tuple[4]}"
@@ -147,23 +155,20 @@ class Position(Config):
 
         current_bid_price = self.exchange.fetch_ticker(self.quote_pair)
         self.buy_order = self.exchange.place_margin_order('buy', self.base_pair, available_balance, order_type)
-        self.trades_info['open']['base_pair']['timestamp'] = datetime.utcnow()
+        self.trades_info['open']['base_pair']['timestamp'] = datetime.utcnow().timestamp()
         self.trades_info['open']['base_pair']['quantity'] = self.exchange.fetch_available_margin_balance(self.synth_pair_tuple[1])
 
         self.status['msg'] = (f"Opened {order_type} BUY order on {self.base_pair}.\n"
                               f"Bought {self.synth_pair_tuple[1]} with {available_balance} {self.synth_pair_tuple[2]}")
         print(self.status['msg'])
 
-        if self.debug_mode:
-            print("\n--------------------------------\n"
-                  f"\n[DEBUG] Available Balances: \n{self.exchange.fetch_available_margin_balances()}")
+        self.status['msg'] = f"Opened LONG Position on {self.synth_pair}.\n"
 
-        pass
+        return self.status
 
     def open_short(self, order_type='market'):
         # ----------------------------------------
-        # Step 1: TODO (Can copy/paste/modify from open_buy)
-        #         Query exchange to fetch max borrow quantity of borrow_coin
+        # Step 1: Query exchange to fetch max borrow quantity of borrow_coin
         #         borrow_coin will be base coin of the base_pair
         #          e.g. in ETHUSDT/BTCUSDT it is ETH
 
@@ -180,8 +185,7 @@ class Position(Config):
         self.borrow()
 
         # ----------------------------------------
-        # Step 4: TODO (Can copy/paste/modify from open_buy)
-        #         Sell base pair using the coins borrowed in step 3.
+        # Step 4: Sell base pair using the coins borrowed in step 3.
         #          eg. Sell ETH for USDT
         self.status['msg'] = f"Fetching {self.borrow_coin} available margin balance..."
         available_balance = self.exchange.fetch_available_margin_balance(self.borrow_coin)
@@ -195,6 +199,9 @@ class Position(Config):
         print(self.status['msg'])
         current_bid_price = self.exchange.fetch_ticker(self.quote_pair)
         self.sell_order = self.exchange.place_margin_order('sell', self.quote_pair, available_balance, order_type)
+        self.trades_info['open']['quote_pair']['timestamp'] = datetime.utcnow().timestamp()
+        self.trades_info['open']['quote_pair']['quantity'] = self.exchange.fetch_available_margin_balance(self.synth_pair_tuple[1])
+
         self.status['msg'] = f"Sold {available_balance} {self.borrow_coin} for {self.synth_pair_tuple[2]}"
         # ----------------------------------------
         # Step 5: TODO (Can copy/paste/modify from open_buy)
@@ -311,9 +318,11 @@ class PositionManager(Config):
 
     current_position = None
     history = None
+    status = {}
 
     def __init__(self, params={}, config_filepath=USER_CONFIG_PATH):
         super().__init__(params, config_filepath)
+        position_history = pd.DataFrame  # Will save positions either to database or .csv
 
     def set_current_position(self, position: Position):
         self.current_position = position
@@ -329,15 +338,15 @@ class PositionManager(Config):
         if direction is None:
             raise ValueError('Direction not specified')
         else:
-            DEBUG_direction = direction
-            print(f"Pre-position Available Balances: \n{self.exchange.fetch_available_margin_balances()}")
+            self.status['pre-open_balances'] = self.exchange.fetch_available_margin_balances()
+            self.status['msg'] = f"Pre-open Available Balances: \n{self.status['pre-open_balances']}"
+
             if not self.paper_trade:
                 self.current_position = Position(order_type=order_type,
-                                                 base_pair=self.base_pair,
-                                                 quote_pair=self.quote_pair,
                                                  direction=direction)
 
-            print(f"Post-open Balances: \n{self.exchange.fetch_available_margin_balances()}\n")
+            self.status['post-open_balances'] = self.exchange.fetch_available_margin_balances()
+            self.status['msg'] = f"Post-open Available Balances: \n{self.status['post-open_balances']}"
 
             print(f"POSITION INFO: \n"
                   f"Borrow Info:\n"
@@ -345,7 +354,29 @@ class PositionManager(Config):
                   f"Trades Info:\n"
                   f"{str(self.current_position.trades_info)}\n")
 
-            return 0
+            return self.status
+
+    def close_position(self, position):
+        pid = position.position_id
+        self.status['pre-close_balances'] = self.exchange.fetch_available_margin_balances()
+        self.status['msg'] = f"Pre-close Available Balances: \n{self.status['pre-close_balances']}"
+
+        print(f"{self.status['msg']}\n")
+        if not self.paper_trade:
+            try:
+                position.close()
+                self.status['ok'] = True
+            except:
+                self.status['ok'] = False
+                return self.status
+
+            self.status['post-close_balances'] = self.exchange.fetch_available_margin_balances()
+            self.status['msg'] = f"Post-close Available Balances: \n{self.status['post-close_balances']}"
+            print(f"{self.status['msg']}\n")
+            return position
+        else:
+            self.status['msg'] = "Paper trading not implemented yet"
+            raise NotImplemented(self.status['msg'])
 
 
 

@@ -6,7 +6,7 @@ import core.exchanges.kucoin_extended
 from core.constants import USER_CONFIG_PATH, EXCHANGES, EXTENDED_EXCHANGES
 import core.utils as utils
 from core.exchanges.kucoin_extended import kucoin_extended
-from scripts.load_api_keys import load_api_keys
+from dev_scripts.load_api_keys import load_api_keys
 
 import core.exchanges
 
