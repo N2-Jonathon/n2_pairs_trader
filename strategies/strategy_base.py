@@ -29,6 +29,8 @@ class StrategyBase(Config):
     be called at a regular defined interval.
     """
 
+    status = {}
+
     multi_timeframe_mode: bool
     """
     Multi-timeframe signal rules mean that signals on multiple 
@@ -138,13 +140,6 @@ class StrategyBase(Config):
         The first line: `super().__init__(params, config_filepath)` means
         it runs the __init__ method in Config and inherits its attributes
         from there, then after that, the other attributes are set.
-
-        :param params:
-        :type params:
-        :param config_filepath:
-        :type config_filepath:
-        :return:
-        :rtype:
         """
         super().__init__(params, config_filepath)
 
@@ -152,13 +147,46 @@ class StrategyBase(Config):
         self.current_signal = None
         # self.position_manager = PositionManager()
 
-        self.event_handler = EventHandler('onNewSignal')
-        self.event_handler.link(self.__on_new_signal, 'onNewSignal')
+        self.event_handler = EventHandler('newSignal')
+        self.event_handler.link(self.__on_new_signal, 'newSignal')
 
+    @staticmethod
     def __on_new_signal(self, signal):
-        print(f'onNewSignal Event Triggered!\n'
-              f'Signal is: {signal}')
+        self.status['msg'] = f"StrategyBase.__on_new_signal fired!"
+        if self.debug_mode:
+            print("======================\n"
+                  f"{self.status['msg']}\n"
+                  "======================\n")
 
+    @staticmethod
+    def __on_new_signal_dev(self, signal):
+        self.status['msg'] = f"StrategyBase.__on_new_signal fired!"
+        if self.debug_mode:
+            print("======================\n"
+                  f"{self.status['msg']}\n"
+                  "======================\n")
+
+        if signal.upper() == 'LONG' or signal.upper() == 'SHORT':
+            """If there is a new signal to LONG or SHORT:"""
+
+            self.status['msg'] = (f"New {signal} signal on {self.synth_pair} from {self.strategy}."
+                                  f"Opening new {signal.lower()} position...")
+            print(self.status['msg'])
+
+            self.open(signal=signal,
+                      order_type='market')  # TODO: add support for limit orders
+
+        elif signal.upper() == 'CLOSE':
+            """If there's a signal to CLOSE, close current position"""
+            self.close(self.current_position)
+
+        else:
+            self.status['msg'] = f"invalid signal: {signal}. No actions taken"
+            self.status['ok'] = False
+            print(self.status)
+
+    def emulate_signal(self, signal):
+        self.event_handler.fire('newSignal', signal)
 
 
     def fetch_bars(self, timeframe="1m", limit=50, timeframes=None):
@@ -207,7 +235,7 @@ class StrategyBase(Config):
          
         return df_synth
 
-    async def get_signal(self, timeframe="1m"):
+    async def listen_for_signals(self, timeframe="1m"):
         raise NotImplemented("Error: get_signal method not implemented for StrategyBase.\n"
                              "You can override this method in strategy classes that inherit"
                              "StrategyBase by writing a new method: `def get_signal(self, timeframe):`"
@@ -219,7 +247,7 @@ class StrategyBase(Config):
 
         signals = {}
         for tf in timeframes:
-            signals[tf] = self.get_signal(timeframe=tf)
+            signals[tf] = self.listen_for_signals(timeframe=tf)
 
         return signals
 

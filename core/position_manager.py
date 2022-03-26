@@ -59,7 +59,7 @@ class Position(Config):
             borrow_coin = synth_pair_tuple[1]
 
         else:
-            borrow_coin = ValueError("Invalid position direction. (Must be 'LONG' or 'SHORT')")
+            borrow_coin = ValueError("Invalid position signal. (Must be 'LONG' or 'SHORT')")
 
         return borrow_coin
 
@@ -81,7 +81,7 @@ class Position(Config):
         self.status['order_type'] = self.order_type
 
         self.direction = direction
-        self.status['direction'] = self.direction
+        self.status['signal'] = self.direction
 
         if self.direction == 'LONG':
             self.status['msg'] = (f"Opening LONG Position on {self.synth_pair}\n"
@@ -326,61 +326,50 @@ class PositionManager(Config):
 
         self.strategy = strategy
 
-        self.event_handler = EventHandler('onNewSignal', 'onOpenPosition', 'onClosePosition')
+        self.event_handler = EventHandler('onOpenPosition', 'onClosePosition')
 
-    def __on_new_signal(self, signal):
-        if signal.upper() == 'LONG' or signal.upper() == 'SHORT':
-            """If there is a new signal to LONG or SHORT:"""
+        self.event_handler.link(self.__on_open_position, 'onOpenPosition')
+        self.event_handler.link(self.__on_close_position, 'onClosePosition')
 
-            self.status['msg'] = (f"New {signal} signal on {self.synth_pair} from {self.strategy}."
-                                  f"Opening new {signal.lower()} position...")
-            print(self.status['msg'])
+        strategy.event_handler.link(self.open, 'newSignal')
+        strategy.event_handler.link(self.close, 'newSignal')
 
-            self.open(direction=signal,
-                      order_type='market')  # TODO: add support for limit orders
-
-        elif signal.upper() == 'CLOSE':
-            """If there's a signal to CLOSE, close current position"""
-            self.close(self.current_position)
-
-        else:
-            self.status['msg'] = f"invalid signal: {signal}. No actions taken"
-            self.status['ok'] = False
-            print(self.status)
-
+    # This callback will be called when onOpenPosition event happens
     def __on_open_position(self, position):
-        pprint(position.status)
+        print("======================\n"
+              "PositionManager.__on_open_position fired!\n")
+        print(f"Position Opened:\n"
+              f"{position}\n"
+              "======================\n")
 
-        raise NotImplemented("This is where the notifier will send an alert about the open position & its details")
-
+    # This callback will be called when onClosePosition event happens
     def __on_close_position(self, position):
-        pprint(position.status)
-
-        raise NotImplemented("This is where the notifier will send a report about the end PnL & other details")
-
-    def set_current_position(self, position: Position):
-        self.current_position = position
-
-    def get_current_position(self):
-        return self.current_position
+        print("======================\n"
+              "PositionManager.__on_close_position fired!\n")
+        print(f"Position Closed:\n"
+              f"{position}"
+              "======================\n")
 
     def save_closed_position(self):
         pass
 
-    def open(self, direction=None, order_type='market'):
+    def open(self, signal=None, order_type='market'):
+        self.status['msg'] = ("PositionManager.open() called")
+        if self.debug_mode:
+            print("======================\n"
+                  f"{self.status['msg']}")
 
-        if direction is None:
-            raise ValueError('Direction not specified')
-        else:
+        if signal != 'CLOSE':
             if not self.paper_trade:
                 self.status['pre-open_balances'] = self.exchange.fetch_available_margin_balances()
                 self.status['msg'] = f"Pre-open Available Balances: \n{self.status['pre-open_balances']}"
 
                 self.current_position = Position(order_type=order_type,
-                                                 direction=direction)
+                                                 direction=signal)
 
                 self.status['post-open_balances'] = self.exchange.fetch_available_margin_balances()
                 self.status['msg'] = f"Post-open Available Balances: \n{self.status['post-open_balances']}"
+                self.status['current_position'] = self.current_position
 
             print(f"POSITION INFO: \n"
                   f"Borrow Info:\n"
@@ -388,9 +377,19 @@ class PositionManager(Config):
                   f"Trades Info:\n"
                   f"{str(self.current_position.trades_info)}\n")
 
+            self.event_handler.fire('onOpenPosition', self.current_position)
             return self.status
+        else:
+            self.status['msg'] = "signal was CLOSE, so not opening"
+            if self.debug_mode:
+                print(f"{self.status['msg']}\n"
+                      "======================\n")
 
     def close(self, position):
+        self.status['msg'] = "PositionManager.close() called."
+        if self.debug_mode:
+            print("======================\n"
+                  f"{self.status['msg']}\n")
 
         self.status['pre-close_balances'] = self.exchange.fetch_available_margin_balances()
         self.status['msg'] = f"Pre-close Available Balances: \n{self.status['pre-close_balances']}"
@@ -401,31 +400,3 @@ class PositionManager(Config):
         self.status['msg'] = f"Pre-close Available Balances: \n{self.status['post-close_balances']}"
 
         return self.status
-
-    def close_position(self, position):
-        pid = position.position_id
-        self.status['pre-close_balances'] = self.exchange.fetch_available_margin_balances()
-        self.status['msg'] = f"Pre-close Available Balances: \n{self.status['pre-close_balances']}"
-
-        print(f"{self.status['msg']}\n")
-        if not self.paper_trade:
-            try:
-                position.close()
-                self.status['ok'] = True
-            except:
-                self.status['ok'] = False
-                return self.status
-
-            self.status['post-close_balances'] = self.exchange.fetch_available_margin_balances()
-            self.status['msg'] = f"Post-close Available Balances: \n{self.status['post-close_balances']}"
-            print(f"{self.status['msg']}\n")
-            return position
-        else:
-            self.status['msg'] = "Paper trading not implemented yet"
-            raise NotImplemented(self.status['msg'])
-
-
-
-
-
-

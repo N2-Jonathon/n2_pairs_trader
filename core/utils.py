@@ -50,7 +50,7 @@ def get_borrow_coin(synth_pair_tuple, position_direction):
         borrow_coin = synth_pair_tuple[1]
 
     else:
-        borrow_coin = ValueError("Invalid position direction. (Must be 'LONG' or 'SHORT')")
+        borrow_coin = ValueError("Invalid position signal. (Must be 'LONG' or 'SHORT')")
 
     return borrow_coin
 

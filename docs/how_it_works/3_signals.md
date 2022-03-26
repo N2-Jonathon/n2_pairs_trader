@@ -21,13 +21,12 @@ def run_bot(strategy=N2SuperTrend()):
                 signal = override_signal
         else:
             """If not in debug mode, call the get_signal method of the strategy"""
-            signal = strategy.get_signal()
+            signal = strategy.listen_for_signals()
 
         ...
 
 
 if __name__ == '__main__':
-
     run_bot()  # Can pass a Strategy to override default eg. main(strategy=YourStrategy)
 ```
 
@@ -53,14 +52,14 @@ def run_bot(strategy=N2SuperTrend()):
 
     while running:
         ...
-        signal = strategy.get_signal()
+        signal = strategy.listen_for_signals()
 
         if signal is not None and signal != 'CLOSE':
             """If there is a new signal to LONG or SHORT:"""
             if pm.get_current_position() is None:
                 """
                 If there's no current position open, then open one
-                in the direction of the signal and set it as pm's
+                in the signal of the signal and set it as pm's
                 current_position
                 """
                 position = Position(strategy.base_pair, strategy.quote_pair,
@@ -79,10 +78,9 @@ def run_bot(strategy=N2SuperTrend()):
             # TODO: Here `core.notifier` would be used again to report
             #   the closing of the trade and send via email/telegram
 
-
         tick_interval = 60  # This should be adjusted to take API rate limits into account
         """For now the tick_interval is set here, but it should be set by params config file by Config.__init__()"""
-    
+
         time.sleep(tick_interval)
         # await asyncio.sleep(tick_interval)
 ```

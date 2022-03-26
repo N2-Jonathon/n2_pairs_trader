@@ -51,7 +51,7 @@ class PositionManager:
     # Now let's define the public methods of the PositionManager to be used outside the class
     def open(self, direction):
         position = {
-            "direction": direction,
+            "signal": direction,
             "open_timestamp": datetime.utcnow().timestamp(),
             "status": "open"
         }
