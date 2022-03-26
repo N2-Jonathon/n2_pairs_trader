@@ -1,4 +1,5 @@
 from datetime import datetime
+from eventhandler import EventHandler
 
 import ccxt
 import pandas as pd
@@ -317,12 +318,45 @@ class Position(Config):
 class PositionManager(Config):
 
     current_position = None
-    history = None
+    positions = []
     status = {}
 
-    def __init__(self, params={}, config_filepath=USER_CONFIG_PATH):
+    def __init__(self, strategy, params={}, config_filepath=USER_CONFIG_PATH):
         super().__init__(params, config_filepath)
-        position_history = pd.DataFrame  # Will save positions either to database or .csv
+
+        self.strategy = strategy
+
+        self.event_handler = EventHandler('onNewSignal', 'onOpenPosition', 'onClosePosition')
+
+    def __on_new_signal(self, signal):
+        if signal.upper() == 'LONG' or signal.upper() == 'SHORT':
+            """If there is a new signal to LONG or SHORT:"""
+
+            self.status['msg'] = (f"New {signal} signal on {self.synth_pair} from {self.strategy}."
+                                  f"Opening new {signal.lower()} position...")
+            print(self.status['msg'])
+
+            self.open(direction=signal,
+                      order_type='market')  # TODO: add support for limit orders
+
+        elif signal.upper() == 'CLOSE':
+            """If there's a signal to CLOSE, close current position"""
+            self.close(self.current_position)
+
+        else:
+            self.status['msg'] = f"invalid signal: {signal}. No actions taken"
+            self.status['ok'] = False
+            print(self.status)
+
+    def __on_open_position(self, position):
+        pprint(position.status)
+
+        raise NotImplemented("This is where the notifier will send an alert about the open position & its details")
+
+    def __on_close_position(self, position):
+        pprint(position.status)
+
+        raise NotImplemented("This is where the notifier will send a report about the end PnL & other details")
 
     def set_current_position(self, position: Position):
         self.current_position = position
@@ -338,15 +372,15 @@ class PositionManager(Config):
         if direction is None:
             raise ValueError('Direction not specified')
         else:
-            self.status['pre-open_balances'] = self.exchange.fetch_available_margin_balances()
-            self.status['msg'] = f"Pre-open Available Balances: \n{self.status['pre-open_balances']}"
-
             if not self.paper_trade:
+                self.status['pre-open_balances'] = self.exchange.fetch_available_margin_balances()
+                self.status['msg'] = f"Pre-open Available Balances: \n{self.status['pre-open_balances']}"
+
                 self.current_position = Position(order_type=order_type,
                                                  direction=direction)
 
-            self.status['post-open_balances'] = self.exchange.fetch_available_margin_balances()
-            self.status['msg'] = f"Post-open Available Balances: \n{self.status['post-open_balances']}"
+                self.status['post-open_balances'] = self.exchange.fetch_available_margin_balances()
+                self.status['msg'] = f"Post-open Available Balances: \n{self.status['post-open_balances']}"
 
             print(f"POSITION INFO: \n"
                   f"Borrow Info:\n"
@@ -355,6 +389,18 @@ class PositionManager(Config):
                   f"{str(self.current_position.trades_info)}\n")
 
             return self.status
+
+    def close(self, position):
+
+        self.status['pre-close_balances'] = self.exchange.fetch_available_margin_balances()
+        self.status['msg'] = f"Pre-close Available Balances: \n{self.status['pre-close_balances']}"
+
+        position.close()
+
+        self.status['post-close_balances'] = self.exchange.fetch_available_margin_balances()
+        self.status['msg'] = f"Pre-close Available Balances: \n{self.status['post-close_balances']}"
+
+        return self.status
 
     def close_position(self, position):
         pid = position.position_id

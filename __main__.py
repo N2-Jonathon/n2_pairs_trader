@@ -1,5 +1,6 @@
 import os
 import time
+import asyncio
 
 
 from core.position_manager import Position, PositionManager
@@ -11,29 +12,30 @@ warnings.filterwarnings('ignore')
 """
 
 
-def run_bot(strategy=N2SuperTrend()):
+async def run_bot(strategy=N2SuperTrend()):
     running = True
 
-    pm: PositionManager = strategy.position_manager
+    pm = PositionManager(strategy)
 
     while running:
 
-        if strategy.debug_mode:
+        if pm.debug_mode:
             """If in debug mode, prompt for signal override"""
             DEBUG_override_signal = input("[DEBUG]Enter a signal to emulate (LONG|[SHORT]|CLOSE):").upper()
             if DEBUG_override_signal == "L":
-                signal = 'LONG'  # Default if you just press enter at the prompt
+                strategy.current_signal = 'LONG'  # Default if you just press enter at the prompt
             elif DEBUG_override_signal == "" or DEBUG_override_signal == "S":
-                signal = 'SHORT'
+                strategy.current_signal = 'SHORT'
             elif DEBUG_override_signal.upper() == 'SHORT' or DEBUG_override_signal == 'LONG':
-                signal = DEBUG_override_signal
+                strategy.current_signal = DEBUG_override_signal
             elif DEBUG_override_signal == 'CLOSE' or DEBUG_override_signal == 'C':
-                signal = 'CLOSE'
+                strategy.current_signal = 'CLOSE'
         else:
             """If not in debug mode, call the get_signal method of the strategy"""
-            signal = strategy.get_signal()
+            await strategy.get_signal()
 
-        if signal is not None and signal != 'CLOSE':
+        '''
+        if strategy.current_signal is not None and strategy.current_signal != 'CLOSE':
             """If there is a new signal to LONG or SHORT:"""
             if pm.current_position is None:
                 """
@@ -41,12 +43,12 @@ def run_bot(strategy=N2SuperTrend()):
                 in the direction of the signal and set it as pm's
                 current_position
                 """
-                position = pm.open(direction=signal,
+                position = pm.open(direction=strategy.current_signal,
                                     order_type='limit')
 
                 pm.set_current_position(position)
 
-        elif signal == 'CLOSE':
+        elif strategy.current_signal == 'CLOSE':
             """
             If the signal is 'CLOSE', then close the pm.current_position
             """
@@ -56,6 +58,7 @@ def run_bot(strategy=N2SuperTrend()):
         """For now the tick_interval is set here, but it should be set by params or in Config"""
         time.sleep(check_signal_interval)
         # await asyncio.sleep(tick_interval)
+        '''
 
 
 if __name__ == '__main__':
@@ -74,7 +77,7 @@ if __name__ == '__main__':
       ₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿   ₿₿  ₿₿₿₿₿₿  ₿₿₿          Jonathon Quick
           """)
 
-    run_bot()  # Can pass a Strategy to override default eg. main(strategy=YourStrategy)
+    asyncio.run(run_bot())  # Can pass a Strategy to override default eg. main(strategy=YourStrategy)
 
     # Later I plan to take advantage of async to run multiple strategies
     # asyncio.run(run_bot())

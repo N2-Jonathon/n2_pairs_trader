@@ -5,7 +5,9 @@ from datetime import datetime
 import pandas as pd
 from pandas import DataFrame
 
-sys.path.append(os.getcwd())
+from eventhandler import EventHandler
+
+# sys.path.append(os.getcwd())
 
 from core.config import Config
 from core.position_manager import PositionManager
@@ -26,25 +28,6 @@ class StrategyBase(Config):
     implemented in the `get_signal()` method which should then
     be called at a regular defined interval.
     """
-    __dict__ = {
-        "cfg_file_key": str,
-        "strategy_name": str,
-        "prompt_for_pairs": bool,
-        "base_pair": str,
-        "quote_pair": str,
-        "synth_pair": str,  # Not sure if this is set by __init__ yet
-        "stake_currency": str,
-        "paper_trade": bool,
-
-        "position_manager": PositionManager,
-
-        "previous_tick": datetime,
-        "ohlcv_data": dict,
-        "signal": str,
-
-        "multi_timeframe_mode": bool,
-        "multi_timeframe_signal_rules": dict,
-    }
 
     multi_timeframe_mode: bool
     """
@@ -149,7 +132,6 @@ class StrategyBase(Config):
             }
         },
     }
-    position_manager: PositionManager = None
 
     def __init__(self, params={}, config_filepath=USER_CONFIG_PATH):
         """
@@ -168,7 +150,16 @@ class StrategyBase(Config):
 
         self.name = 'StrategyBase'
         self.current_signal = None
-        self.position_manager = PositionManager()
+        # self.position_manager = PositionManager()
+
+        self.event_handler = EventHandler('onNewSignal')
+        self.event_handler.link(self.__on_new_signal, 'onNewSignal')
+
+    def __on_new_signal(self, signal):
+        print(f'onNewSignal Event Triggered!\n'
+              f'Signal is: {signal}')
+
+
 
     def fetch_bars(self, timeframe="1m", limit=50, timeframes=None):
         """
@@ -216,7 +207,7 @@ class StrategyBase(Config):
          
         return df_synth
 
-    def get_signal(self, timeframe="1m"):
+    async def get_signal(self, timeframe="1m"):
         raise NotImplemented("Error: get_signal method not implemented for StrategyBase.\n"
                              "You can override this method in strategy classes that inherit"
                              "StrategyBase by writing a new method: `def get_signal(self, timeframe):`"
@@ -231,3 +222,7 @@ class StrategyBase(Config):
             signals[tf] = self.get_signal(timeframe=tf)
 
         return signals
+
+    def tick(self):
+
+        pass
