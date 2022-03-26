@@ -65,7 +65,7 @@
     
     - Implementing this will also make notifications much simpler.
     - I've worked briefly with event handling in C# but I have to admit this is making my head spin. I think I have a handle on it (no pun intended), and I've got a jupyter notebook in **dev_scripts/dev_EventHandling.ipynb** where I'm figuring out how to get it to work properly. 
-    - Once it works in the notebook, I'll do the same in the real classes and at that point the MVP will be finished and ready to submit. 
+    - Once it works in the notebook, I'll do the same in the real classes and add the notifications. At that point the MVP will be finished and ready to submit. 
 
     ***(March 25th, 2022)***
     ***[22:34 CET | 19:31 EDT]***

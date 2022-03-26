@@ -51,6 +51,26 @@ nav:
       - Overview: 'ccxt_insights/1_overview.md'
       - Exchanges with margin: 'ccxt_insights/2_exchanges_with_margin.md'
       - Exchanges with fetchBorrowRate: 'ccxt_insights/3_exchanges_with_fetchBorrowRate.md'
+  - Source Reference:
+    - Index: Docstrings/index.md
+    - core/: 
+      - core.exchanges: 'Docstrings/core/core.md'
+      - core.config: 'Docstrings/core/config.md'
+      - core.constants: 'Docstrings/core/constants.md'
+      - core.indicators: 'Docstrings/core/indicators.md'
+      - core.notifier: 'Docstrings/core/notifier.md'
+      - core.position_manager: 'Docstrings/core/position_manager.md'
+      - core.utils: 'Docstrings/core/utils.md'
+    - strategies/: 
+      - strategies.n2_supertrend: 'Docstrings/strategies/n2_supertrend.md'
+      - strategies.strategy_base: 'Docstrings/strategies/strategy_base.md'
+    - user/: 
+      - /user/config-template.ini: 'Docstrings/user/config-template.ini.md'
+      - /user/user-config.ini: 'Docstrings/user/user-config.ini.md'
+    - __main__.py: '__main__.md'
+    - requirements.txt: 'requirements.txt.md'
+    - mkdocs.yml: 'mkdocs.yml.md'
+    - requirements_dev.txt: 'requirements_dev.txt.md'
 
 
   - Further Ideas: further_ideas.md
