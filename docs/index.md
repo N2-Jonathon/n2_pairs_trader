@@ -44,6 +44,7 @@
         - [ ] ***[4.3]*** **close:**
             - [ ] Re-pay loan
             - [ ] Sell assets back to stake currency USDT 
+            * This will only work properly when event handling is implemented, and when it is, it'll also be very simple to add the notifications
 
     ---
 
@@ -57,6 +58,14 @@
     ---
 
 !!! note
+    ***(March 26th, 2022)***
+    ***[21:30 CET | 18:30 EDT]***
+
+    To make managing positions dynamic, it needs to have a 'newSignal' event which, when fired will call PositionManager.open(), or PositionManager.close(), so that a signal can come at any time.
+    - Implementing this will also make notifications much simpler.
+    - I've worked briefly with event handling in C# but I have to admit this is making my head spin. I think I have a handle on it (no pun intended), and I've got a jupyter notebook in **dev_scripts/dev_EventHandling.ipynb** where I'm figuring out how to get it to work properly. 
+    - Once it works in the notebook, I'll do the same in the real classes and at that point the MVP will be finished and ready to submit. 
+
     ***(March 25th, 2022)***
     ***[22:34 CET | 19:31 EDT]***
 
