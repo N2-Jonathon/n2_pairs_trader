@@ -1,15 +1,5 @@
-import os
-import time
-import asyncio
-
-
 from core.position_manager import Position, PositionManager
 from strategies.n2_supertrend import N2SuperTrend
-
-"""
-pd.set_option('display.max_rows', None)
-warnings.filterwarnings('ignore')
-"""
 
 
 def run_bot(strategy=N2SuperTrend()):
@@ -19,11 +9,11 @@ def run_bot(strategy=N2SuperTrend()):
 
     while running:
 
-        if pm.debug_mode:
+        if strategy.debug_mode:
             """If in debug mode, prompt for signal override"""
             strategy.prompt_to_emulate_signal()
         else:
-            """If not in debug mode, call the get_signal method of the strategy"""
+            """If not in debug mode, have the strategy listen for signals"""
             strategy.listen_for_signals()
 
 
@@ -44,8 +34,3 @@ if __name__ == '__main__':
           """)
 
     run_bot()  # Can pass a Strategy to override default eg. main(strategy=YourStrategy)
-
-    # Later I plan to take advantage of async to run multiple strategies
-    # asyncio.run(run_bot())
-    # loop = asyncio.get_event_loop()
-    # loop.run_until_complete(run_bot())

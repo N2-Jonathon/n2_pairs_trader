@@ -198,8 +198,8 @@ class Position(Config):
                        f"Opened {order_type} SELL order on {self.base_pair}.\n"
                        f"Quantity: {available_balance}")
         print(self.status['msg'])
-        current_bid_price = self.exchange.fetch_ticker(self.quote_pair)
-        self.sell_order = self.exchange.place_margin_order('sell', self.quote_pair, available_balance, order_type)
+        current_bid_price = self.exchange.fetch_ticker(self.base_pair)
+        self.sell_order = self.exchange.place_margin_order('sell', self.base_pair, available_balance, order_type)
         self.trades_info['open']['quote_pair']['timestamp'] = datetime.utcnow().timestamp()
         self.trades_info['open']['quote_pair']['quantity'] = self.exchange.fetch_available_margin_balance(self.synth_pair_tuple[1])
 
@@ -272,15 +272,15 @@ class Position(Config):
 
             while self.borrow_info['borrow_qty'] is None:
                 borrow_qty_input = input(  # Will change this to max amount, but it's at 1% for testing
-                    f"\nTo borrow 1% of the max amount ({round(max_borrow_size / 100, 4)} {self.borrow_coin}), press enter.\n"
+                    f"\nTo borrow 10% of the max amount ({round(max_borrow_size / 10, 4)} {self.borrow_coin}), press enter.\n"
                     "Otherwise, type an amount:\n")
                 if borrow_qty_input == "":
-                    self.borrow_info['borrow_qty'] = round(max_borrow_size / 100, 4)
+                    self.borrow_info['borrow_qty'] = round(max_borrow_size / 10, 4)
                     self.status[
-                        'msg'] = f"Borrowing 1% of max amount: {self.borrow_info['borrow_qty']} {self.borrow_coin}"
+                        'msg'] = f"Borrowing 10% of max amount: {self.borrow_info['borrow_qty']} {self.borrow_coin}"
                 else:
                     try:
-                        self.borrow_info['borrow_qty'] = float(borrow_qty_input)
+                        self.borrow_info['borrow_qty'] = round(float(borrow_qty_input), 4)
 
                         self.status['msg'] = f"Borrowing {borrow_qty_input} {self.borrow_coin}\n"
                         self.status['ok'] = True
@@ -336,19 +336,19 @@ class PositionManager(Config):
 
     # This callback will be called when onOpenPosition event happens
     def __on_open_position(self, position):
-        print("======================\n"
+        print("=======[DEBUG]==========\n"
               "PositionManager.__on_open_position fired!\n")
         print(f"Position Opened:\n"
               f"{position}\n"
-              "======================\n")
+              "========================\n")
 
     # This callback will be called when onClosePosition event happens
     def __on_close_position(self, position):
-        print("======================\n"
+        print("=======[DEBUG]==========\n"
               "PositionManager.__on_close_position fired!\n")
         print(f"Position Closed:\n"
               f"{position}"
-              "======================\n")
+              "========================\n")
 
     def save_closed_position(self):
         pass
@@ -356,7 +356,7 @@ class PositionManager(Config):
     def open(self, signal=None, order_type='market'):
         self.status['msg'] = ("PositionManager.open() called")
         if self.debug_mode:
-            print("======================\n"
+            print("=======[DEBUG]==========\n"
                   f"{self.status['msg']}")
 
         if signal != 'CLOSE':
@@ -383,12 +383,12 @@ class PositionManager(Config):
             self.status['msg'] = "signal was CLOSE, so not opening"
             if self.debug_mode:
                 print(f"{self.status['msg']}\n"
-                      "======================\n")
+                      "========================\n")
 
     def close(self, position):
         self.status['msg'] = "PositionManager.close() called."
         if self.debug_mode:
-            print("======================\n"
+            print("=======[DEBUG]==========\n"
                   f"{self.status['msg']}\n")
 
         self.status['pre-close_balances'] = self.exchange.fetch_available_margin_balances()

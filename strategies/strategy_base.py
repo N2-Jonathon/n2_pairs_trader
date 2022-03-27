@@ -150,21 +150,22 @@ class StrategyBase(Config):
         self.event_handler = EventHandler('newSignal')
         self.event_handler.link(self.__on_new_signal, 'newSignal')
 
-    @staticmethod
     def __on_new_signal(self, signal):
         self.status['msg'] = f"StrategyBase.__on_new_signal fired!"
+        self.status['signal'] = signal
         if self.debug_mode:
-            print("======================\n"
+            print("=======[DEBUG]==========\n"
                   f"{self.status['msg']}\n"
-                  "======================\n")
+                  f"{self.status['signal']}\n"
+                  "=======================\n")
 
     @staticmethod
     def __on_new_signal_dev(self, signal):
         self.status['msg'] = f"StrategyBase.__on_new_signal fired!"
         if self.debug_mode:
-            print("======================\n"
+            print("=======[DEBUG]==========\n"
                   f"{self.status['msg']}\n"
-                  "======================\n")
+                  "=======================\n")
 
         if signal.upper() == 'LONG' or signal.upper() == 'SHORT':
             """If there is a new signal to LONG or SHORT:"""
@@ -245,22 +246,11 @@ class StrategyBase(Config):
          
         return df_synth
 
-    async def listen_for_signals(self, timeframe="1m"):
-        raise NotImplemented("Error: get_signal method not implemented for StrategyBase.\n"
+    def listen_for_signals(self, timeframe="1m"):
+        raise NotImplemented("Error: listen_for_signals method not implemented for StrategyBase.\n"
                              "You can override this method in strategy classes that inherit"
-                             "StrategyBase by writing a new method: `def get_signal(self, timeframe):`"
+                             "StrategyBase by writing a new method: `def listen_for_signals(self, timeframe):`"
                              "then putting your strategy's logic in that method.")
 
-    def get_signals(self, timeframes={"1m", "5m", "15m"}):
-        if timeframes is None or len(timeframes) == 0:
-            return ValueError("No timeframes were given")
-
-        signals = {}
-        for tf in timeframes:
-            signals[tf] = self.listen_for_signals(timeframe=tf)
-
-        return signals
-
     def tick(self):
-
         pass
