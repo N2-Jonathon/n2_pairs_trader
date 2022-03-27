@@ -201,3 +201,26 @@ class kucoin_extended(kucoin):
         response = self.privatePostMarginOrder(params)
 
         return response
+
+    def fetch_outstanding_loans(self):
+        response = self.privateGetMarginBorrowOutstanding()
+
+        items = response['data']['items']
+        return items
+
+    def repay_all_loans(self, sequence='HIGHEST_RATE_FIRST'):
+
+        outstanding_loans = self.fetch_outstanding_loans()
+
+        for loan in outstanding_loans:
+            currency = loan['currency']
+            liability = loan['liability']
+
+            params = {
+                "currency": currency,
+                "sequence": sequence,
+                "size": liability
+            }
+            response = self.privatePostMarginRepayAll(params)
+
+        return self.fetch_outstanding_loans()

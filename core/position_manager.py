@@ -151,7 +151,7 @@ class Position(Config):
 
         self.status['msg'] = f"Fetching {self.synth_pair_tuple[2]} available margin balance..."
         available_balance = self.exchange.fetch_available_margin_balance(self.synth_pair_tuple[2])
-        self.status['msg'] = f"{available_balance} {self.synth_pair_tuple[4]} available for margin trading."
+        self.status['msg'] = f"{available_balance} {self.synth_pair_tuple[2]} available for margin trading."
         print(self.status['msg'])
 
         current_bid_price = self.exchange.fetch_ticker(self.quote_pair)
@@ -215,7 +215,7 @@ class Position(Config):
               f"{self.status['msg']}")
 
         current_bid_price = self.exchange.fetch_ticker(self.quote_pair)
-        self.buy_order = self.exchange.place_margin_order('buy', self.base_pair, available_balance, order_type)
+        self.buy_order = self.exchange.place_margin_order('buy', self.quote_pair, available_balance, order_type)
         self.status['msg'] = (f"Selling {available_balance} {self.borrow_coin} for {self.synth_pair_tuple[2]}\n"
                        f"Opened {order_type} BUY order on {self.base_pair}.\n"
                        f"Quantity: {available_balance}")
@@ -229,12 +229,16 @@ class Position(Config):
 
     def close(self, order_type='market'):
         print(f'Closing {self.direction} Position on {self.synth_pair}...\n'
-              f'Order Type: {order_type}'
+              f'Order Type: {order_type}\n'
               f'TODO: Implement logic for def close() in position_manager.py')
 
         return self, 0
 
     def borrow(self):
+        if self.debug_mode:
+            self.status['msg'] = "[DEBUG] Repaying all current liabilities before proceeding..."
+            self.exchange.repay_all_loans()
+
         self.status['msg'] = f"Checking which methods {self.exchange_name} has for margin...\n"
         if self.exchange.has['fetchBorrowRate']:
             self.status['msg'] = f"{self.exchange_name} has fetchBorrowRate"
@@ -355,6 +359,9 @@ class PositionManager(Config):
 
     def open(self, signal=None, order_type='market'):
         self.status['msg'] = ("PositionManager.open() called")
+        if signal is None:
+            raise ValueError("Can't open a position without a signal")
+
         if self.debug_mode:
             print("=======[DEBUG]==========\n"
                   f"{self.status['msg']}")
@@ -394,7 +401,17 @@ class PositionManager(Config):
         self.status['pre-close_balances'] = self.exchange.fetch_available_margin_balances()
         self.status['msg'] = f"Pre-close Available Balances: \n{self.status['pre-close_balances']}"
 
-        position.close()
+        if type(position) == str and position != 'CLOSE':
+            self.status['msg'] = "signal was not CLOSE, so not closing"
+            if self.debug_mode:
+                print(f"{self.status['msg']}\n"
+                      "=======================\n")
+            return
+        elif type(position) == Position:
+            position.close()
+        elif position == 'CLOSE':
+            position = self.current_position
+            position.close()
 
         self.status['post-close_balances'] = self.exchange.fetch_available_margin_balances()
         self.status['msg'] = f"Pre-close Available Balances: \n{self.status['post-close_balances']}"
