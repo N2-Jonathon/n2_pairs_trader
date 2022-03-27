@@ -153,9 +153,6 @@ class kucoin_extended(kucoin):
 
         return available_balances
 
-
-        pass
-
     def fetch_transferable_balance(self, currency, account):
         accounts = ['MAIN', 'TRADE', 'MARGIN']
         if account.upper() not in accounts:
@@ -208,6 +205,25 @@ class kucoin_extended(kucoin):
         items = response['data']['items']
         return items
 
+    def get_borrow_order(self, order_id):
+        params = {
+            "orderId": order_id
+        }
+        response = self.privateGetMarginBorrow(params)
+
+        order = response
+        return order
+
+    def fetch_outstanding_loan(self, currency):
+        params = {
+            "currency": currency
+        }
+        response = self.privateGetMarginBorrowOutstanding(params)
+        info = response['data']['items']
+
+    def repay_loan(self, currency, trade):
+        pass
+
     def repay_all_loans(self, sequence='HIGHEST_RATE_FIRST'):
 
         outstanding_loans = self.fetch_outstanding_loans()
@@ -224,3 +240,16 @@ class kucoin_extended(kucoin):
             response = self.privatePostMarginRepayAll(params)
 
         return self.fetch_outstanding_loans()
+
+    def convert_all_funds_to_one_currency(self, stake_currency):
+        balances = self.fetch_available_margin_balances()
+        currencies = list(balances.keys())
+
+        for currency in currencies:
+            if currency != stake_currency:
+                symbol = f"{currency}-{stake_currency}"
+                size = balances[currency]
+                self.place_margin_order('sell', symbol, size)
+
+        new_balances = self.fetch_available_margin_balances()
+        return new_balances

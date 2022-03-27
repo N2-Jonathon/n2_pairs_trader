@@ -50,7 +50,7 @@ nav:
   - CCXT Insights:
       - Overview: 'ccxt_insights/1_overview.md'
       - Exchanges with margin: 'ccxt_insights/2_exchanges_with_margin.md'
-      - Exchanges with fetchBorrowRate: 'ccxt_insights/3_exchanges_with_fetchBorrowRate.md'
+      - Exchanges with fetchBorrowRate: 'ccxt_insights/3_exchanges_with_fetchBorrowRate.md' 
 
 
   - Further Ideas: further_ideas.md

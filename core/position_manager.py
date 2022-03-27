@@ -228,9 +228,20 @@ class Position(Config):
         pass
 
     def close(self, order_type='market'):
-        print(f'Closing {self.direction} Position on {self.synth_pair}...\n'
-              f'Order Type: {order_type}\n'
-              f'TODO: Implement logic for def close() in position_manager.py')
+        self.status['msg'] = f"Closing {self.direction} Position on {self.synth_pair}"
+        print(f"{self.status['msg']}\n")
+        # 1. Repay borrowed funds
+        # DEBUG_outstanding_loan = self.exchange.fetch_outstanding_loan(self.borrow_coin)
+        # self.borrow_info['repay_qty'] = self.exchange.get_borrow_order(self.borrow_info['orderId'])
+        self.status['msg'] = (f"Repaying borrowed {self.borrow_coin}")
+        print(f"{self.status['msg']}\n")
+        # self.exchange.repay_loan(self.borrow_info['orderId'])
+        self.exchange.repay_all_loans()
+
+        # 2. Convert funds back to stake currency
+        self.status['msg'] = f"Converting funds back to {self.stake_currency}"
+        print(f"{self.status['msg']}\n")
+        self.exchange.convert_all_funds_to_one_currency(self.stake_currency)
 
         return self, 0
 
@@ -305,7 +316,8 @@ class Position(Config):
         if 'borrow' in self.exchange.has and self.exchange.has['borrow']:  # If the key is present and is True
             self.borrow_order = self.exchange.borrow(self.borrow_coin, self.borrow_info['borrow_qty'])
             self.borrow_info['orderId'] = self.borrow_order['data']['orderId']
-            self.borrow_info['borrow_timestamp_utc'] = datetime.utcnow()
+            self.borrow_info['borrow_timestamp_utc'] = datetime.utcnow().timestamp()
+            self.borrow_info['order'] = self.borrow_order
 
             self.status['borrow_info'] = self.borrow_info
             self.status['msg'] = f"Borrowed {self.borrow_info['borrow_qty']} {self.borrow_coin}\n"
@@ -322,7 +334,7 @@ class Position(Config):
 class PositionManager(Config):
 
     current_position = None
-    positions = []
+    past_positions = []
     status = {}
 
     def __init__(self, strategy, params={}, config_filepath=USER_CONFIG_PATH):
@@ -351,7 +363,7 @@ class PositionManager(Config):
         print("=======[DEBUG]==========\n"
               "PositionManager.__on_close_position fired!\n")
         print(f"Position Closed:\n"
-              f"{position}"
+              f"{position}\n"
               "========================\n")
 
     def save_closed_position(self):
@@ -416,4 +428,7 @@ class PositionManager(Config):
         self.status['post-close_balances'] = self.exchange.fetch_available_margin_balances()
         self.status['msg'] = f"Pre-close Available Balances: \n{self.status['post-close_balances']}"
 
+        self.event_handler.fire('onClosePosition', self.current_position)
+        self.past_positions.append(self.current_position)
+        self.current_position = None
         return self.status

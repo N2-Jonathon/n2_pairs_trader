@@ -41,9 +41,9 @@
             - [x] Copy & modify steps from open_long (refactor this later)
             - **borrow_coin** will be the base coin of the base pair
                 - e.g. in **ETH**USDT/BTCUSDT it is **ETH**
-        - [ ] ***[4.3]*** **close:**
-            - [ ] Re-pay loan
-            - [ ] Sell assets back to stake currency USDT 
+        - [x] ***[4.3]*** **close:**
+            - [x] Re-pay loan
+            - [x] Sell assets back to stake currency USDT 
             * This will only work properly when event handling is implemented, and when it is, it'll also be very simple to add the notifications
 
     ---

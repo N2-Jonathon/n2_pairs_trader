@@ -1,4 +1,5 @@
 from core.position_manager import Position, PositionManager
+from core.notifier import Notifier
 from strategies.n2_supertrend import N2SuperTrend
 
 
@@ -6,6 +7,7 @@ def run_bot(strategy=N2SuperTrend()):
     running = True
 
     pm = PositionManager(strategy)
+    notifier = Notifier(pm)
 
     while running:
 
