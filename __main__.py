@@ -21,15 +21,7 @@ def run_bot(strategy=N2SuperTrend()):
 
         if pm.debug_mode:
             """If in debug mode, prompt for signal override"""
-            DEBUG_override_signal = input("[DEBUG]Enter a signal to emulate (LONG|[SHORT]|CLOSE):").upper()
-            if DEBUG_override_signal == "L":
-                strategy.emulate_signal('LONG')  # Default if you just press enter at the prompt
-            elif DEBUG_override_signal == "" or DEBUG_override_signal == "S":
-                strategy.emulate_signal('SHORT')
-            elif DEBUG_override_signal.upper() == 'SHORT' or DEBUG_override_signal == 'LONG':
-                strategy.emulate_signal(DEBUG_override_signal)
-            elif DEBUG_override_signal == 'CLOSE' or DEBUG_override_signal == 'C':
-                strategy.emulate_signal('CLOSE')
+            strategy.prompt_to_emulate_signal()
         else:
             """If not in debug mode, call the get_signal method of the strategy"""
             strategy.listen_for_signals()

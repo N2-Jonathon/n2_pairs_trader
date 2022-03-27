@@ -188,6 +188,16 @@ class StrategyBase(Config):
     def emulate_signal(self, signal):
         self.event_handler.fire('newSignal', signal)
 
+    def prompt_to_emulate_signal(self):
+        override_signal = input("[DEBUG]Enter a signal to emulate (LONG|[SHORT]|CLOSE):").upper()
+        if override_signal == "L":
+            self.emulate_signal('LONG')  # Default if you just press enter at the prompt
+        elif override_signal == "" or override_signal == "S":
+            self.emulate_signal('SHORT')
+        elif override_signal.upper() == 'SHORT' or override_signal == 'LONG':
+            self.emulate_signal(override_signal)
+        elif override_signal == 'CLOSE' or override_signal == 'C':
+            self.emulate_signal('CLOSE')
 
     def fetch_bars(self, timeframe="1m", limit=50, timeframes=None):
         """
