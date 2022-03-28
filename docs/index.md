@@ -21,7 +21,7 @@
 
     ---
 
-    - [ ] **4.** Fully implement each step of Long/Short positions including borrowing.
+    - [x] **4.** Fully implement each step of Long/Short positions including borrowing.
         - [x] ***[4.1]*** **open_long:**
             - [x] **Step 1:**
             Query exchange to fetch max borrow quantity of borrow_coin.
@@ -44,7 +44,7 @@
         - [x] ***[4.3]*** **close:**
             - [x] Re-pay loan
             - [x] Sell assets back to stake currency USDT 
-            * This will only work properly when event handling is implemented, and when it is, it'll also be very simple to add the notifications
+            - [x] This will only work properly when event handling is implemented, and when it is, it'll also be very simple to add the notifications
 
     ---
 

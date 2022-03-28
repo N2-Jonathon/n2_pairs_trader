@@ -2,13 +2,7 @@ import ccxt
 import importlib
 from configparser import ConfigParser
 
-import core.exchanges.kucoin_extended
 from core.constants import USER_CONFIG_PATH, EXCHANGES, EXTENDED_EXCHANGES
-import core.utils as utils
-from core.exchanges.kucoin_extended import kucoin_extended
-from dev_scripts.load_api_keys import load_api_keys
-
-import core.exchanges
 
 
 class Config:
@@ -40,8 +34,16 @@ class Config:
 
     api_keys = {
         "exchanges": {},
-        "telegram": None
+        "telegram": {
+            "app_api_id": None,
+            "api_hash": None,
+            "username": None,
+            "phone": None,
+            "notification_channel": None
+        }
     }
+
+    status = {}
 
     @staticmethod
     def split_pair(pair, pair_type=None):
@@ -92,6 +94,7 @@ class Config:
                 self.quote_pair = self.cfg_parser['Global Settings']['quote_pair_default']
                 self.stake_currency = self.cfg_parser['Global Settings']['stake_currency']
                 self.paper_trade = 'true' in self.cfg_parser['Global Settings']['paper_trade'].lower()
+                self.telegram_enabled = 'true' in self.cfg_parser['Telegram']['enabled'].lower()
                 # breakpoint()
             except:
                 raise ValueError("Failed to read from config (Make sure all values are assigned)")
@@ -113,6 +116,7 @@ class Config:
                 self.quote_pair: str = params['quote_pair'],
                 self.stake_currency: str = params['stake_currency']
                 self.paper_trade: bool = params['paper_trade']
+                self.telegram_enabled: bool = params['telegram_enabled']
 
                 # self.strategy = importlib.import_module(f"strategies.{self.strategy_name}")
                 # self.exchange: ccxt.Exchange = self.enabled_exchanges[self.cfg_file_key]
@@ -124,6 +128,9 @@ class Config:
         self.synth_pair_tuple = self.get_synth_pair_tuple(self.base_pair, self.quote_pair)
         self.synth_pair = self.synth_pair_tuple[0]
         self.read_exchange_api_keys()
+        # if self.telegram_enabled:
+        #     self.read_telegram_api_keys()
+
 
         if self.exchange_id in EXTENDED_EXCHANGES:
             self.exchange_module_path = EXTENDED_EXCHANGES[self.exchange_id][0]
@@ -205,5 +212,26 @@ class Config:
 
         return keys
 
-    def set_exchange(self):
-        raise NotImplementedError
+    def read_telegram_api_keys(self):
+        self.status['msg'] = "Reading telegram API Keys..."
+        if self.debug_mode:
+            print("=======[DEBUG]==========\n"
+                  f"{self.status['msg']}\n")
+        keys = {}
+        cfg = self.cfg_parser
+        if cfg.has_section('Telegram'):
+            keys['app_api_id'] = cfg['Telegram']['app_api_id']
+            keys['api_hash'] = cfg['Telegram']['api_hash']
+            keys['notification_channel_id'] = cfg['Telegram']['notification_channel_id']
+            keys['username'] = cfg['Telegram']['username']
+            keys['phone'] = cfg['Telegram']['phone']
+            self.api_keys['telegram'] = keys
+
+            self.status['msg'] = "Got telegram API Keys"
+            if self.debug_mode:
+                print(f"{self.status['msg']}\n"
+                      "========================\n")
+            return self.api_keys['telegram']
+        else:
+            self.status['msg'] = 'No telegram section in config file'
+            return 1

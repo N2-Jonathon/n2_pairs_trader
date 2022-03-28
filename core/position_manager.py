@@ -1,6 +1,8 @@
 from datetime import datetime
 from eventhandler import EventHandler
 
+# from core.notifier import Notifier
+
 import ccxt
 import pandas as pd
 from pprint import pprint
@@ -331,6 +333,8 @@ class Position(Config):
         self.status['borrow_info'] = self.borrow_info
 
 
+
+
 class PositionManager(Config):
 
     current_position = None
@@ -341,6 +345,8 @@ class PositionManager(Config):
         super().__init__(params, config_filepath)
 
         self.strategy = strategy
+
+        # self.telegram_notifier = Notifier(self)
 
         self.event_handler = EventHandler('onOpenPosition', 'onClosePosition')
 
