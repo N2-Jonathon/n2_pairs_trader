@@ -220,15 +220,12 @@ class StrategyBase(Config):
         elif override_signal == 'CLOSE' or override_signal == 'C':
             self.override_signal('CLOSE')
 
-    def fetch_synth_ohlcv(self, timeframe="1m", limit=50, timeframes=None):
+    def fetch_synth_ohlcv(self, timeframe="1m", limit=50, timeframes=None, return_type=DataFrame):
         """
-          This takes raw kline data from calling
-          self.exchange.fetch_ohlcv() for each pair
-          as inputs, turns them into DataFrames, 
-          then divides each base OHLCV data point 
-          value by its corresponding quote value, 
-          and returns a new DataFrame with the new 
-          OHLCV values.
+          This takes raw kline data from calling self.exchange.fetch_ohlcv() for each pair as inputs,
+          turns them into DataFrames, divides each base OHLCV data point's value by its corresponding
+          quote value, then depending on the specified return type, it either returns a new DataFrame
+          with the synth OHLCV values, or returns the synth OHLCV values as list.
         """
         print(f"Fetching bars for: {self.synth_pair} {timeframe} (limit={limit}\n"
               f"[timestamp (UTC): {datetime.utcnow().isoformat()}]")
@@ -239,9 +236,9 @@ class StrategyBase(Config):
         base_bars = self.exchange.fetch_ohlcv(self.base_pair, timeframe=timeframe, limit=limit)
         quote_bars = self.exchange.fetch_ohlcv(self.quote_pair, timeframe=timeframe, limit=limit)
 
-        self.ohlcv_data[timeframe]["raw"]["base_pair"] = base_bars
-        self.ohlcv_data[timeframe]["raw"]["quote_pair"] = quote_bars
-        # self.ohlcv_data[timeframe]["raw"]["synth_bars"] = ??
+        self.ohlcv_data[timeframe]["list"]["base_pair"] = base_bars
+        self.ohlcv_data[timeframe]["list"]["quote_pair"] = quote_bars
+        # self.ohlcv_data[timeframe]["list"]["synth_bars"] = ??
 
         df_base = pd.DataFrame(base_bars[:-1], columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])
         df_base['timestamp'] = pd.to_datetime(df_base['timestamp'], unit='ms')
@@ -264,9 +261,18 @@ class StrategyBase(Config):
         self.ohlcv_data[timeframe]["df"]["quote_pair"] = df_quote
         self.ohlcv_data[timeframe]["df"]["synth_pair"] = df_synth
          
-        return df_synth
+        if return_type == DataFrame:
+            return self.ohlcv_data[timeframe]["df"]["synth_pair"]
+        elif return_type == list:
+            raise NotImplementedError("TODO: Will add this shortly")
 
     def convert_ohlcv_list_to_dataframe(self, ohlcv: list)-> DataFrame:
+
+        raise NotImplementedError("TODO: Will add this shortly")
+        pass
+
+    def convert_ohlcv_dataframe_to_list(self, ohlcv: DataFrame) -> list:
+        raise NotImplementedError("TODO: Will add this shortly")
         pass
 
     def listen_for_signals(self, timeframe="1m"):

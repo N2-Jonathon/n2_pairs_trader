@@ -192,6 +192,12 @@ class kucoin_extended(kucoin):
                 "size": size
             }
         elif type == 'limit':
+
+            if price=='current':
+                # TODO: fetch best ask/bids
+                raise NotImplementedError('Must fetch best ask/bids first and assign correct value to price param')
+
+
             params = {
                 # "clientOid": order_id,
                 "side": side,
