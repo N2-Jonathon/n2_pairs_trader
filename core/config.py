@@ -40,7 +40,13 @@ class Config:
 
     api_keys = {
         "exchanges": {},
-        "telegram": None
+        "telegram": {
+            "app_api_id": None,
+            "api_hash": None,
+            "username": None,
+            "phone": None,
+            "notification_channel_id": None
+        }
     }
 
     @staticmethod
@@ -92,6 +98,7 @@ class Config:
                 self.quote_pair = self.cfg_parser['Global Settings']['quote_pair_default']
                 self.stake_currency = self.cfg_parser['Global Settings']['stake_currency']
                 self.paper_trade = 'true' in self.cfg_parser['Global Settings']['paper_trade'].lower()
+                self.telegram_enabled = 'true' in self.cfg_parser['telegram']['enabled'].lower()
                 # breakpoint()
             except:
                 raise ValueError("Failed to read from config (Make sure all values are assigned)")
@@ -113,6 +120,7 @@ class Config:
                 self.quote_pair: str = params['quote_pair'],
                 self.stake_currency: str = params['stake_currency']
                 self.paper_trade: bool = params['paper_trade']
+                self.telegram_enabled = params['telegram_enabled']
 
                 # self.strategy = importlib.import_module(f"strategies.{self.strategy_name}")
                 # self.exchange: ccxt.Exchange = self.enabled_exchanges[self.cfg_file_key]
@@ -124,6 +132,8 @@ class Config:
         self.synth_pair_tuple = self.get_synth_pair_tuple(self.base_pair, self.quote_pair)
         self.synth_pair = self.synth_pair_tuple[0]
         self.read_exchange_api_keys()
+        if self.telegram_enabled:
+            self.read_telegram_api_keys()
 
         if self.exchange_id in EXTENDED_EXCHANGES:
             self.exchange_module_path = EXTENDED_EXCHANGES[self.exchange_id][0]
@@ -172,6 +182,28 @@ class Config:
                 return cfg[cfg_file_key]
         else:
             raise ValueError(f"The key: {cfg_file_key} was not found in {filepath}")
+
+    def read_telegram_api_keys(self):
+        self.status['msg'] = "Reading telegram API Keys..."
+        if self.debug_mode:
+            print("=======[DEBUG]==========\n"
+                  f"{self.status['msg']}\n")
+        keys = {}
+        cfg = self.cfg_parser
+        if cfg.has_section('telegram'):
+            for key in self.api_keys['telegram']:
+                self.api_keys['telegram'][key] = cfg['telegram'][key]
+
+            self.status['msg'] = "Got telegram API Keys"
+            if self.debug_mode:
+                print(f"{self.status['msg']}\n"
+                      "========================\n")
+            return self.api_keys['telegram']
+        else:
+            self.status['ok'] = False
+            self.status['msg'] = 'No telegram section in config file'
+
+            return 1
 
     def read_exchange_api_keys(self, filepath=USER_CONFIG_PATH):
         """
