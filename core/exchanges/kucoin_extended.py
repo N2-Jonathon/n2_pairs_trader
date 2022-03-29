@@ -2,6 +2,8 @@ from ccxt.kucoin import kucoin
 import random
 import string
 
+from ccxt.base.errors import BadSymbol
+
 class kucoin_extended(kucoin):
     """
     This inherits ccxt.kucoin and overrides its methods to implement things which aren't
@@ -55,6 +57,9 @@ class kucoin_extended(kucoin):
                  ie. `GET {url}/margin/account`
             *  For another endpoint eg. 'GET {url}/risk/limit/strategy' it would be `self.privateGetRiskLimitStrategy()`
         """
+
+        # GET {url}/margin/account
+
         response = self.privateGetMarginAccount()
         # {
         #     "accounts": [
@@ -221,11 +226,31 @@ class kucoin_extended(kucoin):
         response = self.privateGetMarginBorrowOutstanding(params)
         info = response['data']['items']
 
-    def repay_loan(self, currency, trade):
+    def repay_single_order(self, currency, trade_id, size):
+        params = {
+            "currency": currency,
+            "tradeId": trade_id,
+            "size": size
+        }
+        response = self.privatePostMarginRepaySingle(params)
+
+        breakpoint()
+        return response
+
+    def get_repay_record(self, currency=None):
+        if currency is not None:
+            params = {
+                "currency": currency
+            }
+            response = self.privateGetMarginBorrowOutstanding(params)
+        else:
+            response = self.privateGetMarginBorrowOutstanding()
+        return response
         pass
 
-    def repay_all_loans(self, sequence='HIGHEST_RATE_FIRST'):
 
+    def repay_all_loans(self, sequence='HIGHEST_RATE_FIRST'):
+        self.load_markets()
         outstanding_loans = self.fetch_outstanding_loans()
 
         for loan in outstanding_loans:
@@ -239,17 +264,33 @@ class kucoin_extended(kucoin):
             }
             response = self.privatePostMarginRepayAll(params)
 
+
         return self.fetch_outstanding_loans()
 
-    def convert_all_funds_to_one_currency(self, stake_currency):
+
+
+    def convert_all_funds_to_one_currency(self, _currency='USDT'):
         balances = self.fetch_available_margin_balances()
         currencies = list(balances.keys())
 
         for currency in currencies:
-            if currency != stake_currency:
-                symbol = f"{currency}-{stake_currency}"
+            if currency != _currency:
+
                 size = balances[currency]
-                self.place_margin_order('sell', symbol, size)
+
+                try:
+                    symbol = f"{currency}-{_currency}"
+                    DEBUG_response = self.place_margin_order('sell', symbol, size)
+                    breakpoint()
+                except BadSymbol:
+                    symbol = f"{_currency}-{currency}"
+
+                    DEBUG_response = self.place_margin_order('buy', symbol, size, type='limit', price='current')
+
+                    breakpoint()
+
+
 
         new_balances = self.fetch_available_margin_balances()
+        breakpoint()
         return new_balances

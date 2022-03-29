@@ -68,6 +68,7 @@ class Position(Config):
 
         super().__init__(params, config_filepath)
 
+        self.borrow_order = None
         if position_id is None:
             self.position_id = ccxt.Exchange.uuid()
         else:
@@ -236,7 +237,12 @@ class Position(Config):
         self.status['msg'] = (f"Repaying borrowed {self.borrow_coin}")
         print(f"{self.status['msg']}\n")
         # self.exchange.repay_loan(self.borrow_info['orderId'])
-        self.exchange.repay_all_loans()
+
+        try:
+            self.repay_record = self.exchange.get_repay_record()
+        except:
+            raise ValueError("Unable to get repay record from exchange")
+        #self.exchange.repay_all_loans()
 
         # 2. Convert funds back to stake currency
         self.status['msg'] = f"Converting funds back to {self.stake_currency}"
@@ -245,10 +251,40 @@ class Position(Config):
 
         return self, 0
 
+    def repay_all_outstanding_liabilities(self):
+        try:
+            self.repay_record = self.exchange.get_repay_record()
+            # DEBUG_repay_record = self.repay_record
+            # breakpoint()
+        except:
+            self.status['ok'] = False
+            self.status['msg'] = ValueError("Unable to pay back  record from exchange")
+            print(self.status)
+
+        self.status['repaid'] = []
+
+        for item in self.repay_record['data']['items']:
+            trade_id = item['tradeId']
+            currency = item['currency']
+            liability = item['liability']
+
+            if self.debug_mode:
+                breakpoint()
+
+            self.exchange.convert_all_funds_to_one_currency(item['currency'])
+            self.status['repaid']['tradeId'] = self.exchange.repay_single_order(currency=item['currency'],
+                                               trade_id=item['tradeId'],
+                                               size=item['liability'])
+            if self.debug_mode:
+                breakpoint()
+
     def borrow(self):
         if self.debug_mode:
             self.status['msg'] = "[DEBUG] Repaying all current liabilities before proceeding..."
-            self.exchange.repay_all_loans()
+
+            self.repay_all_outstanding_liabilities()
+
+            # self.exchange.repay_all_loans()
 
         self.status['msg'] = f"Checking which methods {self.exchange_name} has for margin...\n"
         if self.exchange.has['fetchBorrowRate']:

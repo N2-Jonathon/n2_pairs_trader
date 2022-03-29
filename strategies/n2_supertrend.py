@@ -27,7 +27,7 @@ class N2SuperTrend(StrategyBase):
 
     def listen_for_signals(self, timeframe="1m"):
 
-        self.fetch_bars(timeframe=timeframe)
+        self.create_synth_ohlcv(timeframe=timeframe)
         bars = self.ohlcv_data[timeframe]["df"]["synth_pair"]
 
         supertrend_data = supertrend(bars, period=10, atr_multiplier=2)

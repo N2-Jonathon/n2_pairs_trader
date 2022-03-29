@@ -147,6 +147,11 @@ class StrategyBase(Config):
         self.current_signal = None
         # self.position_manager = PositionManager()
 
+        self._ohlcv_base = self.exchange.fetch_ohlcv(self.exchange.safe_symbol(self.base_pair))
+        self._ohlcv_quote = self.exchange.fetch_ohlcv(self.exchange.safe_symbol(self.quote_pair))
+
+        # self.ohlcv_synth = self.
+
         self.event_handler = EventHandler('newSignal')
         self.event_handler.link(self.__on_new_signal, 'newSignal')
 
@@ -200,7 +205,7 @@ class StrategyBase(Config):
         elif override_signal == 'CLOSE' or override_signal == 'C':
             self.emulate_signal('CLOSE')
 
-    def fetch_bars(self, timeframe="1m", limit=50, timeframes=None):
+    def create_synth_ohlcv(self, timeframe="1m", limit=50, timeframes=None):
         """
           This takes raw kline data from calling
           self.exchange.fetch_ohlcv() for each pair
