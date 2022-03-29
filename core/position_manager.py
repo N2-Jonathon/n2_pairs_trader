@@ -5,10 +5,16 @@ import ccxt
 import pandas as pd
 from pprint import pprint
 
+
+# Fore changes the text's foreground color
+
+
 # from scripts.kucoin import fetch_borrow_rate
 
 from core.constants import USER_CONFIG_PATH, EXCHANGES_WITH_margin, EXCHANGES_WITH_fetchBorrowRate
 from core.config import Config
+
+
 
 
 class Position(Config):

@@ -1,6 +1,10 @@
 import os
 import sys
 from datetime import datetime
+# from prompt_toolkit import print_formatted_text, prompt
+# from prompt_toolkit.completion import WordCompleter
+from colorama import Fore, Back
+import colorama
 
 import pandas as pd
 from pandas import DataFrame
@@ -40,12 +44,19 @@ class StrategyBase(Config):
     signal will be None
     """
     multi_timeframe_signal_rules = {
-        "1m": bool,
-        "5m": bool,
-        "15m": bool,
-        "1h": bool,
-        "1d": bool,
-        "1w": bool
+        '1m': bool,
+        '3m': bool,
+        '5m': bool,
+        '15m': bool,
+        '30m': bool,
+        '1h': bool,
+        '2h': bool,
+        '4h': bool,
+        '6h': bool,
+        '8h': bool,
+        '12h': bool,
+        '1d': bool,
+        '1w': bool,
     }
 
     ohlcv_data = {
@@ -146,7 +157,7 @@ class StrategyBase(Config):
         self.name = 'StrategyBase'
         self.current_signal = None
         # self.position_manager = PositionManager()
-
+        DEBUG_safe_symbol = self.exchange.safe_symbol(self.base_pair)
         self._ohlcv_base = self.exchange.fetch_ohlcv(self.exchange.safe_symbol(self.base_pair))
         self._ohlcv_quote = self.exchange.fetch_ohlcv(self.exchange.safe_symbol(self.quote_pair))
 
@@ -154,6 +165,8 @@ class StrategyBase(Config):
 
         self.event_handler = EventHandler('newSignal')
         self.event_handler.link(self.__on_new_signal, 'newSignal')
+
+        colorama.init()
 
     def __on_new_signal(self, signal):
         self.status['msg'] = f"StrategyBase.__on_new_signal fired!"
@@ -166,6 +179,7 @@ class StrategyBase(Config):
 
     @staticmethod
     def __on_new_signal_dev(self, signal):
+        """Obselete, todo: safe delete"""
         self.status['msg'] = f"StrategyBase.__on_new_signal fired!"
         if self.debug_mode:
             print("=======[DEBUG]==========\n"
@@ -191,21 +205,22 @@ class StrategyBase(Config):
             self.status['ok'] = False
             print(self.status)
 
-    def emulate_signal(self, signal):
+    def override_signal(self, signal):
         self.event_handler.fire('newSignal', signal)
 
-    def prompt_to_emulate_signal(self):
-        override_signal = input("[DEBUG]Enter a signal to emulate (LONG|[SHORT]|CLOSE):").upper()
+    def prompt_to_override_signal(self):
+        # override_options = WordCompleter(['Long', 'Short', 'Close'])
+        override_signal = input("[DEBUG] Override signal (Press TAB for auto-complete): ").upper()
         if override_signal == "L":
-            self.emulate_signal('LONG')  # Default if you just press enter at the prompt
+            self.override_signal('LONG')  # Default if you just press enter at the prompt
         elif override_signal == "" or override_signal == "S":
-            self.emulate_signal('SHORT')
+            self.override_signal('SHORT')
         elif override_signal.upper() == 'SHORT' or override_signal == 'LONG':
-            self.emulate_signal(override_signal)
+            self.override_signal(override_signal)
         elif override_signal == 'CLOSE' or override_signal == 'C':
-            self.emulate_signal('CLOSE')
+            self.override_signal('CLOSE')
 
-    def create_synth_ohlcv(self, timeframe="1m", limit=50, timeframes=None):
+    def fetch_synth_ohlcv(self, timeframe="1m", limit=50, timeframes=None):
         """
           This takes raw kline data from calling
           self.exchange.fetch_ohlcv() for each pair
@@ -250,6 +265,9 @@ class StrategyBase(Config):
         self.ohlcv_data[timeframe]["df"]["synth_pair"] = df_synth
          
         return df_synth
+
+    def convert_ohlcv_list_to_dataframe(self, ohlcv: list)-> DataFrame:
+        pass
 
     def listen_for_signals(self, timeframe="1m"):
         raise NotImplemented("Error: listen_for_signals method not implemented for StrategyBase.\n"
