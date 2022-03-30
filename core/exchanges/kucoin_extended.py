@@ -183,7 +183,32 @@ class kucoin_extended(kucoin):
         marketId = self.market_id(symbol)
         clientOrderId = self.safe_string_2(params, 'clientOid', 'clientOrderId', self.uuid())
 
+        if float(size) < 2000:
+            print("Size of margin order exceeds KuCoin's limit of 2000 per order,\n"
+                  "so reducing it to 2000\n"
+                  "TODO: break these types of orders into multiple orders")
+            size = '2000'
+
+        if type == 'limit':
+
+            if price == 'current':
+                # TODO: fetch best ask/bids
+                # breakpoint()
+                order_book = self.fetch_order_book(marketId)
+                breakpoint()
+                # raise NotImplementedError('Must fetch best ask/bids first and assign correct value to price param')
+                type = 'market'  # Before this gets implemented, limit orders are changed into market order. This will change
+                params = {
+                    # "clientOid": order_id,
+                    "side": side,
+                    "symbol": marketId,
+                    "type": type,
+                    "size": size,
+                    "price": price
+                }
+
         if type == 'market':
+            breakpoint()
             params = {
                 "clientOid": clientOrderId,
                 "side": side,
@@ -191,21 +216,10 @@ class kucoin_extended(kucoin):
                 "type": type,
                 "size": size
             }
-        elif type == 'limit':
-
-            if price=='current':
-                # TODO: fetch best ask/bids
-                raise NotImplementedError('Must fetch best ask/bids first and assign correct value to price param')
 
 
-            params = {
-                # "clientOid": order_id,
-                "side": side,
-                "symbol": marketId,
-                "type": type,
-                "size": size,
-                "price": price
-            }
+
+
         response = self.privatePostMarginOrder(params)
 
         return response

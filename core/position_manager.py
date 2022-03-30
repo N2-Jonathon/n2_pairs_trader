@@ -274,15 +274,12 @@ class Position(Config):
             currency = item['currency']
             liability = item['liability']
 
-            if self.debug_mode:
-                breakpoint()
-
-            self.exchange.convert_all_funds_to_one_currency(item['currency'])
-            self.status['repaid']['tradeId'] = self.exchange.repay_single_order(currency=item['currency'],
-                                               trade_id=item['tradeId'],
-                                               size=item['liability'])
-            if self.debug_mode:
-                breakpoint()
+            # if self.debug_mode:
+                # breakpoint()
+                # self.exchange.convert_all_funds_to_one_currency(item['currency'])
+            # self.status['repaid']['tradeId'] = self.exchange.repay_single_order(currency=item['currency'],
+            #                                    trade_id=item['tradeId'],
+            #                                    size=item['liability'])
 
     def borrow(self):
         if self.debug_mode:
