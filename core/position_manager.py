@@ -413,7 +413,8 @@ class PositionManager(Config):
 
     def open(self, signal=None, order_type='market'):
         self.status['msg'] = ("PositionManager.open() called")
-        self.event_handler.fire('onOpenPosition', self.current_position)
+        #self.event_handler.fire('onOpenPosition', signal)  # self.current_position)
+
         if signal is None:
             raise ValueError("Can't open a position without a signal")
 

@@ -23,10 +23,10 @@ class Notifier:
                                                  self.pm.api_keys['telegram']['app_api_id'],
                                                  self.pm.api_keys['telegram']['api_hash'])
         '''
-        self.loop.run_until_complete(self.run_pyrogram_client())
+        # self.loop.run_until_complete(self.run_pyrogram_client())
         pm.event_handler.link(self.send_telegram_notification, 'onOpenPosition')
         pm.event_handler.link(self.send_telegram_notification, 'onClosePosition')
-        self.schedule_tasks()
+        # self.schedule_tasks()
 
     def schedule_tasks(self: object) -> None:
         """ Minimal selection of tasks for this demonstation. """
@@ -39,12 +39,12 @@ class Notifier:
         print("Sending Telegram Notification...\n"
               "Position Info:\n")
         print(position)
-        breakpoint()
-        self.loop.create_task(self.run_pyrogram_client())
+        # breakpoint()
+        self.loop.run_until_complete(self.send_telegram_msg(str(position)))
         breakpoint()
 
 
-    async def run_pyrogram_client(self):
+    async def send_telegram_msg(self, msg: str):
         async with self.pyrogram_tg_client as tg:
-            await tg.send_message('jonathon_test', 'hello new')
+            await tg.send_message('jonathon_test', msg)
 
