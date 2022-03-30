@@ -48,14 +48,36 @@
 
     ---
 
-    - [ ] **5.** Implement Telegram Notifications with telethon
+    - [x] **5.** Implement Telegram Notifications with telethon
         - **Note:** I did this in my last project so I can just copy/paste that 
 
     ---
 
-    - [ ] **6.** Submit working Minimum Viable Product
+    - [ ] **6.** [ASAP] Submit working demo/mvp/proof-of-concept **Dev v0.0.1 (not unit tested, only for demo)** & accompanying video
 
     ---
+    - [ ] ***[7] TODO (after sub):***
+    - [ ] Make sure limit orders `price='@best'` is working properly, which fetches the order book for the best asks/bids, then creates a limit order at the current best price (For it to be real-time, it needs to be done via websocket which is only part of the ccxt pro apparently which is going to become free later this year. I can also however implement that myself. For now, I've managed to get the order book from the REST API, but so far I haven't been able to get real-time data from that
+        - [ ] [REST API] fetch best bids/asks? (if it's possible)
+        - [ ] Implement Websockets connection & fetch best 5 bids/asks as written in KuCoin's documentation
+    - [ ] Ensure every method has debug status prints for when debug_mode is enabled
+    - [ ] Ensure all queries are within the rate limits as they vary for different API endpoints
+    - [ ] Log the status and save into a file
+    - [ ] Try different configurations and check the logs for any errors/exceptions, then fix them
+    - [ ] Write unit test cases 
+    - [ ] Do any debugging required for the unit tests to all pass
+    - [ ] Write CLI setup wizard which guides the user through setting up a configuration/strategy (maybe also a password)
+    - [ ] Add email notifications
+    - [ ] Release **Stable v0.1.0**
+    - [ ] [Medium-term]Integrate with OctoBot or FreqTrade  (or both)
+    - [ ] [Long-term] Create a user friendly dashboard app which lets you easily configure & deploy a new server running strategies or backtests on various platforms ie. crypto/ccxt, forex/metatrader/FIX, Futures/NinjaTrader/MultiCharts/Sierra Chart (long-term project idea), 
+    - [ ] Design some kind of standard way to describe properties & behaviours of strategies in different programming languages, and take inspiration from the CCXT model of having a standardized API for dealing with different but similar platforms. **This could result in having strategies transpilable from one language to another eg. 
+    
+    - PineScript --> MQL4/5, Python, 
+    - Python --> MQL4/5, PineScript 
+    - MQL4/5 --> PineScript, Python
+    - Support for other languages would be added after those
+
 
 !!! note
     ***(March 26th, 2022)***
