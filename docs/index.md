@@ -4,6 +4,14 @@
     
     Finished tasks migrated to [here](/Releases/dev_v0.0.1/dev-journal/)
     
+<a href="https://wakatime.com"><img src="https://wakatime.com/share/@spliffli/f8c024ff-274d-4aaa-b573-1e3f432f2f27.png" /></a>
+
+(Thankfully I don't charge per hour...) I know I can eventually deliver a high quality, reliable and properly tested product if I spend enough time on it. 
+
+- Some of this time was spent on other things, but most of the time was actually spent on your project.
+- Also, after releasing **[v0.0.1](/Releases/dev_v0.0.1/dev-journal/) (dev)** on github & recording some explanatory videos, I have to request some kind of payment because even though I've been avoiding asking about that so far, the truth is I have no money left in my bank account and my rent is due tomorrow. It's okay if you can't pay on the spot tomorrow and you need time to test it out yourself etc, as long as I'm able to pay my rent eventually then it's okay. 
+- As you can see my productivity has been declining the past few days and it's because I'm feeling kind of burnt out, so I'd also highly appreciate if I can take a bit of a break between when **[v0.0.1](/Releases/dev_v0.0.1/dev-journal/)** is released before moving on to the unit tests and the **[v0.1.0](/Releases/stable_v0.0.1/dev-journal/) (stable)**
+     
 
 !!! todo
 
