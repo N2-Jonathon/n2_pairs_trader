@@ -2,7 +2,8 @@
 
 !!! info
 
-Finished tasks migrated to [here](/Releases/dev_v0.0.1/dev-journal/)
+    Finished tasks migrated to [here](/Releases/dev_v0.0.1/dev-journal/)
+
 <a href="https://wakatime.com"><img src="https://wakatime.com/share/@spliffli/f8c024ff-274d-4aaa-b573-1e3f432f2f27.png" /></a>
 
 (Thankfully I don't charge per hour...) I know I can eventually deliver a high quality, reliable and properly tested product if I spend enough time on it.
@@ -13,9 +14,10 @@ Finished tasks migrated to [here](/Releases/dev_v0.0.1/dev-journal/)
 
 !!! todo
 
-- [ ] **[6]**  Submit working demo/mvp/proof-of-concept **[Dev v0.0.1](/Releases/dev_v0.0.1/dev-journal/) (not unit tested, only for demo)** & accompanying video
-- [ ] **[7]** Plan which features which will be released incrementally in order of priority, with version numbers to make tracking progress more managable
-- [ ] **[8]** Work on all the steps required for the first stable & unit tested release ***[v0.1.0](/Releases/stable_v0.1.0/dev-journal/) (planned)***
+    - [ ] **[6]**  Submit working demo/mvp/proof-of-concept **[Dev v0.0.1](/Releases/dev_v0.0.1/dev-journal/) (not unit tested, only for demo)** & accompanying video
+    - [ ] **[7]** Plan which features which will be released incrementally in order of priority, with version numbers to make tracking progress more managable
+    - [ ] **[8]** Work on all the steps required for the first stable & unit tested release ***[v0.1.0](/Releases/stable_v0.1.0/dev-journal/) (planned)***
+
 In these docs I will explain how this program works and its architecture, and try to make it easy to understand for
 both users or developers.
 
