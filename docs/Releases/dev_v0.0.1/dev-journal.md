@@ -4,13 +4,20 @@
     - [ ] Publish the release on the Github repo
     - [ ] Come back and add some more information here describing how the steps below are implemented including:
         
-        - [ ]  a PlantUML class diagram
+        - [ ]  a PlantUML class diagram of each of the classes:
+            
+            - **Config**
+                - **PositionManager**
+                - **Position**
+                - **Notifier**
+                -  **StrategyBase**
+                    -  **N2SuperTrend**
       
         <img src='https://www.planttext.com/api/plantuml/png/XP1DYy8m48Rlyok6dbQN7FOg7YfwKF2q29v3EzXXavdIfCgY_dTRsog27xUyvCdpJYODqLQnzWuWSdI4l-HiP9LGS1dGuDpP4731TbTP3m1Pbm_a7CiEZu3ulPA8MvPS3w6DU-KSrvhzRGfQg5PV8pWF3sTbK-T9Of-NMWVgptFrlfOXTSAXhz40t5gd9zFSYRdh9hYIWYgELZ9w0lRkJzXrd1TGyfFWsDIbmSHR-K_w2IUjkzJ0xTRUqEqN7bb8IV9czHS0' width=400>
 
-        - [x] An activity diagram like the example below describing the strategy N2SuperTrend (This was already done a while ago on notion, will add it here):
+        - [x] An activity diagram depicting the strategy **N2SuperTrend** (Right click the image and open in a new tab to see full-size):
 
-        <img src='https://www.planttext.com/api/plantuml/png/HP31Ri9034Jl_eh9BHpuWUG0LBHm0YIYzXWPSCAApIxQE23-lWwfr9EbcV7esSjUEUdGUI9rwWK7JkozUConEgjxE7rXxRXDt868td6YufCLswZuSQ7jInFMoOMRIPsSaZnDSGtoQaW1-u3gAjXm9uiPz2e1-Klw6G5DJ3SRG57NMtvO5xw6KDTPbfL_DhXb5wRGyPp4C5QAwdjAIBXC9U9xGHxYs5hi3Eo_RiozUG_nFjANP5kkCUPDH1Nn8PToF2pUYPPcsJD-0G00' width=400>
+        <img src='https://s3.us-west-2.amazonaws.com/secure.notion-static.com/92e6bdea-d919-4a04-88ec-b422aea8cbf0/n2_kucoin_long_short_activity.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220331%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220331T034407Z&X-Amz-Expires=86400&X-Amz-Signature=84fe129d7fd839927195ed7504ea4afc1ba60daf8a448cce9af02da82e116c04&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22n2_kucoin_long_short_activity.png%22&x-id=GetObject' width=400>
 
 
 
