@@ -27,6 +27,7 @@ extra_css:
 - css/dark_theme.css
 - css/codehilite.css
 - css/profont.css
+- https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css
 
 extra_javascript:
   - https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.1/tablesort.min.js
@@ -39,6 +40,7 @@ plugins:
 
 nav:
   - Readme: 'index.md'
+  # - Message for Noe: 'message-for-noe.md'  
   - How it works: 
       - 1. Start the Bot: how_it_works/1_start_the_bot.md
       - 2. Initialize Strategy: how_it_works/2_initialize_strategy.md
@@ -75,3 +77,6 @@ markdown_extensions:
   - pymdownx.caret
   - pymdownx.keys
   - pymdownx.mark
+  - attr_list
+  - md_in_html
+  - fontawesome_markdown

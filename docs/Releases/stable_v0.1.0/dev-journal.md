@@ -14,6 +14,17 @@
     - [ ] Add email notifications
     - [ ] Release **Stable v0.1.0**
 
-    - [ ] Create Sequence Diagram for the entire program execution (example below)
+    - [ ] Create Sequence Diagram for the entire program execution (examples below taken from [mermaid](https://bwmarrin.github.io/MkDocsPlus/mermaid/) & [PlantText](https://www.planttext.com/))
 
-        <img src='https://www.planttext.com/api/plantuml/png/FOyn2iCm34LtdK9upmKwb40AfKCdDsHMOk4Q4Zkrd26thrqddSJ_3-cXLXB5j2qpG79fPbHF5Y7BWWrg_cpi9yQR8njfKG0qfH2n5uumXiqRYZkgWKUyzm-596N257oAOKQbts5TdRVOPSaFwmxOPzEEWpEM4nXAD9BmaGMW7CVcMYxX1Ly1Jn6K9WFTrVxGGCwvhVkLL0KSrHzAfQSIe6LlykzV' width=400>
+        <img src='https://www.planttext.com/api/plantuml/png/FOyn2iCm34LtdK9upmKwb40AfKCdDsHMOk4Q4Zkrd26thrqddSJ_3-cXLXB5j2qpG79fPbHF5Y7BWWrg_cpi9yQR8njfKG0qfH2n5uumXiqRYZkgWKUyzm-596N257oAOKQbts5TdRVOPSaFwmxOPzEEWpEM4nXAD9BmaGMW7CVcMYxX1Ly1Jn6K9WFTrVxGGCwvhVkLL0KSrHzAfQSIe6LlykzV'>
+
+        <img src='/images/sequence-diagram-example-1.png'>
+
+        <img src='/images/sequence-diagram-example-2.png'>
+
+        <img src='/images/sequence-diagram-example-3.png'>
+
+
+        
+
+        

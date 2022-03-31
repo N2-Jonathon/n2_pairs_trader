@@ -1,26 +1,21 @@
 # **Home:**
 
 !!! info
-    
-    Finished tasks migrated to [here](/Releases/dev_v0.0.1/dev-journal/)
-    
+
+Finished tasks migrated to [here](/Releases/dev_v0.0.1/dev-journal/)
 <a href="https://wakatime.com"><img src="https://wakatime.com/share/@spliffli/f8c024ff-274d-4aaa-b573-1e3f432f2f27.png" /></a>
 
-(Thankfully I don't charge per hour...) I know I can eventually deliver a high quality, reliable and properly tested product if I spend enough time on it. 
+(Thankfully I don't charge per hour...) I know I can eventually deliver a high quality, reliable and properly tested product if I spend enough time on it.
 
-- Some of this time was spent on other things, but most of the time was actually spent on your project.
-- Also, after releasing **[v0.0.1](/Releases/dev_v0.0.1/dev-journal/) (dev)** on github & recording some explanatory videos, I have to request some kind of payment because even though I've been avoiding asking about that so far, the truth is I have no money left in my bank account and my rent is due tomorrow. It's okay if you can't pay on the spot tomorrow and you need time to test it out yourself etc, as long as I'm able to pay my rent eventually then it's okay. 
+- Some of this time was spent on other things, but most of the time was actually spent on your project. I'll be able to see a more detailed breakdown when I get WakaTime Premium
+- Also, after releasing **[v0.0.1](/Releases/dev_v0.0.1/dev-journal/) (dev)** on github & recording some explanatory videos, I have to request some kind of payment because even though I've been avoiding asking about that so far, the truth is I have no money left in my bank account and my rent is due tomorrow. It's okay if you can't pay on the spot tomorrow and you need time to test it out yourself etc, as long as I'm able to pay my rent eventually then it's okay.
 - As you can see my productivity has been declining the past few days and it's because I'm feeling kind of burnt out, so I'd also highly appreciate if I can take a bit of a break between when **[v0.0.1](/Releases/dev_v0.0.1/dev-journal/)** is released before moving on to the unit tests and the **[v0.1.0](/Releases/stable_v0.0.1/dev-journal/) (stable)**
-     
 
 !!! todo
 
-    - [ ] **[6]**  Submit working demo/mvp/proof-of-concept **[Dev v0.0.1](/Releases/dev_v0.0.1/dev-journal/) (not unit tested, only for demo)** & accompanying video
-    - [ ] **[7]** Plan which features which will be released incrementally in order of priority, with version numbers to make tracking progress more managable
-    - [ ] **[8]** Work on all the steps required for the first stable & unit tested release ***[v0.1.0](/Releases/stable_v0.1.0/dev-journal/) (planned)***
-
-
-
+- [ ] **[6]**  Submit working demo/mvp/proof-of-concept **[Dev v0.0.1](/Releases/dev_v0.0.1/dev-journal/) (not unit tested, only for demo)** & accompanying video
+- [ ] **[7]** Plan which features which will be released incrementally in order of priority, with version numbers to make tracking progress more managable
+- [ ] **[8]** Work on all the steps required for the first stable & unit tested release ***[v0.1.0](/Releases/stable_v0.1.0/dev-journal/) (planned)***
 In these docs I will explain how this program works and its architecture, and try to make it easy to understand for
 both users or developers.
 
@@ -49,7 +44,6 @@ fetching market data, opening trades, etc.
     abstractions. I should make a wrapper method which handles which one to use but for now that has to be done inside
     the strategy.
 
-
 # Objectives & Requirements
 
 This is a platform that's designed for pairs trading strategies.
@@ -64,15 +58,20 @@ Each position in a pairs trade is composed of at least two trades, with one for 
 
 The reason the short trade should be opened before the long trade, is so that borrowed margin can be used to sell the short asset, and the resulting asset from that trade can be funneled into the long trade.
 
-
 ---
+
 ## **ETH/USDT|D1|KUCOIN**
+
 ![ETH/USDT:D1:KUCOIN - 2022-03-13 22-35-29](images/ETHUSDT-D1-KUCOIN%20-%202022-03-13%2022-35-29.png)
 
 ---
+
 ## BTC/USDT:D1:KUCOIN
+
 ![BTC/USDT:D1:KUCOIN - 2022-03-13 22-34-17](images/BTCUSDT:D1:KUCOIN%20-%20%202022-03-13%2022-34-17.png)
 
 ---
+
 ## ETHUSDT/BTCUSDT:D1:KUCOIN
+
 ![ETHUSDT/BTCUSDT:D1:KUCOIN - 2022-03-13 22-35-29](images/ETHUSDT-BTCUSDT:D1:KUCOIN%20-%202022-03-13%2022-40-24.png)
