@@ -224,7 +224,7 @@ class StrategyBase(Config):
       ₿₿                ₿₿        ₿₿ ₿₿          Created by
       ₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿   ₿₿  ₿₿₿₿₿₿  ₿₿₿          Jonathon Quick
           """
-                                "\n[DEBUG] Override signal ([Long]/Short/Close) ([l]/s/c): ").upper()
+                                + "\n[DEBUG] Override signal ([Long]/Short/Close) ([l]/s/c): ").upper()
         if override_signal == "" or override_signal == "L":
             self.override_signal('LONG')  # Default if you just press enter at the prompt
         elif override_signal ==  "S":
