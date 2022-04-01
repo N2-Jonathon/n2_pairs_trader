@@ -62,9 +62,9 @@ class StrategyBase(Config):
     ohlcv_data = {
         "1m": {
             "raw": {
-                "base_pair": list[list[int | None]],
-                "quote_pair": list[list[int | None]],
-                "synth_pair": list[list[int | None]]
+                "base_pair": list,
+                "quote_pair": list,
+                "synth_pair": list
             },
             "df": {
                 "base_pair": DataFrame,
@@ -74,9 +74,9 @@ class StrategyBase(Config):
         },
         "5m": {
             "raw": {
-                "base_pair": list[list[int | None]],
-                "quote_pair": list[list[int | None]],
-                "synth_pair": list[list[int | None]]
+                "base_pair": list,
+                "quote_pair": list,
+                "synth_pair": list
             },
             "df": {
                 "base_pair": DataFrame,
@@ -86,9 +86,9 @@ class StrategyBase(Config):
         },
         "15m": {
             "raw": {
-                "base_pair": list[list[int | None]],
-                "quote_pair": list[list[int | None]],
-                "synth_pair": list[list[int | None]]
+                "base_pair": list,
+                "quote_pair": list,
+                "synth_pair": list
             },
             "df": {
                 "base_pair": DataFrame,
@@ -98,9 +98,9 @@ class StrategyBase(Config):
         },
         "1h": {
             "raw": {
-                "base_pair": list[list[int | None]],
-                "quote_pair": list[list[int | None]],
-                "synth_pair": list[list[int | None]]
+                "base_pair": list,
+                "quote_pair": list,
+                "synth_pair": list
             },
             "df": {
                 "base_pair": DataFrame,
@@ -110,9 +110,9 @@ class StrategyBase(Config):
         },
         "4h": {
             "raw": {
-                "base_pair": list[list[int | None]],
-                "quote_pair": list[list[int | None]],
-                "synth_pair": list[list[int | None]]
+                "base_pair": list,
+                "quote_pair": list,
+                "synth_pair": list
             },
             "df": {
                 "base_pair": DataFrame,
@@ -122,9 +122,9 @@ class StrategyBase(Config):
         },
         "1d": {
             "raw": {
-                "base_pair": list[list[int | None]],
-                "quote_pair": list[list[int | None]],
-                "synth_pair": list[list[int | None]]
+                "base_pair": list,
+                "quote_pair": list,
+                "synth_pair": list
             },
             "df": {
                 "base_pair": DataFrame,
@@ -134,9 +134,9 @@ class StrategyBase(Config):
         },
         "1w": {
             "raw": {
-                "base_pair": list[list[int | None]],
-                "quote_pair": list[list[int | None]],
-                "synth_pair": list[list[int | None]]
+                "base_pair": list,
+                "quote_pair": list,
+                "synth_pair": list
             },
             "df": {
                 "base_pair": DataFrame,
