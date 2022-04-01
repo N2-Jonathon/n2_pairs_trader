@@ -15,7 +15,7 @@
 !!! todo
 
     - [x] **[6]**  Submit working demo/mvp/proof-of-concept **[Dev v0.0.1](/Releases/dev_v0.0.1/dev-journal/) (not unit tested, only for demo)**
-        - Github release viewable [here](https://github.com/N2-Jonathon/n2_pairs_trader/releases/tag/v0.0.1-dev)
+        - Github release viewable [here](https://github.com/N2-Jonathon/n2_pairs_trader/releases/tag/v0.0.2-dev)
     - [ ] **[7]** Submit explanatory video
     - [ ] **[8]** Plan which features which will be released incrementally in order of priority, with version numbers to make tracking progress more managable
     - [ ] **[9]** Work on all the steps required for the first stable & unit tested release ***[v0.1.0](/Releases/stable_v0.1.0/dev-journal/) (planned)***

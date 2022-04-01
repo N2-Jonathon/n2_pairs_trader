@@ -54,7 +54,8 @@ nav:
       - Exchanges with margin: 'ccxt_insights/2_exchanges_with_margin.md'
       - Exchanges with fetchBorrowRate: 'ccxt_insights/3_exchanges_with_fetchBorrowRate.md' 
   - Releases:
-      - v0.0.1 (dev): 'Releases/dev_v0.0.1/dev-journal.md'
+      - v0.0.1-dev: 'Releases/dev_v0.0.1/dev-journal.md'
+      - v0.0.2-dev: 'Releases/dev_v0.0.2/dev-journal.md'
       - Planned:
           - v0.1.0 (stable & unit tested): 'Releases/stable_v0.1.0/dev-journal.md'
 

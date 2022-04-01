@@ -1,5 +1,8 @@
 # ***v0.0.1*** *(Development Release)*
 
+!!! important
+    This failed the github checks because of a markdown extension for the documentation, so I made another release **[v0.0.2-dev](/Releases/dev_v0.0.2/dev-journal/)** to fix that.
+
 !!! todo
     - [x] Publish the release on the Github repo
         - Github release viewable [here](https://github.com/N2-Jonathon/n2_pairs_trader/releases/tag/v0.0.1-dev)
