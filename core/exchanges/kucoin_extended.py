@@ -183,7 +183,7 @@ class kucoin_extended(kucoin):
         marketId = self.market_id(symbol)
         clientOrderId = self.safe_string_2(params, 'clientOid', 'clientOrderId', self.uuid())
 
-        if float(size) < 2000:
+        if float(size) > 2000:
             print("Size of margin order exceeds KuCoin's limit of 2000 per order,\n"
                   "so reducing it to 2000\n"
                   "TODO: break these types of orders into multiple orders")
@@ -208,7 +208,7 @@ class kucoin_extended(kucoin):
                 }
 
         if type == 'market':
-            breakpoint()
+            # breakpoint()
             params = {
                 "clientOid": clientOrderId,
                 "side": side,

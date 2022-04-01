@@ -210,10 +210,10 @@ class StrategyBase(Config):
 
     def prompt_to_override_signal(self):
         # override_options = WordCompleter(['Long', 'Short', 'Close'])
-        override_signal = input("[DEBUG] Override signal (Press TAB for auto-complete): ").upper()
-        if override_signal == "L":
+        override_signal = input("[DEBUG] Override signal ([Long]/Short/Close) ([l]/s/c): ").upper()
+        if override_signal == "" or override_signal == "L":
             self.override_signal('LONG')  # Default if you just press enter at the prompt
-        elif override_signal == "" or override_signal == "S":
+        elif override_signal ==  "S":
             self.override_signal('SHORT')
         elif override_signal.upper() == 'SHORT' or override_signal == 'LONG':
             self.override_signal(override_signal)

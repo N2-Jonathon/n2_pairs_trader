@@ -254,7 +254,7 @@ class Position(Config):
         self.status['msg'] = f"Converting funds back to {self.stake_currency}"
         print(f"{self.status['msg']}\n")
         self.exchange.convert_all_funds_to_one_currency(self.stake_currency)
-
+        self.status['msg'] = 'CLOSED'
         return self, 0
 
     def repay_all_outstanding_liabilities(self):
@@ -436,7 +436,8 @@ class PositionManager(Config):
                   f"{str(self.current_position.borrow_info)}\n\n"
                   f"Trades Info:\n"
                   f"{str(self.current_position.trades_info)}\n")
-
+            if self.debug_mode:
+                breakpoint()
             self.event_handler.fire('onOpenPosition', self.current_position)
             return self.status
         else:

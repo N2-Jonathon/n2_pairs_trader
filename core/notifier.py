@@ -6,6 +6,7 @@ import asyncio
 from pyrogram import Client
 from telethon import TelegramClient, events
 from telethon.errors import SessionPasswordNeededError
+from pprint import pprint
 
 
 class Notifier:
@@ -24,8 +25,8 @@ class Notifier:
                                                  self.pm.api_keys['telegram']['api_hash'])
         '''
         # self.loop.run_until_complete(self.run_pyrogram_client())
-        pm.event_handler.link(self.send_telegram_notification, 'onOpenPosition')
-        pm.event_handler.link(self.send_telegram_notification, 'onClosePosition')
+        pm.event_handler.link(self.send_position_report, 'onOpenPosition')
+        pm.event_handler.link(self.send_position_report, 'onClosePosition')
         # self.schedule_tasks()
 
     def schedule_tasks(self: object) -> None:
@@ -35,16 +36,47 @@ class Notifier:
         self.loop.run_until_complete(self.run_pyrogram_client())
         breakpoint()
 
-    def send_telegram_notification(self, position):
-        print("Sending Telegram Notification...\n"
-              "Position Info:\n")
-        print(position)
-        # breakpoint()
-        self.loop.run_until_complete(self.send_telegram_msg(str(position)))
+    def send_position_report(self, position):
+
+        if position.status['msg'] == 'OPEN':
+
+            report = (f"**__OPENED {position.direction} POSITION:__**\n\n"
+                      f"Artificial Pair: **{self.pm.synth_pair}**\n"
+                      f"Exchange: {self.pm.exchange_name}\n\n"
+                      "**Borrow Order Info:**\n"
+                      f"  Quantity: {position.borrow_info['borrow_qty']}\n"
+                      f"  Timestamp: {position.borrow_info['borrow_timestamp_utc']}\n"
+                      f"  Currency: {position.borrow_info['currency']}\n"
+                      f"  orderId: {position.borrow_info['orderId']}\n\n"
+                      "**Underlying trades to open position:**\n"
+                      f"  **Base Pair: {position.trades_info['open']['base_pair']['symbol']}**\n"
+                      f"    Side: {position.trades_info['open']['base_pair']['side']}\n"
+                      f"    Timestamp: {position.trades_info['open']['base_pair']['timestamp']}\n"
+                      f"  **Quote Pair: {position.trades_info['open']['quote_pair']['symbol']}**\n"
+                      f"    Side: {position.trades_info['open']['quote_pair']['side']}\n"
+                      f"    Timestamp: {position.trades_info['open']['quote_pair']['timestamp']}\n")
+            print("Sending Telegram Notification...\n"
+                  "Position Info:\n")
+            pprint(report)
+        elif position.status['msg'] == 'CLOSED':
+            report = (f"**__CLOSED {position.direction} POSITION:__**\n\n"
+                      f"Artificial Pair: **{self.pm.synth_pair}**\n"
+                      f"Exchange: {self.pm.exchange_name}\n\n"
+                      "**Borrow Order Info:**\n"
+                      f"  Quantity: {position.borrow_info['borrow_qty']}\n"
+                      f"  Timestamp: {position.borrow_info['borrow_timestamp_utc']}\n"
+                      f"  Currency: {position.borrow_info['currency']}\n"
+                      f"  orderId: {position.borrow_info['orderId']}\n\n"
+                      "**Underlying trades to close position:**\n"
+                      "TODO: track & display relevant information here")
+        breakpoint()
+        self.loop.run_until_complete(self.send_telegram_msg(str(report)))
         breakpoint()
 
 
     async def send_telegram_msg(self, msg: str):
+        msg = str(msg)
+        breakpoint()
         async with self.pyrogram_tg_client as tg:
             await tg.send_message('jonathon_test', msg)
 
