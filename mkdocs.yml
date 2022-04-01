@@ -79,4 +79,4 @@ markdown_extensions:
   - pymdownx.mark
   - attr_list
   - md_in_html
-  - fontawesome_markdown
+  # - fontawesome_markdown
