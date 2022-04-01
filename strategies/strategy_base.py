@@ -210,7 +210,21 @@ class StrategyBase(Config):
 
     def prompt_to_override_signal(self):
         # override_options = WordCompleter(['Long', 'Short', 'Close'])
-        override_signal = input("[DEBUG] Override signal ([Long]/Short/Close) ([l]/s/c): ").upper()
+        override_signal = input("""
+      ₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿          N^2 Capital
+      ₿₿                             ₿₿          
+      ₿₿                             ₿₿          Crypto Pairs Trader
+      ₿₿                             ₿₿          v0.0.1 (Alpha)
+      ₿₿                             ₿₿          
+      ₿₿                                       
+      ₿₿                ₿₿₿₿         ₿₿          
+      ₿₿                ₿₿  ₿₿       ₿₿          
+      ₿₿                ₿₿    ₿₿     ₿₿          
+      ₿₿                ₿₿      ₿₿   ₿₿          
+      ₿₿                ₿₿        ₿₿ ₿₿          Created by
+      ₿₿₿₿₿₿₿₿₿₿₿₿₿₿₿   ₿₿  ₿₿₿₿₿₿  ₿₿₿          Jonathon Quick
+          """
+                                "\n[DEBUG] Override signal ([Long]/Short/Close) ([l]/s/c): ").upper()
         if override_signal == "" or override_signal == "L":
             self.override_signal('LONG')  # Default if you just press enter at the prompt
         elif override_signal ==  "S":
