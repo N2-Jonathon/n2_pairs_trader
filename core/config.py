@@ -158,6 +158,7 @@ class Config:
                     print(f"{self.status['msg']}\n")
                 # breakpoint()
             except:
+                print(self.status['msg'])
                 raise ValueError("Failed to read from config (Make sure all values are assigned)")
         elif self.params is not None:
             for param in self.params:
