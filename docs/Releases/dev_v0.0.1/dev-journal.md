@@ -1,7 +1,7 @@
 # ***v0.0.1*** *(Development Release)*
 
 !!! todo
-    - [ ] Publish the release on the Github repo
+    - [x] Publish the release on the Github repo
     - [ ] Come back and add some more information here describing how the steps below are implemented including:
         
         - [ ]  a PlantUML class diagram of each of the classes:
