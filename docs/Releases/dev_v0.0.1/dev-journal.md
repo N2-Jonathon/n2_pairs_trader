@@ -2,6 +2,7 @@
 
 !!! todo
     - [x] Publish the release on the Github repo
+        - Github release viewable [here](https://github.com/N2-Jonathon/n2_pairs_trader/releases/tag/v0.0.1-dev)
     - [ ] Come back and add some more information here describing how the steps below are implemented including:
         
         - [ ]  a PlantUML class diagram of each of the classes:
