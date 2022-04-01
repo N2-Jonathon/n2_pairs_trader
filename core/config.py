@@ -48,6 +48,7 @@ class Config:
             "notification_channel_id": None
         }
     }
+    status = {}
 
     @staticmethod
     def split_pair(pair, pair_type=None):
@@ -85,20 +86,76 @@ class Config:
                 raise ValueError
 
             try:
+                self.status['msg'] = f"Reading values from {filepath}"
+                if self.debug_mode:
+                    print(f"{self.status['msg']}\n")
+
                 self.exchange_name = self.cfg_parser['Global Settings']['exchange']
+                self.status['exchange_name'] = self.exchange_name
+                self.status['msg'] = f"exchange_name: {self.exchange_name}"
+                if self.debug_mode:
+                    print(f"{self.status['msg']}\n")
+
                 self.exchange_id = self.exchange_name.lower()
+                self.status['exchange_id'] = self.exchange_id
+                self.status['msg'] = f"exchange_id: {self.exchange_id}"
+                if self.debug_mode:
+                    print(f"{self.status['msg']}\n")
+
 
                 self.strategy_name = self.cfg_parser['Global Settings']['strategy']
+                self.status['strategy_name'] = self.strategy_name
+                self.status['msg'] = f"strategy_name: {self.strategy_name}"
+                if self.debug_mode:
+                    print(f"{self.status['msg']}\n")
+
                 self.strategy_import_path = f"strategies.{self.strategy_name}"
+                self.status['strategy_import_path'] = self.strategy_import_path
+                self.status['msg'] = f"strategy_import_path: {self.strategy_import_path}"
+                if self.debug_mode:
+                    print(f"{self.status['msg']}\n")
 
                 self.prompt_for_pairs = 'true' in self.cfg_parser['Global Settings']['prompt_for_pairs'].lower()
+                self.status['prompt_for_pairs'] = self.prompt_for_pairs
+                self.status['msg'] = f"prompt_for_pairs: {self.prompt_for_pairs}"
+                if self.debug_mode:
+                    print(f"{self.status['msg']}\n")
+
                 self.prompt_borrow_qty = 'true' in self.cfg_parser['Global Settings']['prompt_borrow_qty'].lower()
+                self.status['prompt_borrow_qty'] = self.prompt_borrow_qty
+                self.status['msg'] = f"prompt_borrow_qty: {self.prompt_borrow_qty}"
+                if self.debug_mode:
+                    print(f"{self.status['msg']}\n")
 
                 self.base_pair = self.cfg_parser['Global Settings']['base_pair_default']
+                self.status['base_pair'] = self.base_pair
+                self.status['msg'] = f"base_pair: {self.base_pair}"
+                if self.debug_mode:
+                    print(f"{self.status['msg']}\n")
+
                 self.quote_pair = self.cfg_parser['Global Settings']['quote_pair_default']
+                self.status['quote_pair'] = self.quote_pair
+                self.status['msg'] = f"quote_pair: {self.quote_pair}"
+                if self.debug_mode:
+                    print(f"{self.status['msg']}\n")
+
                 self.stake_currency = self.cfg_parser['Global Settings']['stake_currency']
+                self.status['stake_currency'] = self.stake_currency
+                self.status['msg'] = f"stake_currency: {self.stake_currency}"
+                if self.debug_mode:
+                    print(f"{self.status['msg']}\n")
+
                 self.paper_trade = 'true' in self.cfg_parser['Global Settings']['paper_trade'].lower()
+                self.status['paper_trade'] = self.paper_trade
+                self.status['msg'] = f"paper_trade: {self.paper_trade}"
+                if self.debug_mode:
+                    print(f"{self.status['msg']}\n")
+
                 self.telegram_enabled = 'true' in self.cfg_parser['telegram']['enabled'].lower()
+                self.status['telegram_enabled'] = self.telegram_enabled
+                self.status['msg'] = f"telegram_enabled: {self.telegram_enabled}"
+                if self.debug_mode:
+                    print(f"{self.status['msg']}\n")
                 # breakpoint()
             except:
                 raise ValueError("Failed to read from config (Make sure all values are assigned)")
