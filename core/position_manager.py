@@ -437,7 +437,7 @@ class PositionManager(Config):
                   f"Trades Info:\n"
                   f"{str(self.current_position.trades_info)}\n")
             if self.debug_mode:
-                breakpoint()
+                # list
             self.event_handler.fire('onOpenPosition', self.current_position)
             return self.status
         else:

@@ -195,7 +195,7 @@ class kucoin_extended(kucoin):
                 # TODO: fetch best ask/bids
                 # breakpoint()
                 order_book = self.fetch_order_book(marketId)
-                breakpoint()
+                # list
                 # raise NotImplementedError('Must fetch best ask/bids first and assign correct value to price param')
                 type = 'market'  # Before this gets implemented, limit orders are changed into market order. This will change
                 params = {
@@ -254,7 +254,7 @@ class kucoin_extended(kucoin):
         }
         response = self.privatePostMarginRepaySingle(params)
 
-        breakpoint()
+        # list
         return response
 
     def get_repay_record(self, currency=None):
@@ -301,16 +301,16 @@ class kucoin_extended(kucoin):
                 try:
                     symbol = f"{currency}-{_currency}"
                     DEBUG_response = self.place_margin_order('sell', symbol, size)
-                    breakpoint()
+                    # list
                 except BadSymbol:
                     symbol = f"{_currency}-{currency}"
 
                     DEBUG_response = self.place_margin_order('buy', symbol, size, type='limit', price='current')
 
-                    breakpoint()
+                    # list
 
 
 
         new_balances = self.fetch_available_margin_balances()
-        breakpoint()
+        # list
         return new_balances

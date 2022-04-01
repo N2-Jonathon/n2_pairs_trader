@@ -34,7 +34,7 @@ class Notifier:
         loop = self.loop
         # DEBUG_task = self.loop.create_task(self.run_pyrogram_client())
         self.loop.run_until_complete(self.run_pyrogram_client())
-        breakpoint()
+        # list
 
     def send_position_report(self, position):
 
@@ -69,14 +69,14 @@ class Notifier:
                       f"  orderId: {position.borrow_info['orderId']}\n\n"
                       "**Underlying trades to close position:**\n"
                       "TODO: track & display relevant information here")
-        breakpoint()
+        # list
         self.loop.run_until_complete(self.send_telegram_msg(str(report)))
-        breakpoint()
+        # list
 
 
     async def send_telegram_msg(self, msg: str):
         msg = str(msg)
-        breakpoint()
+        # list
         async with self.pyrogram_tg_client as tg:
             await tg.send_message('jonathon_test', msg)
 
