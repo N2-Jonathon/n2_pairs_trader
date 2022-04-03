@@ -1,8 +1,28 @@
-# **Home:**
-
-!!! info
+!!! important
 
     Finished tasks migrated to [here](/Releases/dev_v0.0.1/dev-journal/)
+
+## **1. Demo**
+
+Audio quality of my mic sounds like a tin can, so apologies for that. 
+
+Also, the first two videos were recorded after the third video so when I refer to the previous video I mean the third video
+
+<iframe width="600" height="315" src="https://www.youtube.com/embed/vIULpWUV4Gk?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+---
+
+## **2. Looking at the code**
+
+<iframe width="600" height="315" src="https://www.youtube.com/embed/yqgvRHTsjD0?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+---
+
+## **3. Octobot vs. FreqTrade** 
+
+<iframe width="600" height="315" src="https://www.youtube.com/embed/HDAzjBDvhcE?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+---
 
 <a href="https://wakatime.com"><img src="https://wakatime.com/share/@spliffli/f8c024ff-274d-4aaa-b573-1e3f432f2f27.png" /></a>
 
@@ -48,7 +68,9 @@ fetching market data, opening trades, etc.
     abstractions. I should make a wrapper method which handles which one to use but for now that has to be done inside
     the strategy.
 
-# Objectives & Requirements
+---
+
+# **Objectives & Requirements**
 
 This is a platform that's designed for pairs trading strategies.
 
@@ -64,18 +86,18 @@ The reason the short trade should be opened before the long trade, is so that bo
 
 ---
 
-## **ETH/USDT|D1|KUCOIN**
+## **ETH/USDT**:D1:KUCOIN
 
 ![ETH/USDT:D1:KUCOIN - 2022-03-13 22-35-29](images/ETHUSDT-D1-KUCOIN%20-%202022-03-13%2022-35-29.png)
 
 ---
 
-## BTC/USDT:D1:KUCOIN
+## **BTC/USDT**:D1:KUCOIN
 
 ![BTC/USDT:D1:KUCOIN - 2022-03-13 22-34-17](images/BTCUSDT:D1:KUCOIN%20-%20%202022-03-13%2022-34-17.png)
 
 ---
 
-## ETHUSDT/BTCUSDT:D1:KUCOIN
+## **ETHUSDT/BTCUSDT**:D1:KUCOIN
 
 ![ETHUSDT/BTCUSDT:D1:KUCOIN - 2022-03-13 22-35-29](images/ETHUSDT-BTCUSDT:D1:KUCOIN%20-%202022-03-13%2022-40-24.png)

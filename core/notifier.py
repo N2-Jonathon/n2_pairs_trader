@@ -49,11 +49,11 @@ class Notifier:
                       f"  Currency: {position.borrow_info['currency']}\n"
                       f"  orderId: {position.borrow_info['orderId']}\n\n"
                       "**Underlying trades to open position:**\n"
-                      f"  **Base Pair: {position.trades_info['open']['base_pair']['symbol']}**\n"
-                      f"    Side: {position.trades_info['open']['base_pair']['side']}\n"
-                      f"    Timestamp: {position.trades_info['open']['base_pair']['timestamp']}\n"
+                      f"  *p: {position.trades_info['open']['base_pair']['timestamp']}\n"
                       f"  **Quote Pair: {position.trades_info['open']['quote_pair']['symbol']}**\n"
-                      f"    Side: {position.trades_info['open']['quote_pair']['side']}\n"
+                      f"    Side*Base Pair: {position.trades_info['open']['base_pair']['symbol']}**\n"
+                      f"    Side: {position.trades_info['open']['base_pair']['side']}\n"
+                      f"    Timestam: {position.trades_info['open']['quote_pair']['side']}\n"
                       f"    Timestamp: {position.trades_info['open']['quote_pair']['timestamp']}\n")
             print("Sending Telegram Notification...\n"
                   "Position Info:\n")

@@ -21,7 +21,6 @@ CORE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.abspath(os.path.join(CORE_DIR, os.pardir))
 USER_CONFIG_PATH = f"{ROOT_DIR}/user/user-config.ini"
 
-EXCHANGE_API_KEYS = {}
 
 EXTENDED_EXCHANGES = {'kucoin':
                               ("core.exchanges.kucoin_extended", "kucoin_extended")
