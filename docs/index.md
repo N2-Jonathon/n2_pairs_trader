@@ -4,7 +4,7 @@
 
 ## **1. Demo**
 
-Audio quality of my mic sounds like a tin can, so apologies for that. 
+Audio quality of my mic sounds like a tin can, so apologies for that. I'm going to either edit them and re-upload or if I have to re-record then I will, but it should be possible to fix with editing.
 
 Also, the first two videos were recorded after the third video so when I refer to the previous video I mean the third video
 
