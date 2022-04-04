@@ -8,19 +8,19 @@ Audio quality of my mic sounds like a tin can, so apologies for that. I'm going 
 
 Also, the first two videos were recorded after the third video so when I refer to the previous video I mean the third video
 
-<iframe width="600" height="315" src="https://www.youtube.com/embed/vIULpWUV4Gk?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="600" height="315" src="https://www.youtube.com/embed/KiE56FEMujc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ---
 
 ## **2. Looking at the code**
 
-<iframe width="600" height="315" src="https://www.youtube.com/embed/yqgvRHTsjD0?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="600" height="315" src="https://www.youtube.com/embed/YNiF0Oj13O4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ---
 
 ## **3. Octobot vs. FreqTrade** 
 
-<iframe width="600" height="315" src="https://www.youtube.com/embed/HDAzjBDvhcE?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="600" height="315" src="https://www.youtube.com/embed/7OnZLGU81Zw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ---
 
