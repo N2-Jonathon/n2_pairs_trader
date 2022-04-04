@@ -6,7 +6,7 @@
 
 Audio quality of my mic sounds like a tin can, so apologies for that. I'm going to either edit them and re-upload or if I have to re-record then I will, but it should be possible to fix with editing.
 
-Also, the first two videos were recorded after the third video so when I refer to the previous video I mean the third video
+Also, the first two videos were recorded after the third video so when I refer to the previous video I mean the third video. Th first video ends abruptly since it is the same video as the second one and I just chopped it into two.
 
 <iframe width="600" height="315" src="https://www.youtube.com/embed/KiE56FEMujc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
