@@ -27,6 +27,14 @@ After you have the repository cloned, the next step is to make the file **/user/
       
     <img src='/images/tg-test-channel.png'>
 
-## ***2.*** Install python dependencies
+## ***3.*** Install python dependencies
 
-- Navigate to the root of where you cloned the repository and then type the command: `pip install -r requirements.txt` and it will install te project dependencies. Note that this currently also includes the dependencies for building the documentation, but those will be moved back to requirements_dev.txt and left out of requirements.txt
+Navigate to the root of the repository you cloned and then firstly type the command: 
+
+ - `pip install --upgrade pip` 
+
+Then type the command: 
+
+ - `pip install -r requirements.txt` 
+
+it will then install the project dependencies and it is now installed. Note that this currently also includes the dependencies for building the documentation, but those will be moved back to requirements_dev.txt and left out of requirements.txt
