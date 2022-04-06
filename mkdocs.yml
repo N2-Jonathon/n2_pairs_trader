@@ -43,8 +43,12 @@ nav:
   # - Message for Noe: 'message-for-noe.md'  
   - User Guide: 
       - 1. Installation: user_guide/1_installation.md
+      - 2. Running an instance: user_guide/2_running-an-instance.md
+      - 3. Changing the configuration: user_guide/3_changing-the-configuration.md
+      - 4. Running multiple instances: user_guide/4_running-multiple-instances.md
+      - 5. Monitoring Positions: user_guide/5_monitoring-positions.md
   - CCXT Insights:
-      - Overview: 'ccxt_insights/1_overview.md'
+      - 'CCXT Insights: Overview': 'ccxt_insights/1_overview.md'
       - Exchanges with margin: 'ccxt_insights/2_exchanges_with_margin.md'
       - Exchanges with fetchBorrowRate: 'ccxt_insights/3_exchanges_with_fetchBorrowRate.md' 
   - Releases:
