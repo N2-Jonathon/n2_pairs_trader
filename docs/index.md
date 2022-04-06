@@ -1,10 +1,26 @@
 !!! important
 
-    Finished tasks migrated to [here](/Releases/dev_v0.0.1/dev-journal/)
+    Previously finished tasks from before release Once ***[v0.1.0](/Releases/stable_v0.1.0/dev-journal/)*** migrated to [here](/Releases/dev_v0.0.1/dev-journal/)
+    
+!!! todo
+
+    - [x] **[6]**  Submit working demo/mvp/proof-of-concept **[Dev v0.0.1](/Releases/dev_v0.0.1/dev-journal/) (not unit tested, only for demo)**
+        - Github release viewable [here](https://github.com/N2-Jonathon/n2_pairs_trader/releases/tag/v0.0.2-dev)
+    - [x] **[7]** Submit demo videos
+    - [ ] **[8]** Write User Guide:
+          - [x] 1. Installation
+          - [ ] 2. Running an instance
+          - [ ] 3. Changing the configuration
+          - [ ] 4. Running multiple instances
+          - [ ] 5. Monitoring Positions
+    - [ ] **[9]** Work on all the steps required for the first stable & unit tested release ***[v0.1.0](/Releases/stable_v0.1.0/dev-journal/) (planned)***
+    - [ ] **[10]** Collaboratively plan which features which will be released incrementally in order of priority, clarifying the criteria for each to be fulfilled & assign planned version numbers to make tracking progress more objective. 
+
+
 
 ## **1. Demo**
 
-Audio quality of my mic sounds like a tin can, so apologies for that. I'm going to either edit them and re-upload or if I have to re-record then I will, but it should be possible to fix with editing.
+Audio quality of my mic sounds like a tin can, so apologies for that. Once ***[v0.1.0](/Releases/stable_v0.1.0/dev-journal/)*** is released, I'll record new videos with concise & easy to follow guides for users, and seperate guides for developers (And I'll get a better mic first)
 
 Also, the first two videos were recorded after the third video so when I refer to the previous video I mean the third video. Th first video ends abruptly since it is the same video as the second one and I just chopped it into two.
 
@@ -31,16 +47,6 @@ EDIT: Minor correction to what I say in the video: When it's in debug mode it's 
 (Thankfully I don't charge per hour...) I know I can eventually deliver a high quality, reliable and properly tested product if I spend enough time on it.
 
 - Some of this time was spent on other things, but most of the time was actually spent on your project. I'll be able to see a more detailed breakdown when I get WakaTime Premium
-- Also, after releasing **[v0.0.1](/Releases/dev_v0.0.1/dev-journal/) (dev)** on github & recording some explanatory videos, I have to request some kind of payment because even though I've been avoiding asking about that so far, the truth is I have no money left in my bank account and my rent is due tomorrow. It's okay if you can't pay on the spot tomorrow and you need time to test it out yourself etc, as long as I'm able to pay my rent eventually then it's okay.
-- As you can see my productivity has been declining the past few days and it's because I'm feeling kind of burnt out, so I'd also highly appreciate if I can take a bit of a break between when **[v0.0.1](/Releases/dev_v0.0.1/dev-journal/)** is released before moving on to the unit tests and the **[v0.1.0](/Releases/stable_v0.0.1/dev-journal/) (stable)**
-
-!!! todo
-
-    - [x] **[6]**  Submit working demo/mvp/proof-of-concept **[Dev v0.0.1](/Releases/dev_v0.0.1/dev-journal/) (not unit tested, only for demo)**
-        - Github release viewable [here](https://github.com/N2-Jonathon/n2_pairs_trader/releases/tag/v0.0.2-dev)
-    - [ ] **[7]** Submit explanatory video
-    - [ ] **[8]** Plan which features which will be released incrementally in order of priority, with version numbers to make tracking progress more managable
-    - [ ] **[9]** Work on all the steps required for the first stable & unit tested release ***[v0.1.0](/Releases/stable_v0.1.0/dev-journal/) (planned)***
 
 In these docs I will explain how this program works and its architecture, and try to make it easy to understand for
 both users or developers.
