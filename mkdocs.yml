@@ -41,14 +41,8 @@ plugins:
 nav:
   - Readme: 'index.md'
   # - Message for Noe: 'message-for-noe.md'  
-  - How it works: 
-      - 1. Start the Bot: how_it_works/1_start_the_bot.md
-      - 2. Initialize Strategy: how_it_works/2_initialize_strategy.md
-      - 3. Market Data & Signals: how_it_works/3_signals.md
-      - 4. Opening a Position: how_it_works/4_opening_a_position.md
-      - 5. Closing a Position: how_it_works/5_closing_a_position.md
-      - 6. Notifications: how_it_works/6_generating_reports.md
-      - 7. Creating New Strategies: 'how_it_works/7_creating_a_new_strategy.md'
+  - User Guide: 
+      - 1. Installation: user_guide/1_installation.md
   - CCXT Insights:
       - Overview: 'ccxt_insights/1_overview.md'
       - Exchanges with margin: 'ccxt_insights/2_exchanges_with_margin.md'
