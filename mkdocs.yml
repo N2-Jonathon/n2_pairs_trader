@@ -56,7 +56,7 @@ nav:
       - v0.0.2-dev: 'Releases/dev_v0.0.2/dev-journal.md'
       - Planned:
           - v0.1.0 (stable & unit tested): 'Releases/stable_v0.1.0/dev-journal.md'
-
+  - Developer Guide: 'dev_guide/stub.md'
   - Further Ideas: further_ideas.md
 
 
