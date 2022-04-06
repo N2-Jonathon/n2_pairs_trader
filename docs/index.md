@@ -13,6 +13,7 @@
           - [ ] 3. Changing the configuration
           - [ ] 4. Running multiple instances
           - [ ] 5. Monitoring Positions
+          - [ ] Afterwards add screenshots to all of those pages
     - [ ] **[9]** Work on all the steps required for the first stable & unit tested release ***[v0.1.0](/Releases/stable_v0.1.0/dev-journal/) (planned)***
     - [ ] **[10]** Collaboratively plan which features which will be released incrementally in order of priority, clarifying the criteria for each to be fulfilled & assign planned version numbers to make tracking progress more objective. 
 
