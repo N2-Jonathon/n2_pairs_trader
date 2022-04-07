@@ -13,10 +13,10 @@ The coin which has to be borrowed is worked out automatically depending on wheth
 
     The indexes of this tuple are as follows:
 
-    **[0]** Full artificial symbol ie. **ETHUSDT/BTCUSDT**
-    **[1]** Base currency of base pair ie. **ETH**
-    **[2]** Quote currency of base pair ie. **USDT**
-    **[3]** Base currency of quote pair ie. **BTC**
-    **[4]** Quote currency of quote pair ie. **USDT**
+    - **[0]** Full artificial symbol ie. **ETHUSDT/BTCUSDT**
+    - **[1]** Base currency of base pair ie. **ETH**
+    - **[2]** Quote currency of base pair ie. **USDT**
+    - **[3]** Base currency of quote pair ie. **BTC**
+    - **[4]** Quote currency of quote pair ie. **USDT**
 
     There's currently no reason why **[2]** & **[4]** would be different but it's technically possible to have two pairs with different denominators although that's untested.  
