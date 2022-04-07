@@ -9,7 +9,7 @@
     - [x] **[7]** Submit demo videos
     - [ ] **[8]** Write User Guide:
           - [x] 1. Installation
-          - [ ] 2. Running an instance
+          - [x] 2. Running an instance
           - [ ] 3. Changing the configuration
           - [ ] 4. Running multiple instances
           - [ ] 5. Monitoring Positions
