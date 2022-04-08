@@ -27,7 +27,7 @@ Also, the first two videos were recorded after the third video so when I refer t
 
 EDIT: Minor correction to what I say in the video: When it's in debug mode it's not actually listening for signals, and it's only asking for the prompt. I can however change it so that it is doing both at the same time. If you disable debug_mode, then it will actually be waiting for real signals.
 
-<iframe width="600" height="315" src="https://www.youtube.com/embed/KiE56FEMujc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="600" height="315" src="https://www.youtube.com/embed/ZX-9DyGvBLo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ---
 
