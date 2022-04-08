@@ -81,6 +81,11 @@ fetching market data, opening trades, etc.
 
 # **Objectives & Requirements**
 
+!!! important "**SuperTrend Strategy Activity Diagram from earlier**"
+    
+
+    <img src='/images/activity-diagram.png'>
+
 This is a platform that's designed for pairs trading strategies.
 
 Pairs trading is when you take two tradeable pairs eg. `ETH/USDT` and `BTC/USDT` and combine them to make what can be called an 'artificial', 'synthetic', or 'double' pair (I may use those names interchangeably in these docs) by dividing each of the OHLCV data points in the base currency by the quote currency ie. `ETHUSDT/BTCUSDT`
