@@ -1,0 +1,705 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.8">
+    
+    
+      
+        <title>3. Market Data & Signals: - N2 Pairs Trader Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.644de097.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.e6a45f82.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#000000">
+        
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../../../css/dark_theme.css">
+    
+      <link rel="stylesheet" href="../../../css/codehilite.css">
+    
+      <link rel="stylesheet" href="../../../css/profont.css">
+    
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+<meta name="theme-color" content="#212121">
+
+<link rel='icon' href='/img/favicon.ico'>
+
+<meta name='apple-mobile-web-app-capable' content='yes'>
+<meta name='mobile-web-app-capable' content='yes'>
+<link rel="manifest" href="/manifest.json">
+
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="black" data-md-color-accent="dark-blue">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#3-market-data-signals" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="N2 Pairs Trader Docs" class="md-header__button md-logo" aria-label="N2 Pairs Trader Docs" data-md-component="logo">
+      
+  <img src="../../../img/logo-96px.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            N2 Pairs Trader Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              3. Market Data & Signals:
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="N2 Pairs Trader Docs" class="md-nav__button md-logo" aria-label="N2 Pairs Trader Docs" data-md-component="logo">
+      
+  <img src="../../../img/logo-96px.png" alt="logo">
+
+    </a>
+    N2 Pairs Trader Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Readme
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          User Guide
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="User Guide" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          User Guide
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1_installation/" class="md-nav__link">
+        1. Installation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2_running-an-instance/" class="md-nav__link">
+        2. Running an instance
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3_changing-the-configuration/" class="md-nav__link">
+        3. Changing the configuration
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../4_running-multiple-instances/" class="md-nav__link">
+        4. Running multiple instances
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../5_monitoring-positions/" class="md-nav__link">
+        5. Monitoring Positions
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          CCXT Insights
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="CCXT Insights" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          CCXT Insights
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ccxt_insights/1_overview/" class="md-nav__link">
+        CCXT Insights: Overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ccxt_insights/2_exchanges_with_margin/" class="md-nav__link">
+        Exchanges with margin
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ccxt_insights/3_exchanges_with_fetchBorrowRate/" class="md-nav__link">
+        Exchanges with fetchBorrowRate
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Releases
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Releases" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Releases
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Releases/dev_v0.0.1/dev-journal/" class="md-nav__link">
+        v0.0.1-dev
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Releases/dev_v0.0.2/dev-journal/" class="md-nav__link">
+        v0.0.2-dev
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3" type="checkbox" id="__nav_4_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3">
+          Planned
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Planned" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_3">
+          <span class="md-nav__icon md-icon"></span>
+          Planned
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Releases/stable_v0.1.0/dev-journal/" class="md-nav__link">
+        v0.1.0 (stable & unit tested)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../dev_guide/stub/" class="md-nav__link">
+        Developer Guide
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../further_ideas/" class="md-nav__link">
+        Further Ideas
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#going-back-to-the-run_bot-function-in-mainpy" class="md-nav__link">
+    Going back to the run_bot() function in main.py:
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getting-a-signal-from-the-strategy" class="md-nav__link">
+    Getting a signal from the strategy
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+
+
+<h1 id="3-market-data-signals">3. Market Data &amp; Signals:</h1>
+<ul>
+<li>The strategy will have its own ccxt.Exchange type initialized with api keys read from the user config that gets stored in <code>self.exchange</code> and PositionManager object as a Fields and which can be accessed from inside or outside of the strategy class (better inside):</li>
+</ul>
+<h3 id="going-back-to-the-run_bot-function-in-mainpy">Going back to the run_bot() function in <strong>main</strong>.py:</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">run_bot</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="n">N2SuperTrend</span><span class="p">()):</span>
+    <span class="n">running</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">pm</span><span class="p">:</span> <span class="n">PositionManager</span> <span class="o">=</span> <span class="n">strategy</span><span class="o">.</span><span class="n">position_manager</span>
+
+    <span class="k">while</span> <span class="n">running</span><span class="p">:</span>
+
+        <span class="k">if</span> <span class="n">strategy</span><span class="o">.</span><span class="n">debug_mode</span><span class="p">:</span>
+            <span class="sd">&quot;&quot;&quot;If in debug mode, prompt for signal override&quot;&quot;&quot;</span>
+            <span class="n">override_signal</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;[DEBUG]Enter a signal to emulate: ([LONG]|SHORT|CLOSE)&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">override_signal</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                <span class="n">signal</span> <span class="o">=</span> <span class="s1">&#39;LONG&#39;</span>  <span class="c1"># Default if you just press enter at the prompt</span>
+            <span class="k">elif</span> <span class="n">override_signal</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;SHORT&#39;</span> <span class="ow">or</span> <span class="n">override_signal</span> <span class="o">==</span> <span class="s1">&#39;LONG&#39;</span><span class="p">:</span>
+                <span class="n">signal</span> <span class="o">=</span> <span class="n">override_signal</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="sd">&quot;&quot;&quot;If not in debug mode, call the get_signal method of the strategy&quot;&quot;&quot;</span>
+            <span class="n">signal</span> <span class="o">=</span> <span class="n">strategy</span><span class="o">.</span><span class="n">listen_for_signals</span><span class="p">()</span>
+
+        <span class="o">...</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">run_bot</span><span class="p">()</span>  <span class="c1"># Can pass a Strategy to override default eg. main(strategy=YourStrategy)</span>
+</code></pre></div>
+
+<ul>
+<li>First, the strategy's PositionManager is assigned to the variable <code>pm</code> (can be called anything)</li>
+<li>Then, it enters a while loop: <code>while running:</code>
+  This while loop is essentially one tick, and it would be better to move this out of <code>__main__.py</code> and into a a new method of <code>StrategyBase</code> or <code>Config</code>: called <code>run()</code> or <code>start()</code></li>
+<li>I haven't yet accounted for rate limits, but it's possible to fetch rate limits for an exchange with ccxt.</li>
+</ul>
+<h2 id="getting-a-signal-from-the-strategy">Getting a signal from the strategy</h2>
+<p>When the <code>strategy.get_signal</code> method is called, it will run whatever logic you have defined in that method for your strategy.</p>
+<ul>
+<li>If you don't create a method in your strategy called <code>get_signal</code>, it will default to the one in <code>StrategyBase</code> and raise a <code>NotImplemented</code> error:</li>
+<li>Otherwise, when you do define a <code>get_signal</code> method, it will override the one in <code>StrategyBase</code> and you can implement whatever logic and conditions  to generate the strategy's net signal in that method.</li>
+<li>The signal can either based on one timeframe or you can enable and define <strong>Multi-timeframe signal rules</strong> as a <code>dict</code> with keys for each timeframe that have <code>bool</code> values. Whichever timeframes are set to true, must reach a consensus of their signals for them to generate an aggregated signal.</li>
+<li><strong>[TODO]</strong>: make it so that in multi-timeframe mode, instead of fetching signals for all timeframes at every tick, they will each have different intervals to stay within rate limits.</li>
+<li>I also need to change how <code>get_signal</code> is currently fetching historic bars every time it's called when it should only need to do that once, and then update the price with live tick data from by using <code>ccxt.Exchange.fetch_ticker()</code></li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">run_bot</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="n">N2SuperTrend</span><span class="p">()):</span>
+    <span class="n">running</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">pm</span><span class="p">:</span> <span class="n">PositionManager</span> <span class="o">=</span> <span class="n">strategy</span><span class="o">.</span><span class="n">position_manager</span>
+
+    <span class="k">while</span> <span class="n">running</span><span class="p">:</span>
+        <span class="o">...</span>
+        <span class="n">signal</span> <span class="o">=</span> <span class="n">strategy</span><span class="o">.</span><span class="n">listen_for_signals</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">signal</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">signal</span> <span class="o">!=</span> <span class="s1">&#39;CLOSE&#39;</span><span class="p">:</span>
+            <span class="sd">&quot;&quot;&quot;If there is a new signal to LONG or SHORT:&quot;&quot;&quot;</span>
+            <span class="k">if</span> <span class="n">pm</span><span class="o">.</span><span class="n">get_current_position</span><span class="p">()</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                If there&#39;s no current position open, then open one</span>
+<span class="sd">                in the signal of the signal and set it as pm&#39;s</span>
+<span class="sd">                current_position</span>
+<span class="sd">                &quot;&quot;&quot;</span>
+                <span class="n">position</span> <span class="o">=</span> <span class="n">Position</span><span class="p">(</span><span class="n">strategy</span><span class="o">.</span><span class="n">base_pair</span><span class="p">,</span> <span class="n">strategy</span><span class="o">.</span><span class="n">quote_pair</span><span class="p">,</span>
+                                    <span class="n">direction</span><span class="o">=</span><span class="n">signal</span><span class="p">,</span>
+                                    <span class="n">order_type</span><span class="o">=</span><span class="s1">&#39;limit&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>
+                <span class="c1"># TODO: Here is where the `core.notifier` class would be</span>
+                <span class="c1">#   used to report the opening of the position and send</span>
+                <span class="c1">#   send a notification via telegram and/or email.</span>
+                <span class="n">pm</span><span class="o">.</span><span class="n">set_current_position</span><span class="p">(</span><span class="n">position</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">signal</span> <span class="o">==</span> <span class="s1">&#39;CLOSE&#39;</span><span class="p">:</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            If the signal is &#39;CLOSE&#39;, then close the pm.current_position</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="n">pm</span><span class="o">.</span><span class="n">current_position</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="c1"># TODO: Here `core.notifier` would be used again to report</span>
+            <span class="c1">#   the closing of the trade and send via email/telegram</span>
+
+        <span class="n">tick_interval</span> <span class="o">=</span> <span class="mi">60</span>  <span class="c1"># This should be adjusted to take API rate limits into account</span>
+        <span class="sd">&quot;&quot;&quot;For now the tick_interval is set here, but it should be set by params config file by Config.__init__()&quot;&quot;&quot;</span>
+
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">tick_interval</span><span class="p">)</span>
+        <span class="c1"># await asyncio.sleep(tick_interval)</span>
+</code></pre></div>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../../..", "features": [], "search": "../../../assets/javascripts/workers/search.5e67fbfe.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.c44cc438.min.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.1/tablesort.min.js"></script>
+      
+        <script src="../../../js/tablesort.js"></script>
+      
+    
+  </body>
+</html>

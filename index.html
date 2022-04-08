@@ -1,0 +1,860 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.8">
+    
+    
+      
+        <title>N2 Pairs Trader Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.644de097.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.e6a45f82.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#000000">
+        
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="css/dark_theme.css">
+    
+      <link rel="stylesheet" href="css/codehilite.css">
+    
+      <link rel="stylesheet" href="css/profont.css">
+    
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <script>__md_scope=new URL(".",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+<meta name="theme-color" content="#212121">
+
+<link rel='icon' href='/img/favicon.ico'>
+
+<meta name='apple-mobile-web-app-capable' content='yes'>
+<meta name='mobile-web-app-capable' content='yes'>
+<link rel="manifest" href="/manifest.json">
+
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="black" data-md-color-accent="dark-blue">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#1-demo" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="." title="N2 Pairs Trader Docs" class="md-header__button md-logo" aria-label="N2 Pairs Trader Docs" data-md-component="logo">
+      
+  <img src="img/logo-96px.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            N2 Pairs Trader Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Readme
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="." title="N2 Pairs Trader Docs" class="md-nav__button md-logo" aria-label="N2 Pairs Trader Docs" data-md-component="logo">
+      
+  <img src="img/logo-96px.png" alt="logo">
+
+    </a>
+    N2 Pairs Trader Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Readme
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="." class="md-nav__link md-nav__link--active">
+        Readme
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-demo" class="md-nav__link">
+    1. Demo
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-looking-at-the-code" class="md-nav__link">
+    2. Looking at the code
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-octobot-vs-freqtrade" class="md-nav__link">
+    3. Octobot vs. FreqTrade
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#objectives-requirements" class="md-nav__link">
+    Objectives &amp; Requirements
+  </a>
+  
+    <nav class="md-nav" aria-label="Objectives &amp; Requirements">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ethusdtd1kucoin" class="md-nav__link">
+    ETH/USDT:D1:KUCOIN
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#btcusdtd1kucoin" class="md-nav__link">
+    BTC/USDT:D1:KUCOIN
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ethusdtbtcusdtd1kucoin" class="md-nav__link">
+    ETHUSDT/BTCUSDT:D1:KUCOIN
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          User Guide
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="User Guide" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          User Guide
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="user_guide/1_installation/" class="md-nav__link">
+        1. Installation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="user_guide/2_running-an-instance/" class="md-nav__link">
+        2. Running an instance
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="user_guide/3_changing-the-configuration/" class="md-nav__link">
+        3. Changing the configuration
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="user_guide/4_running-multiple-instances/" class="md-nav__link">
+        4. Running multiple instances
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="user_guide/5_monitoring-positions/" class="md-nav__link">
+        5. Monitoring Positions
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          CCXT Insights
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="CCXT Insights" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          CCXT Insights
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="ccxt_insights/1_overview/" class="md-nav__link">
+        CCXT Insights: Overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="ccxt_insights/2_exchanges_with_margin/" class="md-nav__link">
+        Exchanges with margin
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="ccxt_insights/3_exchanges_with_fetchBorrowRate/" class="md-nav__link">
+        Exchanges with fetchBorrowRate
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Releases
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Releases" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Releases
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="Releases/dev_v0.0.1/dev-journal/" class="md-nav__link">
+        v0.0.1-dev
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="Releases/dev_v0.0.2/dev-journal/" class="md-nav__link">
+        v0.0.2-dev
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3" type="checkbox" id="__nav_4_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3">
+          Planned
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Planned" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_3">
+          <span class="md-nav__icon md-icon"></span>
+          Planned
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="Releases/stable_v0.1.0/dev-journal/" class="md-nav__link">
+        v0.1.0 (stable & unit tested)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="dev_guide/stub/" class="md-nav__link">
+        Developer Guide
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="further_ideas/" class="md-nav__link">
+        Further Ideas
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-demo" class="md-nav__link">
+    1. Demo
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-looking-at-the-code" class="md-nav__link">
+    2. Looking at the code
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-octobot-vs-freqtrade" class="md-nav__link">
+    3. Octobot vs. FreqTrade
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#objectives-requirements" class="md-nav__link">
+    Objectives &amp; Requirements
+  </a>
+  
+    <nav class="md-nav" aria-label="Objectives &amp; Requirements">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ethusdtd1kucoin" class="md-nav__link">
+    ETH/USDT:D1:KUCOIN
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#btcusdtd1kucoin" class="md-nav__link">
+    BTC/USDT:D1:KUCOIN
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ethusdtbtcusdtd1kucoin" class="md-nav__link">
+    ETHUSDT/BTCUSDT:D1:KUCOIN
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+
+
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Previously finished tasks from before release Once <strong><em><a href="/Releases/stable_v0.1.0/dev-journal/">v0.1.0</a></em></strong> migrated to <a href="/Releases/dev_v0.0.1/dev-journal/">here</a></p>
+</div>
+<div class="admonition todo">
+<p class="admonition-title">Todo</p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <strong>[6]</strong>  Submit working demo/mvp/proof-of-concept <strong><a href="/Releases/dev_v0.0.1/dev-journal/">Dev v0.0.1</a> (not unit tested, only for demo)</strong><ul>
+<li>Github release viewable <a href="https://github.com/N2-Jonathon/n2_pairs_trader/releases/tag/v0.0.2-dev">here</a></li>
+</ul>
+</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <strong>[7]</strong> Submit demo videos</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>[8]</strong> Write User Guide:<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> 1. Installation</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> 2. Running an instance</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> 3. Changing the configuration</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> 4. Running multiple instances</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> 5. Monitoring Positions</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Afterwards add screenshots to all of those pages</li>
+</ul>
+</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>[9]</strong> Work on all the steps required for the first stable &amp; unit tested release <strong><em><a href="/Releases/stable_v0.1.0/dev-journal/">v0.1.0</a> (planned)</em></strong></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>[10]</strong> Collaboratively plan which features which will be released incrementally in order of priority, clarifying the criteria for each to be fulfilled &amp; assign planned version numbers to make tracking progress more objective. </li>
+</ul>
+</div>
+<h2 id="1-demo"><strong>1. Demo</strong></h2>
+<p>Audio quality of my mic sounds like a tin can, so apologies for that. Once <strong><em><a href="/Releases/stable_v0.1.0/dev-journal/">v0.1.0</a></em></strong> is released, I'll record new videos with concise &amp; easy to follow guides for users, and seperate guides for developers (And I'll get a better mic first)</p>
+<p>Also, the first two videos were recorded after the third video so when I refer to the previous video I mean the third video. Th first video ends abruptly since it is the same video as the second one and I just chopped it into two.</p>
+<p>EDIT: Minor correction to what I say in the video: When it's in debug mode it's not actually listening for signals, and it's only asking for the prompt. I can however change it so that it is doing both at the same time. If you disable debug_mode, then it will actually be waiting for real signals.</p>
+<iframe width="600" height="315" src="https://www.youtube.com/embed/ZX-9DyGvBLo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+<hr />
+<h2 id="2-looking-at-the-code"><strong>2. Looking at the code</strong></h2>
+<iframe width="600" height="315" src="https://www.youtube.com/embed/YNiF0Oj13O4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+<hr />
+<h2 id="3-octobot-vs-freqtrade"><strong>3. Octobot vs. FreqTrade</strong></h2>
+<iframe width="600" height="315" src="https://www.youtube.com/embed/7OnZLGU81Zw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+<hr />
+<p><a href="https://wakatime.com"><img src="https://wakatime.com/share/@spliffli/f8c024ff-274d-4aaa-b573-1e3f432f2f27.png" /></a></p>
+<p>(Thankfully I don't charge per hour...) I know I can eventually deliver a high quality, reliable and properly tested product if I spend enough time on it.</p>
+<ul>
+<li>Some of this time was spent on other things, but most of the time was actually spent on your project. I'll be able to see a more detailed breakdown when I get WakaTime Premium</li>
+</ul>
+<p>In these docs I will explain how this program works and its architecture, and try to make it easy to understand for
+both users or developers.</p>
+<p>This initially started out as a way to implement a single strategy ie. the SuperTrend Long/Short Strategy, but it's
+designed in a way to be scalable for use with other strategies and exchanges, and have things abstracted in such a
+way that each strategy only needs to deal with checking indicator signals, and opening/closing positions, instead of
+having to think about the underlying trades that comprise the positions while writing a new strategy.</p>
+<p>It will also generate a report whenever a trade is opened or closed, then save it to a log file, and if notifications
+are enabled then it will send notifications either via email or telegram or both including information about each
+position, which strategy it's from, which pair, the signals taken, trades opened, timestamps, PnL, etc</p>
+<p>It should be possible out of the box to use margin trading for any exchange which ccxt has implemented that for, which
+unfortunately is not unified nor implemented for some exchanges, unlike some other unified methods for things like
+fetching market data, opening trades, etc.</p>
+<ul>
+<li>Unfortunately, KuCoin falls into that category of not having margin trading implemented currently, so I've had to
+  implement that myself by:</li>
+<li>Extending the default ccxt.kucoin in <code>core.exchanges.kucoin_extended</code> and overriding the
+    methods so that it does still support margin trading. the default method ccxt uses for margin trading is
+    <code>exchange.fetch_borrow_rate()</code> but KuCoin's API doesn't have that, and it's only possible to get the max borrow
+    amount</li>
+<li>I've added a new method <code>kucoin_extended.fetch_max_borrow_size</code>, and I'm going to override the
+    <code>fetch_borrow_rate()</code> method so that it calculates what the rate would be if that's possible? And then it would be
+    possible for me to unify how all the strategies are implemented in this codebase so they always use the same
+    abstractions. I should make a wrapper method which handles which one to use but for now that has to be done inside
+    the strategy.</li>
+</ul>
+<hr />
+<h1 id="objectives-requirements"><strong>Objectives &amp; Requirements</strong></h1>
+<div class="admonition important">
+<p class="admonition-title"><strong>SuperTrend Strategy Activity Diagram from earlier</strong></p>
+<p><img src='/images/activity-diagram.png'></p>
+</div>
+<p>This is a platform that's designed for pairs trading strategies.</p>
+<p>Pairs trading is when you take two tradeable pairs eg. <code>ETH/USDT</code> and <code>BTC/USDT</code> and combine them to make what can be called an 'artificial', 'synthetic', or 'double' pair (I may use those names interchangeably in these docs) by dividing each of the OHLCV data points in the base currency by the quote currency ie. <code>ETHUSDT/BTCUSDT</code></p>
+<p>Each position in a pairs trade is composed of at least two trades, with one for each sub-pair:</p>
+<ul>
+<li>To open a short position on the artificial pair <code>ETHUSDT/BTCUSDT</code>, that requires going short on the base pair <code>ETH/USDT</code> (ie. Sell ETH for USDT), and then going long on the quote pair <code>BTC/USDT</code> (ie. Buy BTC with USDT)</li>
+<li>Conversely, to open a long position on <code>ETHUSDT/BTCUSDT</code>, that requires going short on the quote pair <code>BTC/USDT</code> (ie. Sell BTC for USDT), and then going long on the base pair <code>ETH/USDT</code> (ie. Buy ETH with USDT)</li>
+<li>The position's PnL is calculated by adding the PnL from each trade together.</li>
+</ul>
+<p>The reason the short trade should be opened before the long trade, is so that borrowed margin can be used to sell the short asset, and the resulting asset from that trade can be funneled into the long trade.</p>
+<hr />
+<h2 id="ethusdtd1kucoin"><strong>ETH/USDT</strong>:D1:KUCOIN</h2>
+<p><img alt="ETH/USDT:D1:KUCOIN - 2022-03-13 22-35-29" src="images/ETHUSDT-D1-KUCOIN%20-%202022-03-13%2022-35-29.png" /></p>
+<hr />
+<h2 id="btcusdtd1kucoin"><strong>BTC/USDT</strong>:D1:KUCOIN</h2>
+<p><img alt="BTC/USDT:D1:KUCOIN - 2022-03-13 22-34-17" src="images/BTCUSDT%3AD1%3AKUCOIN%20-%20%202022-03-13%2022-34-17.png" /></p>
+<hr />
+<h2 id="ethusdtbtcusdtd1kucoin"><strong>ETHUSDT/BTCUSDT</strong>:D1:KUCOIN</h2>
+<p><img alt="ETHUSDT/BTCUSDT:D1:KUCOIN - 2022-03-13 22-35-29" src="images/ETHUSDT-BTCUSDT%3AD1%3AKUCOIN%20-%202022-03-13%2022-40-24.png" /></p>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+      
+        
+        <a href="user_guide/1_installation/" class="md-footer__link md-footer__link--next" aria-label="Next: 1. Installation" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              1. Installation
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": ".", "features": [], "search": "assets/javascripts/workers/search.5e67fbfe.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="assets/javascripts/bundle.c44cc438.min.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.1/tablesort.min.js"></script>
+      
+        <script src="js/tablesort.js"></script>
+      
+    
+  </body>
+</html>

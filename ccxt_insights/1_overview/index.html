@@ -1,0 +1,1740 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.8">
+    
+    
+      
+        <title>CCXT Insights: Overview - N2 Pairs Trader Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.644de097.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.e6a45f82.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#000000">
+        
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../../css/dark_theme.css">
+    
+      <link rel="stylesheet" href="../../css/codehilite.css">
+    
+      <link rel="stylesheet" href="../../css/profont.css">
+    
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+<meta name="theme-color" content="#212121">
+
+<link rel='icon' href='/img/favicon.ico'>
+
+<meta name='apple-mobile-web-app-capable' content='yes'>
+<meta name='mobile-web-app-capable' content='yes'>
+<link rel="manifest" href="/manifest.json">
+
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="black" data-md-color-accent="dark-blue">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#ccxt-insights-overview" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="N2 Pairs Trader Docs" class="md-header__button md-logo" aria-label="N2 Pairs Trader Docs" data-md-component="logo">
+      
+  <img src="../../img/logo-96px.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            N2 Pairs Trader Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              CCXT Insights: Overview
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="N2 Pairs Trader Docs" class="md-nav__button md-logo" aria-label="N2 Pairs Trader Docs" data-md-component="logo">
+      
+  <img src="../../img/logo-96px.png" alt="logo">
+
+    </a>
+    N2 Pairs Trader Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Readme
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          User Guide
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="User Guide" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          User Guide
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user_guide/1_installation/" class="md-nav__link">
+        1. Installation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user_guide/2_running-an-instance/" class="md-nav__link">
+        2. Running an instance
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user_guide/3_changing-the-configuration/" class="md-nav__link">
+        3. Changing the configuration
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user_guide/4_running-multiple-instances/" class="md-nav__link">
+        4. Running multiple instances
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user_guide/5_monitoring-positions/" class="md-nav__link">
+        5. Monitoring Positions
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          CCXT Insights
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="CCXT Insights" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          CCXT Insights
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        CCXT Insights: Overview
+      </a>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2_exchanges_with_margin/" class="md-nav__link">
+        Exchanges with margin
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3_exchanges_with_fetchBorrowRate/" class="md-nav__link">
+        Exchanges with fetchBorrowRate
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Releases
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Releases" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Releases
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Releases/dev_v0.0.1/dev-journal/" class="md-nav__link">
+        v0.0.1-dev
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Releases/dev_v0.0.2/dev-journal/" class="md-nav__link">
+        v0.0.2-dev
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3" type="checkbox" id="__nav_4_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3">
+          Planned
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Planned" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_3">
+          <span class="md-nav__icon md-icon"></span>
+          Planned
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Releases/stable_v0.1.0/dev-journal/" class="md-nav__link">
+        v0.1.0 (stable & unit tested)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dev_guide/stub/" class="md-nav__link">
+        Developer Guide
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../further_ideas/" class="md-nav__link">
+        Further Ideas
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+
+
+<h1 id="ccxt-insights-overview">CCXT Insights: Overview</h1>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Now that I've generated the <code>EXCHANGES</code> constant, I can mine some useful data from that. Here's an overview of the data which I thought was relevant in finding suitable exchanges. </p>
+<ul>
+<li>
+<p>Each column represents keys from the dict that's returned by each exchange's <code>describe()</code> method. </p>
+</li>
+<li>
+<p>The bool values represent whether the keys are present or not for each exchange.</p>
+</li>
+<li>
+<p>You can click on each column to sort them. On the next page I will filter these results.</p>
+</li>
+</ul>
+</div>
+<table>
+<thead>
+<tr>
+<th align="right"></th>
+<th align="left">EXCHANGE</th>
+<th align="left">requiredCredentials</th>
+<th align="left">rateLimit</th>
+<th align="left">has</th>
+<th align="left">margin</th>
+<th align="left">fetchBorrowRate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">0</td>
+<td align="left">COINSPOT</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">1</td>
+<td align="left">HITBTC</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">2</td>
+<td align="left">RIPIO</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">3</td>
+<td align="left">BITFLYER</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">4</td>
+<td align="left">BUDA</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">5</td>
+<td align="left">KUNA</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">6</td>
+<td align="left">BINANCEUSDM</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">7</td>
+<td align="left">BITMART</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">8</td>
+<td align="left">UPBIT</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">9</td>
+<td align="left">WAVESEXCHANGE</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">10</td>
+<td align="left">OCEANEX</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">11</td>
+<td align="left">TIDEBIT</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">12</td>
+<td align="left">BITVAVO</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">13</td>
+<td align="left">MEXC</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">14</td>
+<td align="left">BITGET</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">15</td>
+<td align="left">COINBASEPRIME</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">16</td>
+<td align="left">BINANCEUS</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">17</td>
+<td align="left">THEROCK</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">18</td>
+<td align="left">EQONEX</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">19</td>
+<td align="left">ZB</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+</tr>
+<tr>
+<td align="right">20</td>
+<td align="left">STEX</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">21</td>
+<td align="left">XENA</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">22</td>
+<td align="left">WHITEBIT</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">23</td>
+<td align="left">EXMO</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">24</td>
+<td align="left">BIGONE</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">25</td>
+<td align="left">HITBTC3</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">26</td>
+<td align="left">EQUOS</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">27</td>
+<td align="left">BITHUMB</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">28</td>
+<td align="left">BL3P</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">29</td>
+<td align="left">BITMEX</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">30</td>
+<td align="left">INDODAX</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">31</td>
+<td align="left">COINFALCON</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">32</td>
+<td align="left">LATOKEN</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">33</td>
+<td align="left">OKCOIN</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">34</td>
+<td align="left">BINANCE</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+</tr>
+<tr>
+<td align="right">35</td>
+<td align="left">COINMATE</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">36</td>
+<td align="left">BITFOREX</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">37</td>
+<td align="left">HUOBIJP</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">38</td>
+<td align="left">BTCBOX</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">39</td>
+<td align="left">BITTREX</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">40</td>
+<td align="left">KUCOIN</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left"></td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">41</td>
+<td align="left">BTCMARKETS</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">42</td>
+<td align="left">GATEIO</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">43</td>
+<td align="left">LBANK</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">44</td>
+<td align="left">BITBNS</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">45</td>
+<td align="left">GEMINI</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">46</td>
+<td align="left">HUOBI</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+</tr>
+<tr>
+<td align="right">47</td>
+<td align="left">BTCALPHA</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">48</td>
+<td align="left">COINONE</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">49</td>
+<td align="left">HOLLAEX</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left"></td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">50</td>
+<td align="left">BW</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">51</td>
+<td align="left">QTRADE</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">52</td>
+<td align="left">WOO</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">53</td>
+<td align="left">TIDEX</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">54</td>
+<td align="left">AAX</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">55</td>
+<td align="left">ASCENDEX</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">56</td>
+<td align="left">ZIPMEX</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">57</td>
+<td align="left">ZONDA</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">58</td>
+<td align="left">PHEMEX</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">59</td>
+<td align="left">OKEX5</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">60</td>
+<td align="left">KRAKEN</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">61</td>
+<td align="left">OKX</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+</tr>
+<tr>
+<td align="right">62</td>
+<td align="left">ZAIF</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">63</td>
+<td align="left">MERCADO</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">64</td>
+<td align="left">FTX</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+</tr>
+<tr>
+<td align="right">65</td>
+<td align="left">BEQUANT</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+</tr>
+<tr>
+<td align="right">66</td>
+<td align="left">KUCOINFUTURES</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">67</td>
+<td align="left">LIQUID</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">68</td>
+<td align="left">TIMEX</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">69</td>
+<td align="left">BITBANK</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">70</td>
+<td align="left">COINBASE</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">71</td>
+<td align="left">NOVADAX</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">72</td>
+<td align="left">DERIBIT</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">73</td>
+<td align="left">ITBIT</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">74</td>
+<td align="left">PROBIT</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">75</td>
+<td align="left">OKEX</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">76</td>
+<td align="left">BITBAY</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">77</td>
+<td align="left">BTCTURK</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">78</td>
+<td align="left">COINCHECK</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">79</td>
+<td align="left">BITSTAMP1</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">80</td>
+<td align="left">WAZIRX</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">81</td>
+<td align="left">BITRUE</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">82</td>
+<td align="left">BTCTRADEUA</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">83</td>
+<td align="left">BINANCECOINM</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">84</td>
+<td align="left">YOBIT</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">85</td>
+<td align="left">DELTA</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">86</td>
+<td align="left">BITFINEX2</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">87</td>
+<td align="left">FTXUS</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">88</td>
+<td align="left">CREX24</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">89</td>
+<td align="left">FLOWBTC</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">90</td>
+<td align="left">CURRENCYCOM</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">91</td>
+<td align="left">BITSO</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">92</td>
+<td align="left">BITSTAMP</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">93</td>
+<td align="left">LUNO</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">94</td>
+<td align="left">CEX</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">95</td>
+<td align="left">INDEPENDENTRESERVE</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">96</td>
+<td align="left">BITCOINCOM</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">97</td>
+<td align="left">BYBIT</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">98</td>
+<td align="left">CRYPTOCOM</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">99</td>
+<td align="left">HUOBIPRO</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">100</td>
+<td align="left">COINEX</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">101</td>
+<td align="left">COINBASEPRO</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">102</td>
+<td align="left">BLOCKCHAINCOM</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">103</td>
+<td align="left">BYTETRADE</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">104</td>
+<td align="left">VCC</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">105</td>
+<td align="left">BITFINEX</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">106</td>
+<td align="left">BIT2C</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">107</td>
+<td align="left">BIBOX</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left"></td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">108</td>
+<td align="left">CDAX</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">109</td>
+<td align="left">FMFWIO</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">110</td>
+<td align="left">DIGIFINEX</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">111</td>
+<td align="left">IDEX</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">112</td>
+<td align="left"><strong>INIT</strong></td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">113</td>
+<td align="left">PAYMIUM</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">114</td>
+<td align="left">POLONIEX</td>
+<td align="left">False</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="right">115</td>
+<td align="left">BITPANDA</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">116</td>
+<td align="left">NDAX</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+<tr>
+<td align="right">117</td>
+<td align="left">LYKKE</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">True</td>
+<td align="left">False</td>
+<td align="left">False</td>
+</tr>
+</tbody>
+</table>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../../user_guide/5_monitoring-positions/" class="md-footer__link md-footer__link--prev" aria-label="Previous: 5. Monitoring Positions" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              5. Monitoring Positions
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../2_exchanges_with_margin/" class="md-footer__link md-footer__link--next" aria-label="Next: Exchanges with margin" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Exchanges with margin
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.5e67fbfe.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.c44cc438.min.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.1/tablesort.min.js"></script>
+      
+        <script src="../../js/tablesort.js"></script>
+      
+    
+  </body>
+</html>
